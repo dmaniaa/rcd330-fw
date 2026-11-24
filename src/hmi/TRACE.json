@@ -1,0 +1,357 @@
+{
+  "0x00010e58": {
+    "name": "main",
+    "file": "main.cpp",
+    "line": 80
+  },
+  "0x00023650": {
+    "name": "IgdtGetString",
+    "file": "display/igdt/igdt_strings.cpp",
+    "line": 28
+  },
+  "0x00060e3c": {
+    "name": "hmi_wrapper_igdt_init",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 14
+  },
+  "0x00060f54": {
+    "name": "hmi_wrapper_igdt_show",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 31
+  },
+  "0x0031d2a4": {
+    "name": "LoadFace",
+    "file": "display/igdt/igdt_text.cpp",
+    "line": 83
+  },
+  "0x0031d5ec": {
+    "name": "LoadFaces",
+    "file": "display/igdt/igdt_text.cpp",
+    "line": 102
+  },
+  "0x0031d684": {
+    "name": "ResetState",
+    "file": "display/igdt/igdt_scene.cpp",
+    "line": 16
+  },
+  "0x0031d6fc": {
+    "name": "IgdtCurrentState",
+    "file": "display/igdt/igdt_gl.cpp",
+    "line": 472
+  },
+  "0x0031da6c": {
+    "name": "ApplyClip",
+    "file": "display/igdt/igdt_scene.cpp",
+    "line": 52
+  },
+  "0x0031daa4": {
+    "name": "Translate",
+    "file": "display/igdt/igdt_scene.cpp",
+    "line": 30
+  },
+  "0x0031db3c": {
+    "name": "ApplyAlpha",
+    "file": "display/igdt/igdt_scene.cpp",
+    "line": 37
+  },
+  "0x0031db90": {
+    "name": "SetPivot",
+    "file": "display/igdt/igdt_scene.cpp",
+    "line": 66
+  },
+  "0x0031dfac": {
+    "name": "SetTextStyle",
+    "file": "display/igdt/igdt_scene.cpp",
+    "line": 73
+  },
+  "0x0031f0a0": {
+    "name": "DrawImage",
+    "file": "display/igdt/igdt_scene.cpp",
+    "line": 80
+  },
+  "0x0031f41c": {
+    "name": "DrawText",
+    "file": "display/igdt/igdt_scene.cpp",
+    "line": 100
+  },
+  "0x0032072c": {
+    "name": "IgdtSceneDraw",
+    "file": "display/igdt/igdt_scene.cpp",
+    "line": 128
+  },
+  "0x00320ec8": {
+    "name": "decodes the string into a 0x40-wchar buffer.",
+    "file": "display/igdt/igdt_textbuf.cpp",
+    "line": 10,
+    "also": [
+      {
+        "file": "display/igdt/igdt_textbuf.cpp",
+        "line": 119
+      }
+    ]
+  },
+  "0x003223d4": {
+    "name": "IgdtSetRuntimeText",
+    "file": "display/igdt/igdt_textbuf.cpp",
+    "line": 100
+  },
+  "0x003251ec": {
+    "name": "Translate",
+    "file": "display/igdt/igdt_gl.cpp",
+    "line": 350
+  },
+  "0x003252b0": {
+    "name": "SetMvpFromState",
+    "file": "display/igdt/igdt_gl.cpp",
+    "line": 371
+  },
+  "0x003256a0": {
+    "name": "SetScissorFromState",
+    "file": "display/igdt/igdt_gl.cpp",
+    "line": 389
+  },
+  "0x00325728": {
+    "name": "UploadTexture (GL part of IGDT_LoadOvgTextureEntry)",
+    "file": "display/igdt/igdt_gl.cpp",
+    "line": 421,
+    "also": [
+      {
+        "file": "display/igdt/igdt_gl.cpp",
+        "line": 693
+      },
+      {
+        "file": "display/igdt/igdt_ovg.cpp",
+        "line": 87
+      },
+      {
+        "file": "display/igdt/igdt_ovg.cpp",
+        "line": 148
+      },
+      {
+        "file": "display/igdt/igdt_ovg.cpp",
+        "line": 154
+      },
+      {
+        "file": "display/igdt/igdt_ovg.cpp",
+        "line": 172
+      }
+    ]
+  },
+  "0x00325d30": {
+    "name": "IgdtTexture (cache lookup + 0x00325728 load)",
+    "file": "display/igdt/igdt_gl.cpp",
+    "line": 564,
+    "also": [
+      {
+        "file": "display/igdt/igdt_gl.cpp",
+        "line": 581
+      }
+    ]
+  },
+  "0x00325e24": {
+    "name": "IntersectRect: clips (*x, *y, *w, *h) to (x0, y0, w0, h0);",
+    "file": "display/igdt/igdt_textbuf.cpp",
+    "line": 61
+  },
+  "0x00325ed8": {
+    "name": "IgdtBlitCoverage",
+    "file": "display/igdt/igdt_textbuf.cpp",
+    "line": 136
+  },
+  "0x00326084": {
+    "name": "BuildPrograms (shader part of IgdtGlInit)",
+    "file": "display/igdt/igdt_gl.cpp",
+    "line": 317,
+    "also": [
+      {
+        "file": "display/igdt/igdt_gl.cpp",
+        "line": 477
+      }
+    ]
+  },
+  "0x00326a50": {
+    "name": "IgdtBeginFrame",
+    "file": "display/igdt/igdt_gl.cpp",
+    "line": 589
+  },
+  "0x00326b3c": {
+    "name": "IgdtSwap",
+    "file": "display/igdt/igdt_gl.cpp",
+    "line": 722
+  },
+  "0x00326ee8": {
+    "name": "DrawTexturedQuad (tail, also inlined in 0x00326b3c)",
+    "file": "display/igdt/igdt_gl.cpp",
+    "line": 402,
+    "also": [
+      {
+        "file": "display/igdt/igdt_gl.cpp",
+        "line": 464
+      },
+      {
+        "file": "display/igdt/igdt_gl.cpp",
+        "line": 607
+      }
+    ]
+  },
+  "0x003278e0": {
+    "name": "IgdtDrawTextCoverage (GL part)",
+    "file": "display/igdt/igdt_gl.cpp",
+    "line": 648,
+    "also": [
+      {
+        "file": "display/igdt/igdt_gl.h",
+        "line": 78
+      },
+      {
+        "file": "display/igdt/igdt_text.cpp",
+        "line": 61
+      },
+      {
+        "file": "display/igdt/igdt_text.cpp",
+        "line": 291
+      },
+      {
+        "file": "display/igdt/igdt_text.cpp",
+        "line": 391
+      },
+      {
+        "file": "display/igdt/igdt_textbuf.cpp",
+        "line": 171
+      }
+    ]
+  },
+  "0x00329624": {
+    "name": "FontIndex",
+    "file": "display/igdt/igdt_text.cpp",
+    "line": 70
+  },
+  "0x00329ea0": {
+    "name": "param_1 (auStack_8c in 0x003278e0).",
+    "file": "display/igdt/igdt_text.cpp",
+    "line": 126,
+    "also": [
+      {
+        "file": "display/igdt/igdt_text.cpp",
+        "line": 149
+      }
+    ]
+  },
+  "_data": {
+    "0x003cb25c": {
+      "name": "font style +0xc flags: bit 1 = no text, bit 2 = FreeType face",
+      "file": "display/igdt/igdt_text.cpp",
+      "line": 17,
+      "also": [
+        {
+          "file": "display/igdt/igdt_text.cpp",
+          "line": 34
+        }
+      ]
+    },
+    "0x004536a4": {
+      "name": "scr_table entry (16 B); elements are kElements[elem_first ..",
+      "file": "display/igdt/igdt_tables.h",
+      "line": 55
+    },
+    "0x0046d6a0": {
+      "name": "text_layout entry (20 B), the part the runtime text store",
+      "file": "display/igdt/igdt_tables.h",
+      "line": 64
+    },
+    "0x0069b69c": {
+      "name": "tex_table entry (24 B, <BBHhhIHHII>), docs/assets-and-localization.md section 1.",
+      "file": "display/igdt/igdt_tables.h",
+      "line": 11
+    },
+    "0x008d4988": {
+      "name": "eglChooseConfig attributes: RGB 888, any alpha, 16-bit depth,",
+      "file": "display/igdt/igdt_gl.cpp",
+      "line": 134
+    },
+    "0x008d4bc0": {
+      "name": "(pointer at 0x008d49e8)",
+      "file": "display/igdt/igdt_gl.cpp",
+      "line": 189
+    },
+    "0x008d52d8": {
+      "name": "(pointer at 0x008d49ec)",
+      "file": "display/igdt/igdt_gl.cpp",
+      "line": 213
+    },
+    "0x008d536c": {
+      "name": "(pointer at 0x008d49e0)",
+      "file": "display/igdt/igdt_gl.cpp",
+      "line": 174
+    },
+    "0x008d54c0": {
+      "name": "(pointer at 0x008d49e4)",
+      "file": "display/igdt/igdt_gl.cpp",
+      "line": 183
+    },
+    "0x008d557c": {
+      "name": "(pointer at 0x008d49dc)",
+      "file": "display/igdt/igdt_gl.cpp",
+      "line": 166
+    },
+    "0x008d5710": {
+      "name": "(pointer at 0x008d49d4)",
+      "file": "display/igdt/igdt_gl.cpp",
+      "line": 152
+    },
+    "0x008d5868": {
+      "name": "(pointer at 0x008d49d8)",
+      "file": "display/igdt/igdt_gl.cpp",
+      "line": 160
+    },
+    "0x008d5948": {
+      "name": "(pointer at 0x008d49d0)",
+      "file": "display/igdt/igdt_gl.cpp",
+      "line": 147
+    },
+    "0x008d59c4": {
+      "name": "(pointer at 0x008d49cc)",
+      "file": "display/igdt/igdt_gl.cpp",
+      "line": 143
+    },
+    "0x0096f10c": {
+      "name": "base 3x3 transform (column-major): pixels -> NDC with y down.",
+      "file": "display/igdt/igdt_gl.cpp",
+      "line": 241
+    },
+    "0x0096f130": {
+      "name": "MVPMatrix (4x4, column-major).",
+      "file": "display/igdt/igdt_gl.cpp",
+      "line": 244
+    },
+    "0x0096f170": {
+      "name": "eglCreateContext attributes: EGL_CONTEXT_CLIENT_VERSION 2.",
+      "file": "display/igdt/igdt_gl.cpp",
+      "line": 139
+    },
+    "0x0096f17c": {
+      "name": "FBO copy quad: 4 x (x, y, z, u, v); x/y set to w/h by IgdtGlInit.",
+      "file": "display/igdt/igdt_gl.cpp",
+      "line": 247
+    },
+    "0x0096f1d0": {
+      "name": "element quad: 4 x (x, y, z, u, v).",
+      "file": "display/igdt/igdt_gl.cpp",
+      "line": 250
+    },
+    "0x009704c8": {
+      "name": "g_hmiAutotestEnabled",
+      "file": "main.cpp",
+      "line": 23
+    },
+    "0x00a0f908": {
+      "name": "draw state (current origin, alpha, tint, transform and clip",
+      "file": "display/igdt/igdt_gl.h",
+      "line": 19
+    }
+  },
+  "_coverage": {
+    "recreated": 32,
+    "total": 9580
+  }
+}

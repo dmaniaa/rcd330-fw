@@ -1,0 +1,4 @@
+[submodule "qemu"]
+	path = qemu
+	url = https://github.com/dmaniaa/qemu-rcd330.git
+	branch = rcd330

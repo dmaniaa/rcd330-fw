@@ -1,0 +1,7 @@
+/original-fw
+/extracted-fw
+/build*
+/.superpowers
+.DS_Store
+*.pyc
+__pycache__/
