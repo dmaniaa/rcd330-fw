@@ -5,6 +5,7 @@
 #include <map>
 #include <vector>
 
+#include "control_logic/subsystem/power/vpowerproxy.h"
 #include "display/igdt/igdt_ovg.h"
 #include "service/osal/osal_api.h"
 
@@ -54,6 +55,8 @@ void glBindTexture(GLenum target, GLuint texture);
 void glBlendFuncSeparate(GLenum src_rgb, GLenum dst_rgb, GLenum src_alpha, GLenum dst_alpha);
 void glBufferData(GLenum target, GLsizeiptr size, const void* data, GLenum usage);
 GLenum glCheckFramebufferStatus(GLenum target);
+void glClear(unsigned int mask);
+void glClearColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
 void glCompileShader(GLuint shader);
 GLuint glCreateProgram();
 GLuint glCreateShader(GLenum type);
@@ -100,6 +103,7 @@ const GLenum GL_TEXTURE_2D = 0x0de1;
 const GLenum GL_TEXTURE0 = 0x84c0;
 const GLenum GL_BLEND = 0x0be2;
 const GLenum GL_SCISSOR_TEST = 0x0c11;
+const unsigned int GL_COLOR_BUFFER_BIT = 0x4000;
 const GLenum GL_SRC_ALPHA = 0x0302;
 const GLenum GL_ONE_MINUS_SRC_ALPHA = 0x0303;
 const GLenum GL_ONE = 1;
@@ -398,6 +402,34 @@ void SetScissorFromState(const IgdtDrawState& s) {
     g_gl.sc_h = h;
 }
 
+// Colour channel (shift 16 = red, 8 = green, 0 = blue) as 0..1.
+float Channel(uint32_t color, int shift) {
+    return (float)((color >> shift) & 0xff) / 255.0f;
+}
+
+// Alpha byte of color scaled by the state alpha unless that is 0xff.
+float ColorAlpha(uint32_t color, uint8_t state_alpha) {
+    float a = (float)(color >> 24) / 255.0f;
+    if (state_alpha != 0xff) a = a * (float)state_alpha / 255.0f;
+    return a;
+}
+
+// w x h box at the current MVP in color with the fill program; the
+// sequence 0x0032749c and the text background of 0x003278e0 both issue.
+// 0x0032749c FillBox (shared tail, also in 0x003278e0)
+void FillBox(float w, float h, uint32_t color, uint8_t state_alpha) {
+    const float box[12] = {0.0f, 0.0f, 0.0f, w, 0.0f, 0.0f, 0.0f, h, 0.0f, w, h, 0.0f};
+    glUseProgram(g_gl.prog_fill);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(box), box, GL_DYNAMIC_DRAW);
+    glUniformMatrix4fv(glGetUniformLocation(g_gl.prog_fill, "MVPMatrix"), 1, 0, g_mvp);
+    glUniform4f(glGetUniformLocation(g_gl.prog_fill, "fillColor"), Channel(color, 16), Channel(color, 8),
+                Channel(color, 0), ColorAlpha(color, state_alpha));
+    glBindAttribLocation(g_gl.prog_fill, 0, "inVertex");
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, 0);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+}
+
 // The textured-quad tail shared by 0x00326ee8 and 0x00326b3c.
 // 0x00326ee8 DrawTexturedQuad (tail, also inlined in 0x00326b3c)
 void DrawTexturedQuad(GLuint program, const float* quad, float alpha, const float* skin) {
@@ -604,6 +636,13 @@ void IgdtBeginFrame() {
     g_gl.sc_h = s.screen_h;
 }
 
+// Name is ours; no stock counterpart (see IgdtSceneDrawLayers).
+void IgdtClearFrame() {
+    glScissor(0, 0, g_state.screen_w, g_state.screen_h);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
 // 0x00326ee8 IgdtDrawImage
 void IgdtDrawImage(const IgdtSkinTables& t, const IgdtElement& e) {
     const IgdtDrawState& s = g_state;
@@ -633,18 +672,6 @@ void IgdtDrawImage(const IgdtSkinTables& t, const IgdtElement& e) {
     DrawTexturedQuad(program, g_quad, (float)s.alpha / 255.0f, skin);
 }
 
-// Colour channel (shift 16 = red, 8 = green, 0 = blue) as 0..1.
-float Channel(uint32_t color, int shift) {
-    return (float)((color >> shift) & 0xff) / 255.0f;
-}
-
-// Alpha byte of color scaled by the state alpha unless that is 0xff.
-float ColorAlpha(uint32_t color, uint8_t state_alpha) {
-    float a = (float)(color >> 24) / 255.0f;
-    if (state_alpha != 0xff) a = a * (float)state_alpha / 255.0f;
-    return a;
-}
-
 // 0x003278e0 IgdtDrawTextCoverage (GL part)
 void IgdtDrawTextCoverage(const IgdtTextCoverage& c) {
     const IgdtDrawState& s = g_state;
@@ -652,18 +679,7 @@ void IgdtDrawTextCoverage(const IgdtTextCoverage& c) {
     SetScissorFromState(s);
     SetMvpFromState(s);
     if ((s.text_align & 0x0c) == 0) {
-        const float fw = (float)c.fill_w;
-        const float fh = (float)(int)c.fill_h;
-        const float box[12] = {0.0f, 0.0f, 0.0f, fw, 0.0f, 0.0f, 0.0f, fh, 0.0f, fw, fh, 0.0f};
-        glUseProgram(g_gl.prog_fill);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(box), box, GL_DYNAMIC_DRAW);
-        glUniformMatrix4fv(glGetUniformLocation(g_gl.prog_fill, "MVPMatrix"), 1, 0, g_mvp);
-        glUniform4f(glGetUniformLocation(g_gl.prog_fill, "fillColor"), Channel(s.bg_color, 16),
-                    Channel(s.bg_color, 8), Channel(s.bg_color, 0), ColorAlpha(s.bg_color, s.alpha));
-        glBindAttribLocation(g_gl.prog_fill, 0, "inVertex");
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, 0);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        FillBox((float)c.fill_w, (float)(int)c.fill_h, s.bg_color, s.alpha);
     }
     g_quad[8] = 1.0f;
     g_quad[14] = 1.0f;
@@ -719,6 +735,28 @@ void IgdtDrawTextCoverage(const IgdtTextCoverage& c) {
     glDeleteTextures(1, &tex);
 }
 
+// 0x0032749c IgdtDrawRect
+void IgdtDrawRect(uint16_t w, uint16_t h, uint32_t color) {
+    const IgdtDrawState& s = g_state;
+    if (s.flags != 0) return;
+    SetScissorFromState(s);
+    if (w == s.screen_w && h == s.screen_h) {
+        // 0x00327408: a screen-sized rect clears (within the scissor) instead,
+        // with the colour's own alpha.
+        glClearColor(Channel(color, 16), Channel(color, 8), Channel(color, 0), (float)(color >> 24) / 255.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        g_gl.drawn = 3;
+        return;
+    }
+    SetMvpFromState(s);
+    FillBox((float)w, (float)h, color, s.alpha);
+    g_gl.drawn = 3;
+}
+
+// Stock DAT_0096f1cc: set until the first eglSwapBuffers. Written on the
+// igdtTask render thread, read by VControlTask; a byte flag as in stock.
+static volatile bool g_first_frame_pending = true;
+
 // 0x00326b3c IgdtSwap
 void IgdtSwap() {
     if (g_gl.fbo == kNoFbo || g_gl.fbo_tex == kNoFbo) {
@@ -734,7 +772,23 @@ void IgdtSwap() {
         StoreMvp(g_base);
         DrawTexturedQuad(g_gl.prog_skin, g_copy_quad, 1.0f, skin);
     }
-    // TODO(phase2): 0x0002fcfc(DAT_00973fbf); DAT_00973fbf = 0xff
+    // TODO(phase3): stock passes the pending screen DAT_00973fbf to
+    // 0x0002fcfc, which for screen 0xdf emits VControlTask signal 0x1a
+    // (0x003ae8c0), then resets DAT_00973fbf to 0xff.
     eglSwapBuffers(g_gl.display, g_gl.surface);
-    // TODO(phase2): DAT_00df2fb0 = 1; DAT_0096f1cc -> 0x000560e4()
+    // TODO(phase3): DAT_00df2fb0 = 1 (read by the screenshot path).
+    if (g_first_frame_pending) {
+        // The first visible frame tells pwr_agent the HMI is up (0x000560e4).
+        // It usually comes before VmfThread::start() connects, as in stock
+        // (main starts the display task first), so that send fails and is
+        // logged; the 0x81 audio mode re-sends wake state 2 once
+        // IgdtFirstFrameSwapped() (VControlTask::PowersubsystemNotifyMsg).
+        g_first_frame_pending = false;
+        VPowerProxy::Instance()->SendWakeStateToPowerAgent(2);
+    }
+}
+
+// 0x0096f1cc IgdtFirstFrameSwapped
+bool IgdtFirstFrameSwapped() {
+    return !g_first_frame_pending;
 }

@@ -59,6 +59,9 @@ GLuint IgdtTexture(const IgdtSkinTables& t, int tex_index, GLuint* program);
 
 // 0x00326a50: binds the FBO, enables blending and a full-screen scissor.
 void IgdtBeginFrame();
+// Clears the whole render target to transparent black (ours, see
+// IgdtSceneDrawLayers).
+void IgdtClearFrame();
 
 // 0x00326ee8: draws t.textures[e.tex] (e.w x e.h pixels, via IgdtTexture) at the
 // current draw state's transform with its alpha, tint and clip. Like stock it
@@ -83,7 +86,17 @@ struct IgdtTextCoverage {
 // deleted again right after the draw (stock keeps it in its line cache).
 void IgdtDrawTextCoverage(const IgdtTextCoverage& c);
 
+// 0x0032749c: w x h rect of color (alpha scaled by the state alpha) at the
+// current draw state's transform, clipped to its clip; nothing when the
+// state is transparent or clipped out. A rect the size of the screen clears
+// the clip area to color instead (0x00327408), as stock.
+void IgdtDrawRect(uint16_t w, uint16_t h, uint32_t color);
+
 // 0x00326b3c: copies the FBO to the window surface and swaps.
 void IgdtSwap();
+
+// True once IgdtSwap swapped the first frame and sent wake state 2 (stock
+// flag 0x0096f1cc); VControlTask then sends it itself on the 0x81 audio mode.
+bool IgdtFirstFrameSwapped();
 
 #endif

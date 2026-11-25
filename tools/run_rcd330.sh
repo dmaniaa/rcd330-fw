@@ -18,6 +18,7 @@ SD_IMG=""
 CODING_FILE=""
 HEADLESS=0
 MONITOR_SOCK=""
+QMP_SOCK=""
 HMI_SRC=""
 PROFILE_ENV=()
 
@@ -83,6 +84,18 @@ while [[ $# -gt 0 ]]; do
             MONITOR_SOCK="${1#*=}"
             shift
             ;;
+        --qmp)
+            if [[ $# -lt 2 ]]; then
+                echo "Error: --qmp requires a unix socket path" >&2
+                exit 1
+            fi
+            QMP_SOCK="$2"
+            shift 2
+            ;;
+        --qmp=*)
+            QMP_SOCK="${1#*=}"
+            shift
+            ;;
         --hmi)
             if [[ $# -lt 2 ]]; then
                 echo "Error: --hmi requires a path argument" >&2
@@ -109,7 +122,7 @@ while [[ $# -gt 0 ]]; do
             ;;
         -*)
             echo "Unknown option: $1" >&2
-            echo "Usage: $0 [<firmware.tar>] [--fw <firmware.tar>] [--coding-file <path>] [--dry-run] [--rebuild] [--sd <sd_img>] [--headless] [--monitor <unix-socket>] [--hmi <path>] [--profile-env KEY=VAL]..." >&2
+            echo "Usage: $0 [<firmware.tar>] [--fw <firmware.tar>] [--coding-file <path>] [--dry-run] [--rebuild] [--sd <sd_img>] [--headless] [--monitor <unix-socket>] [--qmp <unix-socket>] [--hmi <path>] [--profile-env KEY=VAL]..." >&2
             exit 1
             ;;
         *)
@@ -245,6 +258,9 @@ QEMU_CMD+=(
 )
 if [[ -n "$MONITOR_SOCK" ]]; then
     QEMU_CMD+=(-monitor "unix:${MONITOR_SOCK},server,nowait")
+fi
+if [[ -n "$QMP_SOCK" ]]; then
+    QEMU_CMD+=(-qmp "unix:${QMP_SOCK},server,nowait")
 fi
 
 GUI_CMD=(

@@ -66,9 +66,19 @@ void TestUtf8OutputLimit() {
     CHECK(untouched == 7);
 }
 
+// Skin tables with only the text-store fields set (every other field 0).
+IgdtSkinTables MakeTables(const IgdtTextLayout* layouts, uint16_t count, uint32_t buffer_len) {
+    IgdtSkinTables t;
+    memset(&t, 0, sizeof(t));
+    t.text_layouts = layouts;
+    t.text_layout_count = count;
+    t.text_buffer_len = buffer_len;
+    return t;
+}
+
 // Layouts: id 0 -> off 0 / 4 wchars, id 1 -> off 4 / 3, id 2 -> off 100 (past the buffer).
-const IgdtTextLayout kLayouts[] = {{0u, 4}, {4u, 3}, {100u, 2}};
-const IgdtSkinTables kTables = {0, 0, 0, 0, 0, 0, 0, kLayouts, 3, 8u};
+const IgdtTextLayout kLayouts[] = {{0u, 4, 0, 0, 0, 0}, {4u, 3, 0, 0, 0, 0}, {100u, 2, 0, 0, 0, 0}};
+const IgdtSkinTables kTables = MakeTables(kLayouts, 3, 8u);
 
 void TestRuntimeText() {
     const IgdtWchar* buf = IgdtRuntimeText(kTables, 0);
@@ -96,8 +106,8 @@ void TestRuntimeText() {
 }
 
 // One slot that ends exactly at the end of an 8-wchar buffer.
-const IgdtTextLayout kEndLayouts[] = {{6u, 2}};
-const IgdtSkinTables kEndTables = {0, 0, 0, 0, 0, 0, 0, kEndLayouts, 1, 8u};
+const IgdtTextLayout kEndLayouts[] = {{6u, 2, 0, 0, 0, 0}};
+const IgdtSkinTables kEndTables = MakeTables(kEndLayouts, 1, 8u);
 
 void TestRuntimeTextEndOfBuffer() {
     const IgdtWchar xyz[] = {'x', 'y', 'z', 0};

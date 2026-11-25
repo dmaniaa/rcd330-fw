@@ -29,6 +29,25 @@ static int g_testFailures = 0;
         }                                                                        \
     } while (0)
 
+// Integer comparison; both sides are printed on failure.
+#define CHECK_EQ(actual, expected)                                               \
+    do {                                                                         \
+        const long long a_ = (long long)(actual);                                \
+        const long long e_ = (long long)(expected);                              \
+        if (a_ != e_) {                                                          \
+            ++g_testFailures;                                                    \
+            fprintf(stderr, "%s:%d: CHECK_EQ(%s, %s): got %lld (0x%llx), want %lld (0x%llx)\n", \
+                    __FILE__, __LINE__, #actual, #expected, a_, (unsigned long long)a_, e_, \
+                    (unsigned long long)e_);                                     \
+        }                                                                        \
+    } while (0)
+
 #define TEST_RESULT() (g_testFailures == 0 ? 0 : 1)
+
+#define RUN_TEST(fn) fn()
+
+static inline int test_summary() {
+    return TEST_RESULT();
+}
 
 #endif

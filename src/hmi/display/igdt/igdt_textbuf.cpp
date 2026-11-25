@@ -7,7 +7,7 @@ namespace {
 
 const IgdtWchar kReplacement = 0xfffd;
 
-// 0x00320ec8 decodes the string into a 0x40-wchar buffer.
+// SetTextFromId (0x00320ec8) decodes the string into a 0x40-wchar buffer.
 const size_t kTextIdMaxChars = 0x40;
 
 // Stock keeps the buffer in .bss (0x00c62264, 410003 wchars for 5624). Ours
@@ -107,7 +107,7 @@ int IgdtSetRuntimeText(const IgdtSkinTables& t, unsigned id, const IgdtWchar* te
         // layout is not a runtime-buffer slot are refused here.
         return IGDT_ERR_PARAM;
     }
-    // TODO(phase2): stock skips the copy when wcsncmp finds the text unchanged
+    // TODO(phase3): stock skips the copy when wcsncmp finds the text unchanged
     // and otherwise marks the id dirty (bit id & 7 of 0x00a11050[(id & 0x7ff) >> 3]).
     IgdtWchar* dst = &buf[layout.off];
     size_t i = 0;
@@ -123,7 +123,7 @@ int IgdtSetRuntimeTextId(const IgdtSkinTables& t, const IgdtStringTables& string
     // tables hold UTF-8.
     IgdtWchar text[kTextIdMaxChars];
     IgdtUtf8ToUtf32(IgdtLookupString(strings, str_id, lang), text, kTextIdMaxChars);
-    // TODO(phase2): DAT_00a0fa58 = 1 (redraw request) on success.
+    // TODO(phase3): DAT_00a0fa58 = 1 (redraw request) on success.
     return IgdtSetRuntimeText(t, id, text);
 }
 

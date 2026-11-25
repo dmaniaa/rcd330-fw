@@ -153,10 +153,12 @@ class TestHmiTables(unittest.TestCase):
         clipped = [e for v in raw.values() for e in v[2] if e.clip is not None]
         self.assertEqual(len(clipped), 2394)
         self.assertEqual(len({e.clip for e in clipped}), 13)
+        # The C++ tables carry the raw clip_table; the walk intersects at runtime.
+        graph = self.gen.load_scene_graph(self.elf)
+        self.assertEqual(graph["clips"][3741], (128, 348, 542, 15))
         source = self.gen.emit_cpp(self.elf)
-        self.assertIn("const IgdtClipRect kClips[13] = {", source)
-        self.assertIn("    {128, 348, 542, 15},", source)
-        self.assertIn("kTextures, 32110, kClips, 13", source)
+        self.assertIn("const IgdtClipRect kClips[%d] = {" % len(graph["clips"]), source)
+        self.assertIn("kTextures, 32110, kClips, %d," % len(graph["clips"]), source)
 
     def test_kind7_rects_present(self):
         self.require_firmware()
@@ -168,6 +170,47 @@ class TestHmiTables(unittest.TestCase):
         self.assertIn({"type": "rect", "tag": "0x07100000", "x": 0, "y": 0, "w": 800,
                        "h": 480, "alpha": 255, "color": "0x00000000"},
                       screens[0xdf]["elements"])
+
+    def test_scene_graph_and_touch_paths(self):
+        self.require_firmware()
+        graph = self.gen.load_scene_graph(self.elf)
+        # Every node reachable from the 255 screens' root lists, in stock
+        # .rodata order (one dense block), child slices kept contiguous.
+        nodes = graph["nodes"]
+        self.assertEqual(len(nodes), 76513)
+        for eidx, ccnt, tag, first in nodes:
+            if ccnt:
+                self.assertTrue(0 <= first and first + ccnt <= len(nodes))
+            else:
+                self.assertEqual(first, -1)
+        self.assertEqual(len(graph["touch_paths"]), 2496)
+        screens = graph["screens"]
+        self.assertEqual(screens[0x04]["touch_count"], 1)
+        self.assertEqual(screens[0x03]["touch_count"], 1)
+        self.assertEqual(screens[0xf9]["touch_count"], 74)
+        self.assertEqual((screens[0x04]["layer_group"], screens[0xfe]["layer_group"]), (1, 5))
+        # A touch path is a root index then child steps, ending with the first
+        # step >= the node's child count (FUN_00324b90).
+        paths = graph["touch_paths"]
+        for screen in screens.values():
+            for first, count in paths[screen["touch_first"]:screen["touch_first"] + screen["touch_count"]]:
+                steps = graph["touch_steps"][first:first + count]
+                self.assertTrue(2 <= count <= 32)
+                self.assertLess(steps[0], screen["root_count"])
+                node = nodes[screen["root_first"] + steps[0]]
+                for step in steps[1:-1]:
+                    self.assertLess(step, node[1])
+                    node = nodes[node[3] + step]
+                self.assertGreaterEqual(steps[-1], node[1])
+        self.assertEqual(len(graph["dyn_grps"]), 0x30ba)
+        self.assertEqual(len(graph["dyn_imgs"]), 0x6cfd)
+        self.assertEqual(len(graph["dyn_txts"]), 0xe2a)
+        self.assertEqual(len(graph["branch_init"]), 0x10f0)
+        self.assertEqual(len(graph["state_init"]), 0x1b11)
+        self.assertEqual(graph["branch_init"][0x45], 1)
+        source = self.gen.emit_cpp(self.elf)
+        self.assertIn("const IgdtNode kNodes[76513] = {", source)
+        self.assertIn("const IgdtTouchPath kTouchPaths[2496] = {", source)
 
     def test_screen_count_255(self):
         self.require_firmware()
@@ -264,7 +307,7 @@ class TestHmiTables(unittest.TestCase):
             for e in elements:
                 if e.kind == 4 and (e.tag >> 24) & 0xf == 4:
                     self.assertEqual(e.rt_off, 0)
-        self.assertIn(", 774u, ", self.gen.emit_cpp(self.elf))
+        self.assertIn("\n    {774u, 100, ", self.gen.emit_cpp(self.elf))
 
     def test_text_layouts_emitted(self):
         self.require_firmware()
@@ -277,8 +320,9 @@ class TestHmiTables(unittest.TestCase):
         self.assertEqual(layouts[0x1a], (2934, 128))
         self.assertEqual(layouts[0x1c], (3192, 100))
         source = self.gen.emit_cpp(self.elf)
-        self.assertIn("const IgdtTextLayout kTextLayouts[3647] = {", source)
-        self.assertIn("    {2934u, 128},", source)
+        # Text nodes use layouts up to 0xe8a; the store still accepts < 0xe3f.
+        self.assertIn("const IgdtTextLayout kTextLayouts[3723] = {", source)
+        self.assertIn("    {2934u, 128, 752, 8, 0x22, 0x02},", source)
         # Runtime buffer (0x00c62264) length: largest offset + max chars of a
         # runtime-text layout (+0x10 bit 1).
         self.assertIn("kTextLayouts, 3647, 410003u", source)
@@ -289,8 +333,9 @@ class TestHmiTables(unittest.TestCase):
         # AppNoConn VInfoTxt (dynamic record 0x58): +0xc background 0xff000000.
         info = next(e for e in raw[0x04][2] if e.tag == 0x45100058)
         self.assertEqual(info.bg_color, 0xff000000)
-        self.assertIn("0x45100058u, 400, 113, 752, 128, 255, 0xffffffffu, -1, 8, 0x22, 0xffffffffu, "
-                      "2934u, -1, 0xff000000u},", self.gen.emit_cpp(self.elf))
+        # kDynTxts[0x58]: alpha, layout 0x1a, x, y, fg, bg, matrix, pivot.
+        self.assertIn("    {255, 26, 400, 113, 0xffffffffu, 0xff000000u, kId, 0.0f, 0.0f},",
+                      self.gen.emit_cpp(self.elf))
 
     def test_decoder_rejects_corrupt_data(self):
         import gen_strings

@@ -137,10 +137,12 @@ Every retail screen is defined declaratively by a 12-byte node graph (`<u16 eidx
 
 ### Verified Scene-Graph Record Layouts & Runtime Buffers (`5624_vw`)
 
-- **`scr_table` (`0x4536a4`, 16 B)**: `+0x00 u8 layer_group`, `+0x01 u8 0xff`, `+0x02 u8 root_count`, `+0x03 u8` unknown, `+0x04 u32` widget-box pointer (`0x8a5xxx`), `+0x08 u32 0xff000000`, `+0x0c u32` root node VA.
+- **`scr_table` (`0x4536a4`, 16 B)**: `+0x00 u8 layer_group` (`0..28`), `+0x01 u8` kind-9 slot (`0xff` for most; `0` applies slot 0's RAM alpha/offset in `0x32072c`), `+0x02 u8 root_count`, `+0x03 u8 touch_count`, `+0x04 u32` touch path list (`0x8a5xxx`, `touch_count` pointers), `+0x08 u32 0xff000000`, `+0x0c u32` root node VA.
+- **Node table**: every node reachable from the 255 root lists is one dense block `0x7948e4..0x874b64` (`76,513` nodes, child slices contiguous). **Touch paths** ([`0x324b90`](decompiled/5624/hmi/functions/0x324b90.c)): byte `0` = root index, then one child step per byte until the first step `>=` the node's child count (`2,496` paths, at most 13 bytes in `5624`).
+- **Dynamic RAM records** (initialized by [`0x324328`](decompiled/5624/hmi/functions/0x324328.c)): groups `0xa4bb14 + idx * 0x10` (`+0` alpha, `+4/+6` x/y, `+8` touch area = clip, from `clip_table[grp_flags[key].clip_idx]` or `(0, 0, -1, -1)` when `0`, [`0x323c48`](decompiled/5624/hmi/functions/0x323c48.c)), tint array (init `-1`), matrices `0xa7c6b4`; x/y are **not** copied from the record (`.bss`, start at `0, 0`). Images `0xb054d0 + idx * 0xc` (alpha, record `+8` → draw-state fg colour, x/y), tint `0xaea0dc` (`IgdtSetColor`, init `-1`), matrices `0xb570ac`. Text `0xa117a0 + idx * 0x10` (`+0` align bits from the record's layout `+8`, `+1` font, `+4` alpha, `+8` fg, `+0xc/+0xe` x/y), matrices `0xa1fa40`. All 47,693 record matrices in `5624` are identity with zero pivot. Text nodes use `text_layout` entries up to `0xe8a` (engineering text), past the `0xe3f` ids the runtime store accepts.
 - **Node `tag` bitfields** (`FUN_0031f41c`, `FUN_0031f8e4`): bits `24..27` = kind (`0` group, `1` branch, `2` img, `3` state, `4`/`5` txt, `7` rect/text-like), bit `30` = dynamic record (`1`) vs static (`0`), bits `0..19` = record index.
 - **Image record** (`(dyn ? 0x51df44 : 0x896d38) + idx * 0x38`): `+0x00 u8 alpha`, `+0x04 s16 x, y`, `+0x08 u32 tint` (written to unread `0xa0f954`), `+0x30 float pivot`.
-- **Text record** (`(dyn ? 0x759eec : 0x874b70) + idx * 0x3c`): `+0x00 u8 alpha`, `+0x02 u16`, `+0x04 s16 x, y`, `+0x08 u32 fg_color`, `+0x34 float pivot`.
+- **Text record** (`(dyn ? 0x759eec : 0x874b70) + idx * 0x3c`): `+0x00 u8 alpha`, `+0x02 u16 text_layout`, `+0x04 s16 x, y`, `+0x08 u32 fg_color`, `+0x0c u32 bg_color`, `+0x10 float matrix[9]`, `+0x34 float pivot`.
 - **`text_layout` (`0x46d6a0`, 0x14 B, [`0x3220dc`](decompiled/5624/hmi/functions/0x3220dc.c) / [`0x31ee54`](decompiled/5624/hmi/functions/0x31ee54.c))**: `+0x00 u32 wchar_offset`, `+0x04 u16 width` (+ RAM delta `0xc55af0`), `+0x06 u16 max_wchars`, `+0x07 u8 font`, `+0x08 u8 align` (bits `0..1` horizontal, `4..5` background, `6..7` truncation), `+0x09/+0x0c/+0x10 bit 0` glow radius/sigma/enable (RAM `0xc57770`), `+0x10 bit 1` runtime buffer (`1`) vs engineering UTF-32 table (`0`).
 - **Branch & state selection (`0x321ea8`, `0x321f00`, `0x324328`)**: `branch_init` (`0x78f0c4`, `0x10f0` entries) and `state_init` (`0x7912a4`, `0x1b11` entries) are indexed by **node `eidx`** (not `tag & 0xfffff` — a defect in the earlier `scenes_5624_vw.json` extractor; see [gen_igdt_tables.py](../src/hmi/tools/gen_igdt_tables.py)) and copied to RAM `0xc502d8` / `0xc524b8` by [`0x324328`](decompiled/5624/hmi/functions/0x324328.c). A state node draws only an `img` child.
 - **Flow-layout & clip groups (`0x3202c4`, `0x31ee54`, `0x31d86c`)**: `0x454694[eidx * 4]` holds `u8 flags` (bits `0..1` clip, bits `2..3 == 0xc` plain walk else flow), `u8 spacing`, `u16 clip_table_idx` into `0x45cca0` (`8 B` `s16 x, y, w, h`). Active clip bounds live in absolute `x0, y0, x1, y1` at RAM `0xa0f93c`, with `0xa0f914` bit `1` marking an empty clip.
@@ -164,3 +166,54 @@ Every retail screen is defined declaratively by a 12-byte node graph (`<u16 eidx
 | `display/page/system_setup/vsystemsetupmainpage.cpp` | `0x15716c` | `0xee` | `0xe8` | System Setup |
 | `display/page/sound/vsoundsetupmain.cpp` | `0x1b4ea0` | `0xe6` | `0xe2` | Sound Setup |
 | `display/page/car/vcar_rvc.cpp` | `0x202a18` | `0xdf` | `0xdb` | Rear View Camera Overlay |
+
+---
+
+## 7. Phase 2 Recreation Notes (verified while porting `src/hmi`)
+
+These are behaviour facts that the recreated hmi ([src/hmi/README.md](../src/hmi/README.md)) depends on. Each was checked against the decompiled functions.
+
+- **Threads and locks.**
+  - `VmfThread::Dispatch` calls each proxy's `RecieveVmfMsg` (and the `IPowerNotifySink` callbacks) with the listener `QMutex` held. That mutex is **not recursive**. The handlers do more than update their own state, in stock and in ours:
+    - `VPSSProxy::RecieveVmfMsg` (`0x1c5a90`) applies the region: `0x50abc` → `0x509b0` → `VDisplayProxy::SetLanguage` (`0x508f0`) → `hmi_wrapper_igdt_set_lang` (`0x6125c`), which takes the IGDT mutex.
+    - `VPowerProxy`'s RUN handling (`HandleRunMode`, part of `0x5bab4`) sends VMF messages (`VmfThread::Send` takes no lock) and calls `VDisplayProxy::InsertPage`. `InsertPage` reaches `VDisplayTask` only through the queued `IDisplaySink` signals (`SigShowPage` / `SigForceShowPage` / `SigClosePage`), so no page is created or destroyed on the VMF thread.
+  - Every page is created, run and destroyed on the `VDisplayTask` thread.
+  - IGDT state sits behind one recursive pthread mutex (`0x00a0fa40`), which `hmi_wrapper_igdt_init` (`0x00060e3c`) creates.
+  - `VPageManager` has its own recursive page mutex (ours; stock has no lock). Pages call the IGDT wrapper while it is held.
+  - **Lock order:** page mutex → IGDT mutex, and VMF listener mutex → IGDT mutex. Nothing that holds the IGDT mutex takes the page mutex or the listener mutex: the IGDT touch callback only emits a queued signal.
+  - **Rules for code that runs in `RecieveVmfMsg` / `IPowerNotifySink`:** never take the page mutex, never call `RegisterVmfGroup` / `AddListener` (the listener mutex is already held and is not recursive), and never block (no sleeps or waits; delays go through a `QTimer` on another thread, as in `VPssRetryTimer`).
+  - The render thread is `igdtTask` (ctor [`0x62e60`](decompiled/5624/hmi/functions/0x62e60.c), 128 KB stack). It redraws on a timer and reports IGDT touch hits through a callback, which `VDisplayTask` turns into a queued signal.
+- **Display layers.**
+  - `VPageManager` (stack at `0x00e5128c`) and the IGDT runtime both use **29 layers**.
+  - [`0x32072c`](decompiled/5624/hmi/functions/0x32072c.c) walks the per-layer descriptor table at `0x7948c8`: 16 B per layer, screen list pointer at `+0xc` = `0x7948d4`.
+  - A screen's layer is `scr_table +0` (`0x31bd30`). For example, `0xf9` is on layer 0, `0x04` on layer 1, `0x03` on layer 2 and `0xfe` on layer 5.
+- **Status line.**
+  - The status line is part of screens `0xf9` and `0x04` (`img_main_page_status_line_bg`, 800x41 at (0, 0)). It is not a separate screen.
+  - `0x03` covers it with an opaque 800x480 background on layer 2.
+  - Screen `0xfe` is `VSoundVolumeSetup` (`ShowPage` case `0xfe` → ctor `0x1b958c`, RTTI `17VSoundVolumeSetup`). [scenes_5624_vw.json](../resources/scenes/scenes_5624_vw.json) (from the earlier extractor, whose source is not in the repo) labels it `"StatusBar"` and has no entry for screen `0x03`. [gen_igdt_tables.py](../src/hmi/tools/gen_igdt_tables.py) keeps the label only so that the oracle comparison in `test_hmi_tables.py` still holds.
+- **Touch.**
+  - The device `libts-1.0.so.0` is a Visteon tslib fork, and its `struct ts_sample` is **24 bytes**, not upstream's 20. `VMultiTouch` steps samples by `0x18` (`0x23b14`, `0x23cac`) and reads the contact id at `+0x15`.
+  - Touch areas are reached through each screen's touch paths. On `0x04`, `VBtnInfo` uses tag `0x40100167` at (0, 0x18c), 800x0x54. On `0x03`, Back uses tag `0x4010015e` at (0x2cf, 1), 0x3d x 0x3d, and Back calls `VDisplayProxy::RemovePage(3)` (`0x515f8`).
+- **Controls.** `ControlCreator` composite forms are `0` one part, `1` LCR (left / stretched centre / right 3-slice), `2` UML (upper / middle / lower 3-slice) and `3` nine parts.
+- **Hard keys.**
+  - Each key is dispatched twice. First the driver press or release updates `VHMIKey` in `VIPCLNotifyFilter`.
+  - The resulting key event (3 press, 4 short release, ...) goes through `SigKeyEventNotify` to `hmi_wrapper_igdt_post_button_event` (`0x657dc`). That function re-posts the event to the filters for the per-key handler, then releases the held key: `0x632bc` → `0x61244` → `0x31c5e0(key, 0xff)`.
+  - Without that release, the held key (`0x00a0f76c`) blocks every other key.
+- **Language.** The default is index 1, which is **zh_CN**: `VDisplayProxy::Init` ([`0x531a8`](decompiled/5624/hmi/functions/0x531a8.c)) sets `+0x48 = 1`, and `hmi_wrapper_igdt_init` calls `0x31d210(1)`. The real language is decided once, early in boot, and the decision is a race:
+  1. A platform-type change (`PA_OUT_VRM_INTO`, `VPowerProxy::RecieveVmfMsg` [`0x5bab4`](decompiled/5624/hmi/functions/0x5bab4.c)) sends `VPSSProxy::OnSendPSSReadSystemSetupStatusRequest` ([`0x1c3ce0`](decompiled/5624/hmi/functions/0x1c3ce0.c)): a read of PSS block `0x4b` (`HMI_SYSTEM_SETUP_PSS_NEWBLK`).
+  2. `VPSSProxy::RecieveVmfMsg` ([`0x1c5a90`](decompiled/5624/hmi/functions/0x1c5a90.c)) handles the reply. On a good read (status 0) the region is `pData[0xb]`. On a failed read (a status bit in `0x3ec`; always the case under QEMU) the region is 1, unless `VAppConnectProxy::GetRegionMode` ([`0x347498`](decompiled/5624/hmi/functions/0x347498.c), `+0x24`) is already 2 from the decoded App-Connect PSS coding. Then it is `0xff` on platform type 1 (`VPowerProxy +0x83`, `0x5a0a0`) and 0 otherwise.
+  3. `0x50abc` → [`0x509b0`](decompiled/5624/hmi/functions/0x509b0.c) (stores `+0x44`) → `0x508f0` (stores `+0x48`, calls `0x6125c`) applies it. Regions 0..4 map to the same language index. For `0xff`, the BAP vehicle country (`0xb1fd4`, 0xa2:0x06 bytes 0/1) decides: without coding region 2, country 9 gives zh_CN and anything else en_US; with coding region 2, `0x0d` → 3, `0x15`/`6` → 2, `5`/`0x13` → 4, anything else → 0 (en_US).
+  4. diag writes the App-Connect coding to PSS during boot, so whether it is decoded before the `0x4b` read fails depends on timing. Under QEMU the result is usually en_US.
+  - Stock logs nothing for the switch: `0x508f0` and `0x6125c` don't log, and the setup write `0x1c3b18` logs `+0x35`/`+0x3c`.
+  - VBAP sub 6 only takes effect for region `0xff`, and the VIP model sends `lang_valid = 0`.
+  - **The recreated hmi ports this decision** (`VPSSProxy::RecieveVmfMsg` 0x4b reply only, `VDisplayProxy::SetRegion`/`SetLanguage`/`ApplyRegion`, the `VBAPProxy` country). It therefore inherits the race faithfully; the PSS write-back and the platform-2 unit messages are TODO(phase3).
+  - pss answers a read with status **10 = not ready** while its NVM data is not loaded: `handle_pss_read_req` ([pss `0x9a78`](decompiled/5624/services/pss/functions/0x9a78.c), the `DAT_0002b8b2 == 0` branch) checks that before any per-block status. The flag is cleared by `pss_nvm_mgr_cold_reset` ([`0xb310`](decompiled/5624/services/pss/functions/0xb310.c)) and set only after the VIP warm-RAM backup has been processed (`handle_vip_backup_data_rcvd`, [`0xb54c`](decompiled/5624/services/pss/functions/0xb54c.c)). Status 8 is a real per-block failure (`DAT_0002b8b4[block]`). Stock asks late enough to get 8; stock `0x1c5a90` ignores status 10.
+  - Ours starts earlier and often got 10, which left it on zh_CN. **DEVIATION:** `VPSSProxy` re-sends the `0x4b` read on status 10, every 200 ms, at most 50 times (10 s) per fresh request. A fresh `OnSendPSSReadSystemSetupStatusRequest` and any reply other than 10 reset the count. The re-send runs from a single-shot `QTimer` on the VControlTask thread (`VPssRetryTimer`), never on the VMF thread. One log line marks the start of retrying and one marks giving up.
+  - [`tools/tests/test_hmi_parity.py`](../tools/tests/test_hmi_parity.py) reads both languages from the AppNoConn pixels (ink width of the second welcome line: en_US 514 px, zh_CN 381 px). It re-boots the stock reference up to 3 times until it matches ours, and skips with the race named if it never does.
+  - The Phase 1 language mismatch came from the removed `HMI_DEV_SCREEN` hook, which rendered en_US.
+- **Wake-state cycle.**
+  - pwr_agent's `WS_IDLE` → `WS_RUNNING` (group `0x6e`, sub 200) clears `VPowerProxy +0x04` (hmi-run). While that flag is clear, `VControlTask` drops every hard key.
+  - The `WS_RUNNING` cascade re-reads the App-Connect PSS coding (`0x3476a8`) and asks the VIP for its audio mode (`VAudioProxy::OnGetAudioModeFromVIP` [`0x4776c`](decompiled/5624/hmi/functions/0x4776c.c): group `0x8f`, sub `0x27`, payload `2`). The `0x81` reply re-runs the start-up handshake, and the RUN that follows sets hmi-run again and recovers the main page.
+  - Stock gets the cycle before its boot page. The faster recreated hmi can get it afterwards, so the QEMU tests wait for it (`Rcd330Qemu.wait_hmi_ready`).
+- **App-Connect coding.** diag writes the App-Connect coding to PSS during boot. A query made too early gets an all-zero app record (`00 1c 01 00 ...`), which makes AppNoConn show "App-Connect not supported". The re-read on `WS_RUNNING` gets the real coding.
+- **QEMU logging.** The `log_simple` hook in [hal_gpio_shim.c](../tools/arm_hal_shim/hal_gpio_shim.c) echoes only calls whose *format string* contains `" ==== HMI ==== "`, and passes on only 4 variadic arguments. Recreated log helpers therefore keep the marker in the format, and stock lines with more than 4 arguments show garbage in their later fields.

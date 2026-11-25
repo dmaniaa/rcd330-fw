@@ -20,6 +20,11 @@ Every VMF packet starts with a fixed **26-byte (`0x1A`) header** followed immedi
 
 Inside `opt/hmi`, `VBaseProxy::PackMsg` ([`0x5fe68`](decompiled/5624/hmi/functions/0x5fe68.c)) accepts an internal 4-byte prefix `[grp, sub, len_hi, len_lo]` followed by `len` payload bytes, converts the big-endian length `(buf[2] << 8) | buf[3]` into little-endian `*(uint16_t*)(pkt + 0x18)`, copies `buf + 4` to `pkt + 0x1a`, and transmits via `VmfThread::send` ([`0x606e8`](decompiled/5624/hmi/functions/0x606e8.c) -> `nw_vmf_send`).
 
+Stock quirks found while recreating `src/hmi/service/vmf/` and `src/hmi/service/utility/vbaseproxy.cpp`:
+- `PackMsg` starts with `memset(pkt, 0, 0x4d0)`. When it rejects a buffer (NULL, under 4 bytes, length over `0x4b4`, or length not `len - 4`), `SendVmfMsg` ([`0x5ff4c`](decompiled/5624/hmi/functions/0x5ff4c.c)) still sends that all-zero packet, and `nw_vmf_send` forwards it as a basic packet to group `0`. The recreation does not send it.
+- `VmfThread::run` (`0x60688`, not in the decompiled set) loops on `nw_vmf_receive(handle, buf, 0x1008)` into a zeroed `0x1008`-byte stack buffer and dispatches only when the return value is `> 0`. The third argument is the buffer size (libvmf_client rejects packets with `len + 0x1a` above it), not a timeout. So received payloads can be up to `0xfee` bytes, more than the `0x4b4` TX limit.
+- `VmfThread::Connect` ([`0x60428`](decompiled/5624/hmi/functions/0x60428.c)) tries `nw_vmf_connect("", 0, 0, 100, 0xfe0)` 10 times with `QThread::msleep(2)` between attempts, then `nw_vmf_register_msg_group` with all groups the proxies registered. If either step fails, `VmfThread::start` ([`0x604b8`](decompiled/5624/hmi/functions/0x604b8.c)) aborts the process via `__assert_fail`. `VmfThread` has no `Q_OBJECT`: its vtable `0x3f5958` uses the `QThread` meta-object entries.
+
 For CLI testing on the target or inside QEMU, [`opt/tools/vmf_send`](decompiled/5624/vmf/vmf_send) and [`opt/tools/vmf_rcv`](decompiled/5624/vmf/vmf_rcv) inject and monitor decimal VMF packets (`vmf_send <dec_group> <dec_sub> [dec_byte0 ...]`).
 
 ---

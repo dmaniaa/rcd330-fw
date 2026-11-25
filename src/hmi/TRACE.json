@@ -2,22 +2,2216 @@
   "0x00010e58": {
     "name": "main",
     "file": "main.cpp",
-    "line": 80
+    "line": 61
+  },
+  "0x00023514": {
+    "name": "logo_black_avoid_handle",
+    "file": "main.cpp",
+    "line": 40
   },
   "0x00023650": {
     "name": "IgdtGetString",
     "file": "display/igdt/igdt_strings.cpp",
     "line": 28
   },
+  "0x000237f4": {
+    "name": "VMultiTouch::VMultiTouch",
+    "file": "display/multitouch/vmultitouch.cpp",
+    "line": 44
+  },
+  "0x000238d4": {
+    "name": "VMultiTouch::Init",
+    "file": "display/multitouch/vmultitouch.cpp",
+    "line": 54
+  },
+  "0x00023aec": {
+    "name": "VMultiTouch::Run",
+    "file": "display/multitouch/vmultitouch.cpp",
+    "line": 72
+  },
+  "0x00023b04": {
+    "name": "VMultiTouch::SetMoveInterval (name is ours)",
+    "file": "display/multitouch/vmultitouch.cpp",
+    "line": 78
+  },
+  "0x00023b14": {
+    "name": "VMultiTouch::UpdateTouchState (name is ours)",
+    "file": "control_logic/input/input_decoders.cpp",
+    "line": 168
+  },
+  "0x00023cac": {
+    "name": "VMultiTouch::ReleaseAllTouch (name is ours)",
+    "file": "control_logic/input/input_decoders.cpp",
+    "line": 232
+  },
+  "0x00023d34": {
+    "name": "VMultiTouch::GetTouchData (name is ours)",
+    "file": "control_logic/input/input_decoders.cpp",
+    "line": 152
+  },
+  "0x00023dbc": {
+    "name": "VMultiTouch::Initialize",
+    "file": "display/multitouch/vmultitouch.cpp",
+    "line": 83
+  },
+  "0x0002a7d0": {
+    "name": "VBasePage::VBasePage",
+    "file": "display/page/base/basepage.cpp",
+    "line": 45
+  },
+  "0x0002a8fc": {
+    "name": "VBasePage::~VBasePage",
+    "file": "display/page/base/basepage.cpp",
+    "line": 54
+  },
+  "0x0002aa98": {
+    "name": "VBasePage::GetScreenId",
+    "file": "display/page/base/basepage.cpp",
+    "line": 59
+  },
+  "0x0002aaa8": {
+    "name": "VBasePage::Stop",
+    "file": "display/page/base/basepage.cpp",
+    "line": 80
+  },
+  "0x0002aaf4": {
+    "name": "VBasePage::Pause",
+    "file": "display/page/base/basepage.cpp",
+    "line": 95
+  },
+  "0x0002ab0c": {
+    "name": "VBasePage::Resume",
+    "file": "display/page/base/basepage.cpp",
+    "line": 105
+  },
+  "0x0002ab58": {
+    "name": "VBasePage::OnTouchEvent",
+    "file": "display/page/base/basepage.cpp",
+    "line": 110
+  },
+  "0x0002acd0": {
+    "name": "VBasePage::DispatchIgdtTouch",
+    "file": "display/page/base/basepage.cpp",
+    "line": 124
+  },
+  "0x0002ad60": {
+    "name": "VBasePage::UpdateHeadlineDisplay",
+    "file": "display/page/base/basepage.cpp",
+    "line": 146
+  },
+  "0x0002adf0": {
+    "name": "VBasePage::Start",
+    "file": "display/page/base/basepage.cpp",
+    "line": 69
+  },
+  "0x0002b2a4": {
+    "name": "VPageManager::VPageManager",
+    "file": "display/page/base/pagemanager.cpp",
+    "line": 36
+  },
+  "0x0002b398": {
+    "name": "VPageManager::Instance",
+    "file": "display/page/base/pagemanager.cpp",
+    "line": 53
+  },
+  "0x0002b428": {
+    "name": "VPageManager::ClosePage",
+    "file": "display/page/base/pagemanager.cpp",
+    "line": 198
+  },
+  "0x0002b4ac": {
+    "name": "VPageManager::RemovePage",
+    "file": "display/page/base/pagemanager.cpp",
+    "line": 281
+  },
+  "0x0002b64c": {
+    "name": "VPageManager::RemoveAllPage",
+    "file": "display/page/base/pagemanager.cpp",
+    "line": 210
+  },
+  "0x0002b6b0": {
+    "name": "VPageManager::OnIgdtTouchEvent",
+    "file": "display/page/base/pagemanager.cpp",
+    "line": 324
+  },
+  "0x0002b7cc": {
+    "name": "VPageManager::RemovePagesAbove",
+    "file": "display/page/base/pagemanager.cpp",
+    "line": 178
+  },
+  "0x0002b8b8": {
+    "name": "VPageManager::FindPage",
+    "file": "display/page/base/pagemanager.cpp",
+    "line": 70
+  },
+  "0x0002ba34": {
+    "name": "VPageManager::OnTouchEvent",
+    "file": "display/page/base/pagemanager.cpp",
+    "line": 315
+  },
+  "0x0002bb00": {
+    "name": "VPageManager::UpdateHeadline",
+    "file": "display/page/base/pagemanager.cpp",
+    "line": 334
+  },
+  "0x0002bb60": {
+    "name": "VPageManager::GetCurrentScreen",
+    "file": "display/page/base/pagemanager.cpp",
+    "line": 82
+  },
+  "0x0002bb70": {
+    "name": "VPageManager::GetBaseScreen",
+    "file": "display/page/base/pagemanager.cpp",
+    "line": 88
+  },
+  "0x0002bbf8": {
+    "name": "VPageManager::IsScreenInStack",
+    "file": "display/page/base/pagemanager.cpp",
+    "line": 94
+  },
+  "0x0002c070": {
+    "name": "VPageManager::ShowIgdtScreen",
+    "file": "display/page/base/pagemanager.cpp",
+    "line": 220
+  },
+  "0x0002c1b4": {
+    "name": "VPageManager::InsertPage",
+    "file": "display/page/base/pagemanager.cpp",
+    "line": 242
+  },
+  "0x0002c34c": {
+    "name": "VPageManager::ShowPage",
+    "file": "display/page/base/pagemanager.cpp",
+    "line": 108
+  },
+  "0x0002fc28": {
+    "name": "VPageManager::ForceShowPage",
+    "file": "display/page/base/pagemanager.cpp",
+    "line": 159
+  },
+  "0x0002fd18": {
+    "name": "VControlTask::VControlTask",
+    "file": "control_logic/vcontroltask.cpp",
+    "line": 65
+  },
+  "0x00030054": {
+    "name": "VControlTask::Instance",
+    "file": "control_logic/vcontroltask.cpp",
+    "line": 119
+  },
+  "0x00030064": {
+    "name": "VControlTask::Run",
+    "file": "control_logic/vcontroltask.cpp",
+    "line": 172
+  },
+  "0x000306e0": {
+    "name": "VControlTask::StartKeyTimer",
+    "file": "control_logic/vcontroltask.cpp",
+    "line": 200
+  },
+  "0x00030768": {
+    "name": "VControlTask::StopKeyTimer",
+    "file": "control_logic/vcontroltask.cpp",
+    "line": 212
+  },
+  "0x00031ed8": {
+    "name": "VControlTask::HMIKeyTimeOutSlot",
+    "file": "control_logic/vcontroltask.cpp",
+    "line": 219
+  },
+  "0x000322bc": {
+    "name": "VControlTask::KeyDriverNotifySlot",
+    "file": "control_logic/vcontroltask.cpp",
+    "line": 235
+  },
+  "0x00032a60": {
+    "name": "VControlTask::NotifyDisplayKey",
+    "file": "control_logic/vcontroltask.cpp",
+    "line": 483
+  },
+  "0x00033244": {
+    "name": "VControlTask::KeySubsystemNotifyMsg",
+    "file": "control_logic/vcontroltask.cpp",
+    "line": 195
+  },
+  "0x00033298": {
+    "name": "VControlTask::PowersubsystemNotifySlot",
+    "file": "control_logic/vcontroltask.cpp",
+    "line": 328
+  },
+  "0x0003356c": {
+    "name": "VControlTask::KeysubsystemNotifySlot",
+    "file": "control_logic/vcontroltask.cpp",
+    "line": 320
+  },
+  "0x0003399c": {
+    "name": "VControlTask::RegisterSignals",
+    "file": "control_logic/vcontroltask.cpp",
+    "line": 156
+  },
+  "0x00033c68": {
+    "name": "VControlTask::Init",
+    "file": "control_logic/vcontroltask.cpp",
+    "line": 124
+  },
+  "0x00034630": {
+    "name": "VControlTask::PowersubsystemNotifyMsg",
+    "file": "control_logic/vcontroltask.cpp",
+    "line": 337
+  },
+  "0x00035624": {
+    "name": "VControlTask::InitializeSlot",
+    "file": "control_logic/vcontroltask.cpp",
+    "line": 179
+  },
+  "0x00036270": {
+    "name": "VControlTask::OnIgdtRefreshNotify",
+    "file": "control_logic/vcontroltask.cpp",
+    "line": 476
+  },
+  "0x0003962c": {
+    "name": "VBaseFilter::DispatchMsg",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 69
+  },
+  "0x00039780": {
+    "name": "VBaseFilter::AddNextFilter",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 55
+  },
+  "0x00039998": {
+    "name": "VBaseFilter::HandleMsg",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 83
+  },
+  "0x00039a84": {
+    "name": "VBaseFilter::HandleNotifyMsg",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 104
+  },
+  "0x00039d80": {
+    "name": "VBaseFilter::HandlePowerNotify",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 118
+  },
+  "0x0003a1a4": {
+    "name": "VBaseFilter::HandleIPCLNotify",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 155
+  },
+  "0x0003abd8": {
+    "name": "VBaseFilter::HandleLPCLHardKey",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 164
+  },
+  "0x0003af18": {
+    "name": "VBaseFilter::~VBaseFilter",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 52
+  },
+  "0x0003af60": {
+    "name": "VBaseFilter::VBaseFilter",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 49
+  },
+  "0x0003af80": {
+    "name": "VBaseFilter::HandlePowerVOLStatus",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 135
+  },
+  "0x0003afb0": {
+    "name": "VBaseFilter::HandlePowerAuxStatus",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 140
+  },
+  "0x0003afe0": {
+    "name": "VBaseFilter::HandlePowerEjectStatus",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 145
+  },
+  "0x0003b010": {
+    "name": "VBaseFilter::HandleAudioModeStatus",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 150
+  },
+  "0x0003b7f0": {
+    "name": "VBaseFilter::HandleLPCLHardKeyMedia",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 202
+  },
+  "0x0003b820": {
+    "name": "VBaseFilter::HandleLPCLHardKeyRadio",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 207
+  },
+  "0x0003b850": {
+    "name": "VBaseFilter::HandleLPCLHardKeyPhone",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 212
+  },
+  "0x0003b8b0": {
+    "name": "VBaseFilter::HandleLPCLHardKeyVoice",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 217
+  },
+  "0x0003b9a0": {
+    "name": "VBaseFilter::HandleLPCLHardKeySet",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 222
+  },
+  "0x0003ba60": {
+    "name": "VBaseFilter::HandleLPCLHardKeyTune",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 227
+  },
+  "0x0003ba90": {
+    "name": "VBaseFilter::HandleLPCLHardKeyTuneUp",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 232
+  },
+  "0x0003bac0": {
+    "name": "VBaseFilter::HandleLPCLHardKeyTuneDown",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 237
+  },
+  "0x0003bb50": {
+    "name": "VBaseFilter::HandleLPCLHardKeyApp",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 242
+  },
+  "0x0003bb80": {
+    "name": "VBaseFilter::HandleLPCLHardKeyEject",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 247
+  },
+  "0x0003bbb0": {
+    "name": "VBaseFilter::HandleCmdMsg",
+    "file": "control_logic/mode/vbasefilter.cpp",
+    "line": 99
+  },
+  "0x0003bc10": {
+    "name": "VHMIKey::VHMIKey",
+    "file": "control_logic/mode/ipcl/vhmikey.cpp",
+    "line": 14
+  },
+  "0x0003bd90": {
+    "name": "VHMIKey::SetLongPressTime",
+    "file": "control_logic/mode/ipcl/vhmikey.cpp",
+    "line": 29
+  },
+  "0x0003bd98": {
+    "name": "VHMIKey::ResetAll",
+    "file": "control_logic/mode/ipcl/vhmikey.cpp",
+    "line": 125
+  },
+  "0x0003c564": {
+    "name": "VHMIKey::Tick",
+    "file": "control_logic/mode/ipcl/vhmikey.cpp",
+    "line": 96
+  },
+  "0x0003c750": {
+    "name": "VHMIKey::Release",
+    "file": "control_logic/mode/ipcl/vhmikey.cpp",
+    "line": 68
+  },
+  "0x0003c820": {
+    "name": "VHMIKey::Press",
+    "file": "control_logic/mode/ipcl/vhmikey.cpp",
+    "line": 57
+  },
+  "0x0003c9bc": {
+    "name": "VHMIKey::AddKey",
+    "file": "control_logic/mode/ipcl/vhmikey.cpp",
+    "line": 19
+  },
+  "0x00040e18": {
+    "name": "VAudioNotifyFilter::VAudioNotifyFilter",
+    "file": "control_logic/mode/audio/vaudionotifyfilter.cpp",
+    "line": 4
+  },
+  "0x00040e38": {
+    "name": "VDisplayCmdFilter::HandleCmdMsg",
+    "file": "control_logic/mode/display/vdisplaycmdfilter.cpp",
+    "line": 33
+  },
+  "0x000411b8": {
+    "name": "VDisplayCmdFilter::VDisplayCmdFilter",
+    "file": "control_logic/mode/display/vdisplaycmdfilter.cpp",
+    "line": 30
+  },
+  "0x00041374": {
+    "name": "VIPCLNotifyFilter::HandleLPCLHardKeyEject",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 250
+  },
+  "0x00041470": {
+    "name": "VIPCLNotifyFilter::HandleLPCLHardKeyVoice",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 238
+  },
+  "0x00041990": {
+    "name": "VIPCLNotifyFilter::HandleLPCLHardKeyTuneDown",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 272
+  },
+  "0x00041ab8": {
+    "name": "VIPCLNotifyFilter::HandleLPCLHardKeyTuneUp",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 264
+  },
+  "0x00041b74": {
+    "name": "VIPCLNotifyFilter::HandleLPCLHardKeyTune",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 256
+  },
+  "0x00041c40": {
+    "name": "VIPCLNotifyFilter::HandleLPCLHardKeyApp",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 403
+  },
+  "0x00042088": {
+    "name": "VIPCLNotifyFilter::HandleLPCLHardKeySet",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 244
+  },
+  "0x00042570": {
+    "name": "VIPCLNotifyFilter::HandleLPCLHardKeyPhone",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 232
+  },
+  "0x00042934": {
+    "name": "VIPCLNotifyFilter::HandleLPCLHardKeyRadio",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 285
+  },
+  "0x00042fdc": {
+    "name": "VIPCLNotifyFilter::HandleLPCLHardKey",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 175
+  },
+  "0x00043194": {
+    "name": "VIPCLNotifyFilter::~VIPCLNotifyFilter",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 168
+  },
+  "0x00043200": {
+    "name": "hard_key_ultralong_press",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 114
+  },
+  "0x000432f0": {
+    "name": "hard_key_extend_long_press",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 98
+  },
+  "0x000433e0": {
+    "name": "hard_key_short_press",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 60
+  },
+  "0x000434c0": {
+    "name": "hard_key_ultralong_release",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 121
+  },
+  "0x000435c8": {
+    "name": "hard_key_extend_long_release",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 105
+  },
+  "0x000436cc": {
+    "name": "hard_key_long_release",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 88
+  },
+  "0x000437d0": {
+    "name": "hard_key_long_press",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 78
+  },
+  "0x000438d4": {
+    "name": "hard_key_short_release",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 68
+  },
+  "0x0004398c": {
+    "name": "VIPCLNotifyFilter::VIPCLNotifyFilter",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 143
+  },
+  "0x00043c1c": {
+    "name": "VIPCLNotifyFilter::HandleLPCLHardKeyMedia",
+    "file": "control_logic/mode/ipcl/vipclnotifyfilter.cpp",
+    "line": 226
+  },
+  "0x00045bdc": {
+    "name": "VMediaNotifyFilter::VMediaNotifyFilter",
+    "file": "control_logic/mode/media/vmedianotifyfilter.cpp",
+    "line": 4
+  },
+  "0x00045ea4": {
+    "name": "VPrehandleFilter::VPrehandleFilter",
+    "file": "control_logic/mode/vprehandlefilter.cpp",
+    "line": 4
+  },
+  "0x00045ec4": {
+    "name": "VPowerNotifyFilter::HandlePowerEjectStatus",
+    "file": "control_logic/mode/power/vpowernotifyfilter.cpp",
+    "line": 42
+  },
+  "0x00045fa4": {
+    "name": "VPowerNotifyFilter::HandlePowerVOLStatus",
+    "file": "control_logic/mode/power/vpowernotifyfilter.cpp",
+    "line": 17
+  },
+  "0x00046054": {
+    "name": "VPowerNotifyFilter::HandleAudioModeStatus",
+    "file": "control_logic/mode/power/vpowernotifyfilter.cpp",
+    "line": 56
+  },
+  "0x00046250": {
+    "name": "VPowerNotifyFilter::HandlePowerAuxStatus",
+    "file": "control_logic/mode/power/vpowernotifyfilter.cpp",
+    "line": 29
+  },
+  "0x000465fc": {
+    "name": "VPowerNotifyFilter::VPowerNotifyFilter",
+    "file": "control_logic/mode/power/vpowernotifyfilter.cpp",
+    "line": 14
+  },
+  "0x000467f0": {
+    "name": "VAudioProxy::channel_switch_out",
+    "file": "control_logic/subsystem/audio/vaudioproxy.cpp",
+    "line": 115
+  },
+  "0x00046a9c": {
+    "name": "VAudioProxy::VAudioProxy",
+    "file": "control_logic/subsystem/audio/vaudioproxy.cpp",
+    "line": 33
+  },
+  "0x00046b38": {
+    "name": "VAudioProxy::Instance",
+    "file": "control_logic/subsystem/audio/vaudioproxy.cpp",
+    "line": 45
+  },
+  "0x00046b80": {
+    "name": "VAudioProxy::Init",
+    "file": "control_logic/subsystem/audio/vaudioproxy.cpp",
+    "line": 53
+  },
+  "0x00046f10": {
+    "name": "VAudioProxy::SetCurPrimaryAudioChannel",
+    "file": "control_logic/subsystem/audio/vaudioproxy.cpp",
+    "line": 72
+  },
+  "0x00046fb8": {
+    "name": "VAudioProxy::GetAudioMode",
+    "file": "control_logic/subsystem/audio/vaudioproxy.cpp",
+    "line": 67
+  },
+  "0x000470ac": {
+    "name": "VAudioProxy::SetTargetPrimaryAudioChannel",
+    "file": "control_logic/subsystem/audio/vaudioproxy.cpp",
+    "line": 84
+  },
+  "0x000476ac": {
+    "name": "VAudioProxy::OnOffConnectionReq",
+    "file": "control_logic/subsystem/audio/vaudioproxy.cpp",
+    "line": 166
+  },
+  "0x0004776c": {
+    "name": "VAudioProxy::OnGetAudioModeFromVIP",
+    "file": "control_logic/subsystem/audio/vaudioproxy.cpp",
+    "line": 183
+  },
+  "0x00048240": {
+    "name": "VAudioProxy::OnBuildConnectionReq",
+    "file": "control_logic/subsystem/audio/vaudioproxy.cpp",
+    "line": 147
+  },
+  "0x0004875c": {
+    "name": "VAudioProxy::InsertAudioMode",
+    "file": "control_logic/subsystem/audio/vaudioproxy.cpp",
+    "line": 93
+  },
+  "0x00049da8": {
+    "name": "VAudioProxy::OnGetAllAudioSetting",
+    "file": "control_logic/subsystem/audio/vaudioproxy.cpp",
+    "line": 175
+  },
+  "0x00049f24": {
+    "name": "VAudioProxy::RecieveVmfMsg",
+    "file": "control_logic/subsystem/audio/vaudioproxy.cpp",
+    "line": 190
+  },
+  "0x00050058": {
+    "name": "VDisplayProxy::GetPopPageState",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 330
+  },
+  "0x000500b4": {
+    "name": "VDisplayProxy::NotifyHmiOn",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 339
+  },
+  "0x00050590": {
+    "name": "VDisplayProxy::GetCurDisplayPage",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 313
+  },
+  "0x00050598": {
+    "name": "VDisplayProxy::GetMainPage",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 308
+  },
+  "0x000505a8": {
+    "name": "VDisplayProxy::SetMainPageValue",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 367
+  },
+  "0x000505b0": {
+    "name": "VDisplayProxy::SetPrevMainPageValue",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 373
+  },
+  "0x000505b8": {
+    "name": "VDisplayProxy::SetMainPageId",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 318
+  },
+  "0x000508e8": {
+    "name": "VDisplayProxy::GetRegion",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 270
+  },
+  "0x000508f0": {
+    "name": "VDisplayProxy::SetLanguage",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 289
+  },
+  "0x000509b0": {
+    "name": "VDisplayProxy::SetRegion",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 276
+  },
+  "0x00050abc": {
+    "name": "VDisplayProxy::ApplyRegion",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 301
+  },
+  "0x00050ad0": {
+    "name": "VDisplayProxy::GetLanguage",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 265
+  },
+  "0x00050bcc": {
+    "name": "VDisplayProxy::UpdateBacklight",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 343
+  },
+  "0x0005149c": {
+    "name": "VDisplayProxy::IsPopupStackClear",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 405
+  },
+  "0x000514f4": {
+    "name": "VDisplayProxy::IsPopupScreen",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 391
+  },
+  "0x000515f8": {
+    "name": "VDisplayProxy::RemovePage",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 256
+  },
+  "0x000517f4": {
+    "name": "VDisplayProxy::SetIgdtShown",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 379
+  },
+  "0x000517fc": {
+    "name": "VDisplayProxy::IsIgdtShown",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 385
+  },
+  "0x00051e8c": {
+    "name": "VDisplayProxy::VDisplayProxy",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 59
+  },
+  "0x00052174": {
+    "name": "VDisplayProxy::Instance",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 83
+  },
+  "0x000530e4": {
+    "name": "VDisplayProxy::PushPage",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 203
+  },
+  "0x000531a8": {
+    "name": "VDisplayProxy::Init",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 91
+  },
+  "0x000537fc": {
+    "name": "VDisplayProxy::ForceClosePage",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 247
+  },
+  "0x00053b98": {
+    "name": "VDisplayProxy::ClosePage",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 234
+  },
+  "0x00054314": {
+    "name": "VDisplayProxy::InsertPage",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 129
+  },
+  "0x00054fcc": {
+    "name": "VDisplayProxy::SetMainPage",
+    "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+    "line": 114
+  },
+  "0x00055d48": {
+    "name": "VPowerProxy::VPowerProxy",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 67
+  },
+  "0x00055fd4": {
+    "name": "VPowerProxy::Instance",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 97
+  },
+  "0x0005601c": {
+    "name": "VPowerProxy::Init",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 105
+  },
+  "0x00056040": {
+    "name": "VPowerProxy::SendWakeStateToPowerAgent",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 114
+  },
+  "0x000561ec": {
+    "name": "VPowerProxy::GetPwrCurStateToPowerAgent",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 281
+  },
+  "0x000563bc": {
+    "name": "VPowerProxy::GetAuxMode",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 234
+  },
+  "0x000567a0": {
+    "name": "VPowerProxy::SetBacklightOnOFF",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 128
+  },
+  "0x000568cc": {
+    "name": "VPowerProxy::SetHMIOff",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 161
+  },
+  "0x00056950": {
+    "name": "VPowerProxy::SetHMIOn",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 148
+  },
+  "0x00056a7c": {
+    "name": "VPowerProxy::RestoreBacklight",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 170
+  },
+  "0x0005a068": {
+    "name": "VPowerProxy::GetPowerState",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 242
+  },
+  "0x0005a070": {
+    "name": "VPowerProxy::GetTimeDisplayFlags",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 247
+  },
+  "0x0005a0a0": {
+    "name": "VPowerProxy::GetPlatformType",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 214
+  },
+  "0x0005a0b8": {
+    "name": "VPowerProxy::IsHMIOn",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 219
+  },
+  "0x0005a394": {
+    "name": "VPowerProxy::SetRvcCoded",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 224
+  },
+  "0x0005a3ec": {
+    "name": "VPowerProxy::SetStartupDone",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 229
+  },
+  "0x0005a850": {
+    "name": "VPowerProxy::GetRemoteWakeFlag",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 269
+  },
+  "0x0005a88c": {
+    "name": "VPowerProxy::GetPhoneWakeFlag",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 263
+  },
+  "0x0005b510": {
+    "name": "VPowerProxy::GetRecoverPage",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 257
+  },
+  "0x0005b520": {
+    "name": "VPowerProxy::RecoverSetupMainPage",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 181
+  },
+  "0x0005b9cc": {
+    "name": "VPowerProxy::GetTempProtect",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 275
+  },
+  "0x0005bab4": {
+    "name": "VPowerProxy::RecieveVmfMsg",
+    "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+    "line": 343
+  },
+  "0x0005ee7c": {
+    "name": "VSubsystemProxy::Instance",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 189
+  },
+  "0x0005eec4": {
+    "name": "VSubsystemProxy::Init",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 197
+  },
+  "0x0005fd24": {
+    "name": "VBaseProxy::~VBaseProxy",
+    "file": "service/utility/vbaseproxy.cpp",
+    "line": 18
+  },
+  "0x0005fdb4": {
+    "name": "VBaseProxy::VBaseProxy",
+    "file": "service/utility/vbaseproxy.cpp",
+    "line": 15
+  },
+  "0x0005fdd4": {
+    "name": "VBaseProxy::RegisterVmfGroup",
+    "file": "service/utility/vbaseproxy.cpp",
+    "line": 21
+  },
+  "0x0005fe68": {
+    "name": "VBaseProxy::PackMsg",
+    "file": "service/utility/vbaseproxy.cpp",
+    "line": 44,
+    "also": [
+      {
+        "file": "service/vmf/vmf_frame.cpp",
+        "line": 8
+      }
+    ]
+  },
+  "0x0005ff4c": {
+    "name": "VBaseProxy::SendVmfMsg",
+    "file": "service/utility/vbaseproxy.cpp",
+    "line": 65
+  },
+  "0x000602e0": {
+    "name": "VmfThread::VmfThread",
+    "file": "service/vmf/VmfThread.cpp",
+    "line": 23
+  },
+  "0x00060384": {
+    "name": "VmfThread::Instance",
+    "file": "service/vmf/VmfThread.cpp",
+    "line": 26
+  },
+  "0x000603f4": {
+    "name": "VmfThread::SetName",
+    "file": "service/vmf/VmfThread.cpp",
+    "line": 32
+  },
+  "0x00060428": {
+    "name": "VmfThread::Connect",
+    "file": "service/vmf/VmfThread.cpp",
+    "line": 40
+  },
+  "0x000604b8": {
+    "name": "VmfThread::start",
+    "file": "service/vmf/VmfThread.cpp",
+    "line": 73
+  },
+  "0x000604fc": {
+    "name": "VmfThread::AddListener",
+    "file": "service/vmf/VmfThread.cpp",
+    "line": 83,
+    "also": [
+      {
+        "file": "service/vmf/vmf_frame.cpp",
+        "line": 58
+      }
+    ]
+  },
+  "0x000605f0": {
+    "name": "VmfThread::Dispatch",
+    "file": "service/vmf/VmfThread.cpp",
+    "line": 92,
+    "also": [
+      {
+        "file": "service/vmf/vmf_frame.cpp",
+        "line": 66
+      }
+    ]
+  },
+  "0x000606e8": {
+    "name": "VmfThread::Send",
+    "file": "service/vmf/VmfThread.cpp",
+    "line": 103
+  },
+  "0x00060720": {
+    "name": "VmfThread::AddGroup",
+    "file": "service/vmf/VmfThread.cpp",
+    "line": 111,
+    "also": [
+      {
+        "file": "service/vmf/vmf_frame.cpp",
+        "line": 49
+      }
+    ]
+  },
+  "0x000609f8": {
+    "name": "VBaseTask::VBaseTask",
+    "file": "service/utility/vbasetask.cpp",
+    "line": 4
+  },
+  "0x00060a50": {
+    "name": "VBaseTask::~VBaseTask",
+    "file": "service/utility/vbasetask.cpp",
+    "line": 9
+  },
+  "0x00060ac8": {
+    "name": "VBaseTask::Start",
+    "file": "service/utility/vbasetask.cpp",
+    "line": 15
+  },
+  "0x00060ae8": {
+    "name": "VBaseTask::LogThread",
+    "file": "service/utility/vbasetask.cpp",
+    "line": 20
+  },
   "0x00060e3c": {
     "name": "hmi_wrapper_igdt_init",
     "file": "display/igdt/extend/igdt_wrapper.cpp",
-    "line": 14
+    "line": 98
   },
   "0x00060f54": {
     "name": "hmi_wrapper_igdt_show",
     "file": "display/igdt/extend/igdt_wrapper.cpp",
-    "line": 31
+    "line": 114
+  },
+  "0x000610a8": {
+    "name": "hmi_wrapper_igdt_insert_page",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 151,
+    "also": [
+      {
+        "file": "display/igdt/extend/igdt_wrapper.h",
+        "line": 37
+      },
+      {
+        "file": "display/igdt/igdt_touch.cpp",
+        "line": 136
+      }
+    ]
+  },
+  "0x000611bc": {
+    "name": "hmi_wrapper_igdt_remove_page",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 164
+  },
+  "0x00061220": {
+    "name": "hmi_wrapper_igdt_is_page_shown",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 183
+  },
+  "0x00061244": {
+    "name": "hmi_wrapper_igdt_release_key",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 265
+  },
+  "0x0006125c": {
+    "name": "hmi_wrapper_igdt_set_lang",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 326
+  },
+  "0x000612cc": {
+    "name": "hmi_wrapper_igdt_get_lang",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 338
+  },
+  "0x000612d4": {
+    "name": "hmi_wrapper_igdt_touch_event",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 191
+  },
+  "0x00061510": {
+    "name": "hmi_wrapper_igdt_set_text_wstr",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 286
+  },
+  "0x000615ec": {
+    "name": "hmi_wrapper_igdt_set_text_id",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 274
+  },
+  "0x0006167c": {
+    "name": "hmi_wrapper_igdt_set_branch",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 343
+  },
+  "0x000616a8": {
+    "name": "hmi_wrapper_igdt_set_state",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 349
+  },
+  "0x00061700": {
+    "name": "hmi_wrapper_igdt_set_touch_area",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 355
+  },
+  "0x00061758": {
+    "name": "hmi_wrapper_igdt_set_color",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 367
+  },
+  "0x00061784": {
+    "name": "hmi_wrapper_igdt_set_alpha",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 373
+  },
+  "0x00061808": {
+    "name": "hmi_wrapper_igdt_set_xy",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 391
+  },
+  "0x00061840": {
+    "name": "hmi_wrapper_igdt_set_x",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 379
+  },
+  "0x0006186c": {
+    "name": "hmi_wrapper_igdt_set_y",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 385
+  },
+  "0x000618c4": {
+    "name": "hmi_wrapper_igdt_get_xy",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 398
+  },
+  "0x000619b0": {
+    "name": "hmi_wrapper_igdt_get_touch_area",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 361
+  },
+  "0x00061a10": {
+    "name": "hmi_wrapper_igdt_reset_node",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 425
+  },
+  "0x00061b10": {
+    "name": "hmi_wrapper_igdt_set_matrix",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 419
+  },
+  "0x00061b3c": {
+    "name": "hmi_wrapper_igdt_set_scale",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 413
+  },
+  "0x000624f0": {
+    "name": "hmi_wrapper_igdt_set_text_tabular",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 313
+  },
+  "0x00062a28": {
+    "name": "hmi_wrapper_igdt_get_hardkey_permit",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 434
+  },
+  "0x00062d40": {
+    "name": "hmi_wrapper_igdt_set_mutihardkey_permit",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 448
+  },
+  "0x00062d50": {
+    "name": "hmi_wrapper_igdt_get_mutihardkey_permit",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 443
+  },
+  "0x00062d60": {
+    "name": "hmi_wrapper_igdt_set_touch_permit",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 458
+  },
+  "0x00062d70": {
+    "name": "hmi_wrapper_igdt_get_touch_permit",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 453
+  },
+  "0x00062e60": {
+    "name": "igdtTask::igdtTask",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 463
+  },
+  "0x00062f14": {
+    "name": "igdtTask::Instance",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 474
+  },
+  "0x00062f5c": {
+    "name": "igdtTask::~igdtTask",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 480
+  },
+  "0x0006304c": {
+    "name": "igdtTask::InitializeSlot (0x00062fdc connections)",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 487
+  },
+  "0x00063084": {
+    "name": "igdtTask::OnTimeOut",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 504
+  },
+  "0x00063260": {
+    "name": "igdtTask::OnCircleReflash",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 498
+  },
+  "0x00063298": {
+    "name": "VDisplayTask::IgdtTouchCallback",
+    "file": "display/vdisplaytask.cpp",
+    "line": 85
+  },
+  "0x00063344": {
+    "name": "VDisplayTask::VDisplayTask",
+    "file": "display/vdisplaytask.cpp",
+    "line": 21
+  },
+  "0x000633a4": {
+    "name": "VDisplayTask::Instance",
+    "file": "display/vdisplaytask.cpp",
+    "line": 30
+  },
+  "0x000633b4": {
+    "name": "VDisplayTask::InitializeSlot",
+    "file": "display/vdisplaytask.cpp",
+    "line": 75
+  },
+  "0x00063584": {
+    "name": "VDisplayTask::Run",
+    "file": "display/vdisplaytask.cpp",
+    "line": 67
+  },
+  "0x0006497c": {
+    "name": "VDisplayTask::OnShowPage",
+    "file": "display/vdisplaytask.cpp",
+    "line": 93
+  },
+  "0x00064994": {
+    "name": "VDisplayTask::OnForceShowPage",
+    "file": "display/vdisplaytask.cpp",
+    "line": 98
+  },
+  "0x000649ac": {
+    "name": "VDisplayTask::OnClosePage",
+    "file": "display/vdisplaytask.cpp",
+    "line": 103
+  },
+  "0x000649c4": {
+    "name": "VDisplayTask::OnRemoveAllPage",
+    "file": "display/vdisplaytask.cpp",
+    "line": 108
+  },
+  "0x000649d4": {
+    "name": "VDisplayTask::OnDisplayTimeOut",
+    "file": "display/vdisplaytask.cpp",
+    "line": 113
+  },
+  "0x00065238": {
+    "name": "VDisplayTask::Init",
+    "file": "display/vdisplaytask.cpp",
+    "line": 37
+  },
+  "0x00065308": {
+    "name": "VDisplayTask::OnTouchEvent",
+    "file": "display/vdisplaytask.cpp",
+    "line": 122
+  },
+  "0x00065524": {
+    "name": "VDisplayTask::OnIgdtTouchEvent",
+    "file": "display/vdisplaytask.cpp",
+    "line": 135
+  },
+  "0x000657dc": {
+    "name": "VDisplayTask::SlotKeyEventNotify",
+    "file": "display/vdisplaytask.cpp",
+    "line": 141
+  },
+  "0x000aa0d0": {
+    "name": "VKnobDriver::VKnobDriver",
+    "file": "control_logic/input/vknobdriver.cpp",
+    "line": 29
+  },
+  "0x000aa12c": {
+    "name": "VKnobDriver::Run",
+    "file": "control_logic/input/vknobdriver.cpp",
+    "line": 45
+  },
+  "0x000aa1bc": {
+    "name": "VKnobDriver::Init",
+    "file": "control_logic/input/vknobdriver.cpp",
+    "line": 35
+  },
+  "0x000aa250": {
+    "name": "VKnobDriver::InitializeSlot",
+    "file": "control_logic/input/vknobdriver.cpp",
+    "line": 51
+  },
+  "0x000aa2b8": {
+    "name": "VKnobDriver::DuplicateRotation",
+    "file": "control_logic/input/input_decoders.cpp",
+    "line": 141,
+    "also": [
+      {
+        "file": "control_logic/input/vknobdriver.cpp",
+        "line": 133
+      }
+    ]
+  },
+  "0x000aa304": {
+    "name": "VKnobDriver::CalculateFastRotateNum",
+    "file": "control_logic/input/input_decoders.cpp",
+    "line": 115,
+    "also": [
+      {
+        "file": "control_logic/input/vknobdriver.cpp",
+        "line": 118
+      }
+    ]
+  },
+  "0x000aa3e0": {
+    "name": "VKnobDriver::readKnobDriver",
+    "file": "control_logic/input/input_decoders.cpp",
+    "line": 102,
+    "also": [
+      {
+        "file": "control_logic/input/vknobdriver.cpp",
+        "line": 63
+      }
+    ]
+  },
+  "0x000aa5bc": {
+    "name": "VKeyDriver::VKeyDriver",
+    "file": "control_logic/input/vkeydriver.cpp",
+    "line": 33
+  },
+  "0x000aa64c": {
+    "name": "VKeyDriver::Instance",
+    "file": "control_logic/input/vkeydriver.cpp",
+    "line": 41
+  },
+  "0x000aa664": {
+    "name": "VKeyDriver::RegisterSignals (name is ours)",
+    "file": "control_logic/input/vkeydriver.cpp",
+    "line": 46
+  },
+  "0x000aa6bc": {
+    "name": "VKeyDriver::Init",
+    "file": "control_logic/input/vkeydriver.cpp",
+    "line": 52
+  },
+  "0x000aa6d4": {
+    "name": "VKeyDriver::InitializeSlot",
+    "file": "control_logic/input/vkeydriver.cpp",
+    "line": 58
+  },
+  "0x000aa70c": {
+    "name": "VKeyDriver::IsTuneOkDown",
+    "file": "control_logic/input/vkeydriver.cpp",
+    "line": 72
+  },
+  "0x000aa714": {
+    "name": "VKeyDriver::SetKeyCode (name is ours)",
+    "file": "control_logic/input/vkeydriver.cpp",
+    "line": 77
+  },
+  "0x000aa71c": {
+    "name": "VKeyDriver::RemapKeyCode (name is ours)",
+    "file": "control_logic/input/input_decoders.cpp",
+    "line": 43
+  },
+  "0x000aa77c": {
+    "name": "VKeyDriver::readKeyDriver",
+    "file": "control_logic/input/input_decoders.cpp",
+    "line": 63,
+    "also": [
+      {
+        "file": "control_logic/input/vkeydriver.cpp",
+        "line": 86
+      }
+    ]
+  },
+  "0x000ac6a4": {
+    "name": "VCameraNotifyFilter::VCameraNotifyFilter",
+    "file": "control_logic/mode/camera/vcameranotifyfilter.cpp",
+    "line": 4
+  },
+  "0x000acfcc": {
+    "name": "VAMFMProxy::VAMFMProxy",
+    "file": "control_logic/subsystem/amfm/vamfmproxy.cpp",
+    "line": 17
+  },
+  "0x000ad0a8": {
+    "name": "VAMFMProxy::Instance",
+    "file": "control_logic/subsystem/amfm/vamfmproxy.cpp",
+    "line": 20
+  },
+  "0x000ad0f0": {
+    "name": "VAMFMProxy::Init",
+    "file": "control_logic/subsystem/amfm/vamfmproxy.cpp",
+    "line": 28
+  },
+  "0x000ad104": {
+    "name": "VAMFMProxy::OnGetCurrentInfoOpera",
+    "file": "control_logic/subsystem/amfm/vamfmproxy.cpp",
+    "line": 33
+  },
+  "0x000ad1a4": {
+    "name": "VAMFMProxy::OnGetTunerListOpera",
+    "file": "control_logic/subsystem/amfm/vamfmproxy.cpp",
+    "line": 42
+  },
+  "0x000ae1f0": {
+    "name": "VAMFMProxy::OnGetSeekmodeOpera",
+    "file": "control_logic/subsystem/amfm/vamfmproxy.cpp",
+    "line": 49
+  },
+  "0x000ae28c": {
+    "name": "VAMFMProxy::RecieveVmfMsg",
+    "file": "control_logic/subsystem/amfm/vamfmproxy.cpp",
+    "line": 59
+  },
+  "0x000af434": {
+    "name": "VBAPProxy::VBAPProxy",
+    "file": "control_logic/subsystem/bap/vbapproxy.cpp",
+    "line": 24
+  },
+  "0x000afb84": {
+    "name": "VBAPProxy::Instance",
+    "file": "control_logic/subsystem/bap/vbapproxy.cpp",
+    "line": 33
+  },
+  "0x000afbd0": {
+    "name": "VBAPProxy::Init",
+    "file": "control_logic/subsystem/bap/vbapproxy.cpp",
+    "line": 41
+  },
+  "0x000b1fd4": {
+    "name": "VBAPProxy::GetVehicleCountry",
+    "file": "control_logic/subsystem/bap/vbapproxy.cpp",
+    "line": 67
+  },
+  "0x000b61ac": {
+    "name": "VBAPProxy::OnSetBAPInfo",
+    "file": "control_logic/subsystem/bap/vbapproxy.cpp",
+    "line": 46
+  },
+  "0x000b70b0": {
+    "name": "VBAPProxy::RequestSensorInfo",
+    "file": "control_logic/subsystem/bap/vbapproxy.cpp",
+    "line": 59
+  },
+  "0x000b9970": {
+    "name": "VBAPProxy::RecieveVmfMsg",
+    "file": "control_logic/subsystem/bap/vbapproxy.cpp",
+    "line": 73
+  },
+  "0x000bf734": {
+    "name": "VBTProxy::Instance",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 55
+  },
+  "0x000bf780": {
+    "name": "VBTProxy::Init",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 63
+  },
+  "0x000cb140": {
+    "name": "VBTProxy::RecieveVmfMsg",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 69
+  },
+  "0x000d59d0": {
+    "name": "VMediaProxy::Init",
+    "file": "control_logic/subsystem/media/vmediaproxy.cpp",
+    "line": 28
+  },
+  "0x000d6fe0": {
+    "name": "VMediaProxy::OnGetMsg",
+    "file": "control_logic/subsystem/media/vmediaproxy.cpp",
+    "line": 33
+  },
+  "0x000d7f74": {
+    "name": "VMediaProxy::VMediaProxy",
+    "file": "control_logic/subsystem/media/vmediaproxy.cpp",
+    "line": 17
+  },
+  "0x000d82e0": {
+    "name": "VMediaProxy::Instance",
+    "file": "control_logic/subsystem/media/vmediaproxy.cpp",
+    "line": 20
+  },
+  "0x000d9360": {
+    "name": "VMediaProxy::RecieveVmfMsg",
+    "file": "control_logic/subsystem/media/vmediaproxy.cpp",
+    "line": 43
+  },
+  "0x000dc520": {
+    "name": "VMirrorLinkProxy::Init",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 82
+  },
+  "0x000dc6d4": {
+    "name": "VMirrorLinkProxy::Instance",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 74
+  },
+  "0x000ddb0c": {
+    "name": "VMirrorLinkProxy::RecieveVmfMsg",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 88
+  },
+  "0x0011df58": {
+    "name": "VTunerMainPage::Stop",
+    "file": "display/page/tuner/vtunermainpage.cpp",
+    "line": 28
+  },
+  "0x0011e500": {
+    "name": "VTunerMainPage::Pause",
+    "file": "display/page/tuner/vtunermainpage.cpp",
+    "line": 36
+  },
+  "0x0011ffdc": {
+    "name": "VTunerMainPage::Resume",
+    "file": "display/page/tuner/vtunermainpage.cpp",
+    "line": 42
+  },
+  "0x001201b4": {
+    "name": "VTunerMainPage::Start",
+    "file": "display/page/tuner/vtunermainpage.cpp",
+    "line": 22
+  },
+  "0x0012218c": {
+    "name": "VTunerMainPage::VTunerMainPage",
+    "file": "display/page/tuner/vtunermainpage.cpp",
+    "line": 12
+  },
+  "0x001c3338": {
+    "name": "VPSSProxy::VPSSProxy",
+    "file": "control_logic/subsystem/pss/vpssproxy.cpp",
+    "line": 30
+  },
+  "0x001c338c": {
+    "name": "VPSSProxy::Instance",
+    "file": "control_logic/subsystem/pss/vpssproxy.cpp",
+    "line": 35
+  },
+  "0x001c33d4": {
+    "name": "VPSSProxy::Init",
+    "file": "control_logic/subsystem/pss/vpssproxy.cpp",
+    "line": 43
+  },
+  "0x001c3ce0": {
+    "name": "VPSSProxy::OnSendPSSReadSystemSetupStatusRequest",
+    "file": "control_logic/subsystem/pss/vpssproxy.cpp",
+    "line": 57
+  },
+  "0x001c5a90": {
+    "name": "VPSSProxy::RecieveVmfMsg",
+    "file": "control_logic/subsystem/pss/vpssproxy.cpp",
+    "line": 78
+  },
+  "0x001fc340": {
+    "name": "VDiagProxy::OnResponesToDIAG",
+    "file": "control_logic/subsystem/diag/vdiagproxy.cpp",
+    "line": 36
+  },
+  "0x001fc650": {
+    "name": "VDiagProxy::NotifyDiagReady",
+    "file": "control_logic/subsystem/diag/vdiagproxy.cpp",
+    "line": 53
+  },
+  "0x001fc6a4": {
+    "name": "VDiagProxy::Init",
+    "file": "control_logic/subsystem/diag/vdiagproxy.cpp",
+    "line": 30
+  },
+  "0x001fe10c": {
+    "name": "VDiagProxy::RecieveVmfMsg",
+    "file": "control_logic/subsystem/diag/vdiagproxy.cpp",
+    "line": 61
+  },
+  "0x001ff3f4": {
+    "name": "VDiagProxy::VDiagProxy",
+    "file": "control_logic/subsystem/diag/vdiagproxy.cpp",
+    "line": 19
+  },
+  "0x001ffc10": {
+    "name": "VDiagProxy::Instance",
+    "file": "control_logic/subsystem/diag/vdiagproxy.cpp",
+    "line": 22,
+    "also": [
+      {
+        "file": "display/igdt/extend/igdt_wrapper.cpp",
+        "line": 213
+      }
+    ]
+  },
+  "0x00200d28": {
+    "name": "VServiceAuxProxy::RecieveVmfMsg",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 184
+  },
+  "0x00200ec8": {
+    "name": "VServiceAuxProxy::Instance",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 169
+  },
+  "0x002012a4": {
+    "name": "VServiceAuxProxy::Init",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 177
+  },
+  "0x00201390": {
+    "name": "VServiceProxy::RecieveVmfMsg",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 164
+  },
+  "0x00201694": {
+    "name": "VServiceProxy::Instance",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 150
+  },
+  "0x002016e0": {
+    "name": "VServiceProxy::Init",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 158
+  },
+  "0x00201fa4": {
+    "name": "VSystemTimeCalendarProxy::RecieveVmfMsg",
+    "file": "control_logic/subsystem/system_time_calendar/vsystemtimecalendarproxy.cpp",
+    "line": 34
+  },
+  "0x00202190": {
+    "name": "VSystemTimeCalendarProxy::VSystemTimeCalendarProxy",
+    "file": "control_logic/subsystem/system_time_calendar/vsystemtimecalendarproxy.cpp",
+    "line": 17
+  },
+  "0x002021d0": {
+    "name": "VSystemTimeCalendarProxy::Instance",
+    "file": "control_logic/subsystem/system_time_calendar/vsystemtimecalendarproxy.cpp",
+    "line": 20
+  },
+  "0x00202218": {
+    "name": "VSystemTimeCalendarProxy::Init",
+    "file": "control_logic/subsystem/system_time_calendar/vsystemtimecalendarproxy.cpp",
+    "line": 28
+  },
+  "0x002c6e28": {
+    "name": "ButtonBase::ButtonBase",
+    "file": "display/controls/controlbase/buttonbase.cpp",
+    "line": 18
+  },
+  "0x002c6fdc": {
+    "name": "ButtonBase::SetState",
+    "file": "display/controls/controlbase/buttonbase.cpp",
+    "line": 37
+  },
+  "0x002c6ffc": {
+    "name": "ButtonBase::SetSelected",
+    "file": "display/controls/controlbase/buttonbase.cpp",
+    "line": 42
+  },
+  "0x002c7040": {
+    "name": "ButtonBase::SetTextColors",
+    "file": "display/controls/controlbase/buttonbase.cpp",
+    "line": 47
+  },
+  "0x002c7054": {
+    "name": "ButtonBase::GetTextColor",
+    "file": "display/controls/controlbase/buttonbase.cpp",
+    "line": 53
+  },
+  "0x002c7074": {
+    "name": "ButtonBase::BindEventReceiver",
+    "file": "display/controls/controlbase/buttonbase.cpp",
+    "line": 58
+  },
+  "0x002c7320": {
+    "name": "ButtonBase::OnRelease",
+    "file": "display/controls/controlbase/buttonbase.cpp",
+    "line": 95
+  },
+  "0x002c7398": {
+    "name": "ButtonBase::OnClicked",
+    "file": "display/controls/controlbase/buttonbase.cpp",
+    "line": 104
+  },
+  "0x002c73f0": {
+    "name": "ButtonBase::OnLeave",
+    "file": "display/controls/controlbase/buttonbase.cpp",
+    "line": 110
+  },
+  "0x002c7458": {
+    "name": "ButtonBase::OnMove",
+    "file": "display/controls/controlbase/buttonbase.cpp",
+    "line": 118
+  },
+  "0x002c748c": {
+    "name": "ButtonBase::OnHold",
+    "file": "display/controls/controlbase/buttonbase.cpp",
+    "line": 126
+  },
+  "0x002c7534": {
+    "name": "ButtonBase::OnLongPress",
+    "file": "display/controls/controlbase/buttonbase.cpp",
+    "line": 133
+  },
+  "0x002c755c": {
+    "name": "ButtonBase::OnExLongPress",
+    "file": "display/controls/controlbase/buttonbase.cpp",
+    "line": 138
+  },
+  "0x002c7584": {
+    "name": "ButtonBase::OnUltraLongPress",
+    "file": "display/controls/controlbase/buttonbase.cpp",
+    "line": 143
+  },
+  "0x002c75ac": {
+    "name": "ButtonBase::OnHolding",
+    "file": "display/controls/controlbase/buttonbase.cpp",
+    "line": 155
+  },
+  "0x002c75f0": {
+    "name": "ButtonBase::OnLongPressTimeOut",
+    "file": "display/controls/controlbase/buttonbase.cpp",
+    "line": 165
+  },
+  "0x002c76a0": {
+    "name": "ButtonBase::StopPressTimers",
+    "file": "display/controls/controlbase/buttonbase.cpp",
+    "line": 149
+  },
+  "0x002c7714": {
+    "name": "ComplexControl::SetSize",
+    "file": "display/controls/controlbase/complexcontrol.cpp",
+    "line": 21
+  },
+  "0x002c7d84": {
+    "name": "ComplexControl::GetChildCount",
+    "file": "display/controls/controlbase/complexcontrol.cpp",
+    "line": 34
+  },
+  "0x002c7efc": {
+    "name": "ComplexControl::ComplexControl",
+    "file": "display/controls/controlbase/complexcontrol.cpp",
+    "line": 6
+  },
+  "0x002c80d0": {
+    "name": "ComplexControl::AddChild",
+    "file": "display/controls/controlbase/complexcontrol.cpp",
+    "line": 26
+  },
+  "0x002c8474": {
+    "name": "CompositeBackground::SetState",
+    "file": "display/controls/controlparts/compositebackground.cpp",
+    "line": 18
+  },
+  "0x002c85f0": {
+    "name": "CompositeBackground::CompositeBackground",
+    "file": "display/controls/controlparts/compositebackground.cpp",
+    "line": 9
+  },
+  "0x002c9168": {
+    "name": "CompositeItem::ComposeOfLCR",
+    "file": "display/base/control_layout.cpp",
+    "line": 90
+  },
+  "0x002c9340": {
+    "name": "CompositeItem::ComposeOfUML",
+    "file": "display/base/control_layout.cpp",
+    "line": 104
+  },
+  "0x002c98f8": {
+    "name": "CompositeItem::SetSize",
+    "file": "display/controls/controlparts/compositeitem.cpp",
+    "line": 27
+  },
+  "0x002c9a10": {
+    "name": "CompositeItem::CompositeItem",
+    "file": "display/controls/controlparts/compositeitem.cpp",
+    "line": 10
+  },
+  "0x002cd438": {
+    "name": "IgdtButton::SetSize",
+    "file": "display/controls/controlparts/igdtbutton.cpp",
+    "line": 47
+  },
+  "0x002cd50c": {
+    "name": "IgdtButton::SetState",
+    "file": "display/controls/controlparts/igdtbutton.cpp",
+    "line": 57
+  },
+  "0x002cd8fc": {
+    "name": "IgdtButton::SetSelected",
+    "file": "display/controls/controlparts/igdtbutton.cpp",
+    "line": 75
+  },
+  "0x002cda98": {
+    "name": "IgdtButton::SetBgStatus",
+    "file": "display/controls/controlparts/igdtbutton.cpp",
+    "line": 82
+  },
+  "0x002cdbcc": {
+    "name": "IgdtButton::SetText",
+    "file": "display/controls/controlparts/igdtbutton.cpp",
+    "line": 91
+  },
+  "0x002cdf9c": {
+    "name": "IgdtButton::SetTextColor",
+    "file": "display/controls/controlparts/igdtbutton.cpp",
+    "line": 104
+  },
+  "0x002ce0ac": {
+    "name": "IgdtButton::GetTextItem",
+    "file": "display/controls/controlparts/igdtbutton.cpp",
+    "line": 112
+  },
+  "0x002ce164": {
+    "name": "IgdtButton::AddTextItem",
+    "file": "display/controls/controlparts/igdtbutton.cpp",
+    "line": 121
+  },
+  "0x002ce510": {
+    "name": "IgdtButton::IgdtButton",
+    "file": "display/controls/controlparts/igdtbutton.cpp",
+    "line": 18
+  },
+  "0x002ceab8": {
+    "name": "IgdtImageItem::IgdtImageItem",
+    "file": "display/controls/controlparts/igdtimageitem.cpp",
+    "line": 14
+  },
+  "0x002ceb74": {
+    "name": "IgdtImageItem::IgdtImageItem",
+    "file": "display/controls/controlparts/igdtimageitem.cpp",
+    "line": 8
+  },
+  "0x002cec38": {
+    "name": "IgdtImageItem::~IgdtImageItem",
+    "file": "display/controls/controlparts/igdtimageitem.cpp",
+    "line": 23
+  },
+  "0x002cedcc": {
+    "name": "IgdtImageItem::SetX",
+    "file": "display/controls/controlparts/igdtimageitem.cpp",
+    "line": 26
+  },
+  "0x002ceeb8": {
+    "name": "IgdtImageItem::SetY",
+    "file": "display/controls/controlparts/igdtimageitem.cpp",
+    "line": 40
+  },
+  "0x002cefa4": {
+    "name": "IgdtImageItem::SetSize",
+    "file": "display/controls/controlparts/igdtimageitem.cpp",
+    "line": 54
+  },
+  "0x002cf3f4": {
+    "name": "IgdtTextItem::SetColor",
+    "file": "display/controls/controlparts/igdttextitem.cpp",
+    "line": 104
+  },
+  "0x002cf428": {
+    "name": "IgdtTextItem::SetText",
+    "file": "display/controls/controlparts/igdttextitem.cpp",
+    "line": 59
+  },
+  "0x002cf4c8": {
+    "name": "IgdtTextItem::SetText",
+    "file": "display/controls/controlparts/igdttextitem.cpp",
+    "line": 67
+  },
+  "0x002cfff4": {
+    "name": "IgdtTextItem::ShowGlow",
+    "file": "display/controls/controlparts/igdttextitem.cpp",
+    "line": 84
+  },
+  "0x002d02ac": {
+    "name": "IgdtTextItem::IgdtTextItem",
+    "file": "display/controls/controlparts/igdttextitem.cpp",
+    "line": 16
+  },
+  "0x002d0348": {
+    "name": "IgdtTextItem::IgdtTextItem",
+    "file": "display/controls/controlparts/igdttextitem.cpp",
+    "line": 33
+  },
+  "0x002d0414": {
+    "name": "IgdtTextItem::SetGlowIds",
+    "file": "display/controls/controlparts/igdttextitem.cpp",
+    "line": 72
+  },
+  "0x002d0b50": {
+    "name": "ItemBase::ItemBase",
+    "file": "display/controls/controlbase/itembase.cpp",
+    "line": 54
+  },
+  "0x002d0c48": {
+    "name": "ItemBase::SetX",
+    "file": "display/controls/controlbase/itembase.cpp",
+    "line": 71
+  },
+  "0x002d0cb8": {
+    "name": "ItemBase::SetY",
+    "file": "display/controls/controlbase/itembase.cpp",
+    "line": 76
+  },
+  "0x002d0d28": {
+    "name": "ItemBase::GetAbsX",
+    "file": "display/controls/controlbase/itembase.cpp",
+    "line": 91
+  },
+  "0x002d0d94": {
+    "name": "ItemBase::GetAbsY",
+    "file": "display/controls/controlbase/itembase.cpp",
+    "line": 96
+  },
+  "0x002d0e00": {
+    "name": "ItemBase::SetSize",
+    "file": "display/controls/controlbase/itembase.cpp",
+    "line": 101
+  },
+  "0x002d0e2c": {
+    "name": "ItemBase::GetWidth",
+    "file": "display/controls/controlbase/itembase.cpp",
+    "line": 108
+  },
+  "0x002d0e3c": {
+    "name": "ItemBase::GetHeight",
+    "file": "display/controls/controlbase/itembase.cpp",
+    "line": 113
+  },
+  "0x002d0e78": {
+    "name": "ItemBase::SetParent",
+    "file": "display/controls/controlbase/itembase.cpp",
+    "line": 140
+  },
+  "0x002d11a4": {
+    "name": "ItemBase::SetOrigX",
+    "file": "display/controls/controlbase/itembase.cpp",
+    "line": 118
+  },
+  "0x002d11b4": {
+    "name": "ItemBase::SetOrigY",
+    "file": "display/controls/controlbase/itembase.cpp",
+    "line": 123
+  },
+  "0x002d1290": {
+    "name": "ItemBase::SetVisibility",
+    "file": "display/controls/controlbase/itembase.cpp",
+    "line": 156
+  },
+  "0x002d12e8": {
+    "name": "ItemBase::BindEventReceiver",
+    "file": "display/controls/controlbase/itembase.cpp",
+    "line": 163
+  },
+  "0x002d6590": {
+    "name": "GetDynId",
+    "file": "display/base/control_layout.cpp",
+    "line": 269
+  },
+  "0x002d65e0": {
+    "name": "FindElement",
+    "file": "display/base/control_layout.cpp",
+    "line": 51
+  },
+  "0x002d6720": {
+    "name": "ControlCreator::GetTextCoordX",
+    "file": "display/base/control_layout.cpp",
+    "line": 65
+  },
+  "0x002d6884": {
+    "name": "ControlCreator::GetElementRoot",
+    "file": "display/base/control_layout.cpp",
+    "line": 142
+  },
+  "0x002d690c": {
+    "name": "ControlCreator::GetElementRect",
+    "file": "display/base/control_layout.cpp",
+    "line": 155
+  },
+  "0x002d6c30": {
+    "name": "ControlCreator::CreateText",
+    "file": "display/base/controlcreator.cpp",
+    "line": 76
+  },
+  "0x002d6f04": {
+    "name": "ControlCreator::CreateImage",
+    "file": "display/base/controlcreator.cpp",
+    "line": 69
+  },
+  "0x002d81f4": {
+    "name": "ControlCreator::CreateComposite",
+    "file": "display/base/controlcreator.cpp",
+    "line": 130
+  },
+  "0x002d8f10": {
+    "name": "ControlCreator::CreateButton",
+    "file": "display/base/controlcreator.cpp",
+    "line": 136
+  },
+  "0x002db0ac": {
+    "name": "ControlCreator::ParentAddItem",
+    "file": "display/base/controlcreator.cpp",
+    "line": 142
+  },
+  "0x002db2fc": {
+    "name": "ControlCreator::ParentAddItem",
+    "file": "display/base/controlcreator.cpp",
+    "line": 152
+  },
+  "0x002dbd04": {
+    "name": "ControlCreator::CreateComposite",
+    "file": "display/base/controlcreator.cpp",
+    "line": 83
+  },
+  "0x002dbf64": {
+    "name": "ControlCreator::CreateCompositeBackground",
+    "file": "display/base/controlcreator.cpp",
+    "line": 95
+  },
+  "0x002dd4e0": {
+    "name": "ControlCreator::CreateButton",
+    "file": "display/base/controlcreator.cpp",
+    "line": 107
+  },
+  "0x002e61f0": {
+    "name": "VMainPageStatusLine::VMainPageStatusLine",
+    "file": "display/controls/controlparts/vmainpagestatusline.cpp",
+    "line": 18
+  },
+  "0x002e61f8": {
+    "name": "VMainPageStatusLine::setTitleBarTime",
+    "file": "display/controls/controlparts/vmainpagestatusline.cpp",
+    "line": 45
+  },
+  "0x002e9d68": {
+    "name": "IgdtButtonBase::IgdtButtonBase",
+    "file": "display/controls/controlbase/igdtbuttonbase.cpp",
+    "line": 9
+  },
+  "0x002e9e28": {
+    "name": "IgdtButtonBase::~IgdtButtonBase",
+    "file": "display/controls/controlbase/igdtbuttonbase.cpp",
+    "line": 16
+  },
+  "0x002e9fd4": {
+    "name": "IgdtButtonBase::GetTouchId",
+    "file": "display/controls/controlbase/igdtbuttonbase.cpp",
+    "line": 19
+  },
+  "0x002ea060": {
+    "name": "IgdtButtonBase::SetTouchArea",
+    "file": "display/controls/controlbase/igdtbuttonbase.cpp",
+    "line": 24
+  },
+  "0x002ea150": {
+    "name": "IgdtButtonBase::StopPressTimers",
+    "file": "display/controls/controlbase/igdtbuttonbase.cpp",
+    "line": 41
+  },
+  "0x002ea1f0": {
+    "name": "IgdtButtonBase::DisableDbClick",
+    "file": "display/controls/controlbase/igdtbuttonbase.cpp",
+    "line": 36
+  },
+  "0x002ea27c": {
+    "name": "IgdtButtonBase::TouchEventHandler",
+    "file": "display/controls/controlbase/igdtbuttonbase.cpp",
+    "line": 50
+  },
+  "0x002ea4a0": {
+    "name": "IgdtButtonBase::IgdtTouchScreenHandler",
+    "file": "display/controls/controlbase/igdtbuttonbase.cpp",
+    "line": 78
+  },
+  "0x002f80bc": {
+    "name": "VDynamicBase::~VDynamicBase",
+    "file": "display/controls/controlbase/vdynamicbase.cpp",
+    "line": 15
+  },
+  "0x002f810c": {
+    "name": "VDynamicBase::GetDynIndex",
+    "file": "display/controls/controlbase/vdynamicbase.cpp",
+    "line": 56
+  },
+  "0x002f8190": {
+    "name": "VDynamicBase::GetDynType",
+    "file": "display/controls/controlbase/vdynamicbase.cpp",
+    "line": 40
+  },
+  "0x002f8214": {
+    "name": "VDynamicBase::SetDynType",
+    "file": "display/controls/controlbase/vdynamicbase.cpp",
+    "line": 35
+  },
+  "0x002f8298": {
+    "name": "VDynamicBase::GetDynId",
+    "file": "display/controls/controlbase/vdynamicbase.cpp",
+    "line": 30
+  },
+  "0x002f831c": {
+    "name": "VDynamicBase::SetDynId",
+    "file": "display/controls/controlbase/vdynamicbase.cpp",
+    "line": 18
+  },
+  "0x002f83d4": {
+    "name": "VDynamicBase::SetDynIndex",
+    "file": "display/controls/controlbase/vdynamicbase.cpp",
+    "line": 46
+  },
+  "0x002f848c": {
+    "name": "VDynamicBase::VDynamicBase",
+    "file": "display/controls/controlbase/vdynamicbase.cpp",
+    "line": 8
+  },
+  "0x002f85fc": {
+    "name": "VMoveableBase::SetPos",
+    "file": "display/controls/controlbase/vmoveablebase.cpp",
+    "line": 59
+  },
+  "0x002f862c": {
+    "name": "VMoveableBase::~VMoveableBase",
+    "file": "display/controls/controlbase/vmoveablebase.cpp",
+    "line": 14
+  },
+  "0x002f867c": {
+    "name": "VMoveableBase::SetRelaY",
+    "file": "display/controls/controlbase/vmoveablebase.cpp",
+    "line": 32
+  },
+  "0x002f8700": {
+    "name": "VMoveableBase::SetRelaX",
+    "file": "display/controls/controlbase/vmoveablebase.cpp",
+    "line": 27
+  },
+  "0x002f8784": {
+    "name": "VMoveableBase::GetRelaY",
+    "file": "display/controls/controlbase/vmoveablebase.cpp",
+    "line": 42
+  },
+  "0x002f8808": {
+    "name": "VMoveableBase::GetRelaX",
+    "file": "display/controls/controlbase/vmoveablebase.cpp",
+    "line": 37
+  },
+  "0x002f888c": {
+    "name": "VMoveableBase::GetMoveId",
+    "file": "display/controls/controlbase/vmoveablebase.cpp",
+    "line": 22
+  },
+  "0x002f8910": {
+    "name": "VMoveableBase::SetMoveId",
+    "file": "display/controls/controlbase/vmoveablebase.cpp",
+    "line": 17
+  },
+  "0x002f8994": {
+    "name": "VMoveableBase::SetY",
+    "file": "display/controls/controlbase/vmoveablebase.cpp",
+    "line": 53
+  },
+  "0x002f8a70": {
+    "name": "VMoveableBase::SetX",
+    "file": "display/controls/controlbase/vmoveablebase.cpp",
+    "line": 47
+  },
+  "0x002f8b4c": {
+    "name": "VMoveableBase::VMoveableBase",
+    "file": "display/controls/controlbase/vmoveablebase.cpp",
+    "line": 8
+  },
+  "0x002f996c": {
+    "name": "VVisibilityBase::~VVisibilityBase",
+    "file": "display/controls/controlbase/vvisibilitybase.cpp",
+    "line": 13
+  },
+  "0x002f99bc": {
+    "name": "VVisibilityBase::SetVisibility",
+    "file": "display/controls/controlbase/vvisibilitybase.cpp",
+    "line": 18
+  },
+  "0x002f9ab0": {
+    "name": "VVisibilityBase::GetMoveablePtr",
+    "file": "display/controls/controlbase/vvisibilitybase.cpp",
+    "line": 48
+  },
+  "0x002f9b34": {
+    "name": "VVisibilityBase::SetMoveablePtr",
+    "file": "display/controls/controlbase/vvisibilitybase.cpp",
+    "line": 53
+  },
+  "0x002f9bb8": {
+    "name": "VVisibilityBase::IsVisible",
+    "file": "display/controls/controlbase/vvisibilitybase.cpp",
+    "line": 33
+  },
+  "0x002f9c40": {
+    "name": "VVisibilityBase::GetVisibilityId",
+    "file": "display/controls/controlbase/vvisibilitybase.cpp",
+    "line": 38
+  },
+  "0x002f9cc4": {
+    "name": "VVisibilityBase::SetVisibilityId",
+    "file": "display/controls/controlbase/vvisibilitybase.cpp",
+    "line": 43
+  },
+  "0x002f9d48": {
+    "name": "VVisibilityBase::VVisibilityBase",
+    "file": "display/controls/controlbase/vvisibilitybase.cpp",
+    "line": 9
+  },
+  "0x0031bd30": {
+    "name": "IgdtScreenLayer",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 429
+  },
+  "0x0031bd48": {
+    "name": "IgdtLayerShowScreen",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 435
   },
   "0x0031d2a4": {
     "name": "LoadFace",
@@ -32,57 +2226,108 @@
   "0x0031d684": {
     "name": "ResetState",
     "file": "display/igdt/igdt_scene.cpp",
-    "line": 16
+    "line": 68
   },
   "0x0031d6fc": {
     "name": "IgdtCurrentState",
     "file": "display/igdt/igdt_gl.cpp",
-    "line": 472
+    "line": 504
+  },
+  "0x0031d714": {
+    "name": "SaveState",
+    "file": "display/igdt/igdt_scene.cpp",
+    "line": 39
+  },
+  "0x0031d7c0": {
+    "name": "RestoreState",
+    "file": "display/igdt/igdt_scene.cpp",
+    "line": 53
   },
   "0x0031da6c": {
-    "name": "ApplyClip",
+    "name": "ApplyClip (0x0031d86c intersection)",
     "file": "display/igdt/igdt_scene.cpp",
-    "line": 52
+    "line": 115
   },
   "0x0031daa4": {
     "name": "Translate",
     "file": "display/igdt/igdt_scene.cpp",
-    "line": 30
+    "line": 82
+  },
+  "0x0031dad0": {
+    "name": "ApplyTint",
+    "file": "display/igdt/igdt_scene.cpp",
+    "line": 90
   },
   "0x0031db3c": {
     "name": "ApplyAlpha",
     "file": "display/igdt/igdt_scene.cpp",
-    "line": 37
+    "line": 97
   },
   "0x0031db90": {
     "name": "SetPivot",
     "file": "display/igdt/igdt_scene.cpp",
-    "line": 66
+    "line": 157
+  },
+  "0x0031df9c": {
+    "name": "ApplyMatrix (0x0031dbac)",
+    "file": "display/igdt/igdt_scene.cpp",
+    "line": 141
   },
   "0x0031dfac": {
     "name": "SetTextStyle",
     "file": "display/igdt/igdt_scene.cpp",
-    "line": 73
+    "line": 164
   },
   "0x0031f0a0": {
-    "name": "DrawImage",
+    "name": "DrawImageNode",
     "file": "display/igdt/igdt_scene.cpp",
-    "line": 80
+    "line": 192
   },
   "0x0031f41c": {
-    "name": "DrawText",
+    "name": "DrawTextNode",
     "file": "display/igdt/igdt_scene.cpp",
-    "line": 100
+    "line": 239
+  },
+  "0x0031f8e4": {
+    "name": "DrawRectNode (kind-7 case)",
+    "file": "display/igdt/igdt_scene.cpp",
+    "line": 301,
+    "also": [
+      {
+        "file": "display/igdt/igdt_scene.cpp",
+        "line": 321
+      },
+      {
+        "file": "display/igdt/igdt_scene.cpp",
+        "line": 380
+      }
+    ]
+  },
+  "0x003202c4": {
+    "name": "WalkGroup",
+    "file": "display/igdt/igdt_scene.cpp",
+    "line": 338
   },
   "0x0032072c": {
-    "name": "IgdtSceneDraw",
+    "name": "DrawScreen (per-screen body)",
     "file": "display/igdt/igdt_scene.cpp",
-    "line": 128
+    "line": 411,
+    "also": [
+      {
+        "file": "display/igdt/igdt_scene.cpp",
+        "line": 430
+      }
+    ]
+  },
+  "0x00320c7c": {
+    "name": "IgdtColdInit",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 83
   },
   "0x00320ec8": {
-    "name": "decodes the string into a 0x40-wchar buffer.",
-    "file": "display/igdt/igdt_textbuf.cpp",
-    "line": 10,
+    "name": "SetTextFromId (under the lock)",
+    "file": "display/igdt/extend/igdt_wrapper.cpp",
+    "line": 75,
     "also": [
       {
         "file": "display/igdt/igdt_textbuf.cpp",
@@ -90,34 +2335,189 @@
       }
     ]
   },
+  "0x0032199c": {
+    "name": "ApplyTouchNode",
+    "file": "display/igdt/igdt_touch.cpp",
+    "line": 46
+  },
+  "0x00321ea8": {
+    "name": "SelectedChild (0x00321f00 for states)",
+    "file": "display/igdt/igdt_scene.cpp",
+    "line": 180
+  },
   "0x003223d4": {
     "name": "IgdtSetRuntimeText",
     "file": "display/igdt/igdt_textbuf.cpp",
     "line": 100
   },
+  "0x00322690": {
+    "name": "IgdtSetTextAlign",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 345
+  },
+  "0x00322860": {
+    "name": "IgdtSetBranch",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 199,
+    "also": [
+      {
+        "file": "display/igdt/igdt_runtime.h",
+        "line": 94
+      }
+    ]
+  },
+  "0x00322900": {
+    "name": "IgdtSetState",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 207
+  },
+  "0x00322a50": {
+    "name": "IgdtSetColor",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 215
+  },
+  "0x00322bf8": {
+    "name": "IgdtSetAlpha",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 232
+  },
+  "0x00322e18": {
+    "name": "IgdtSetTouchArea",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 254,
+    "also": [
+      {
+        "file": "display/igdt/igdt_runtime.h",
+        "line": 104
+      }
+    ]
+  },
+  "0x00322ef4": {
+    "name": "IgdtGetTouchArea",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 268
+  },
+  "0x00323494": {
+    "name": "SetPos (0x003236f4 for y)",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 278,
+    "also": [
+      {
+        "file": "display/igdt/igdt_runtime.cpp",
+        "line": 302
+      },
+      {
+        "file": "display/igdt/igdt_runtime.h",
+        "line": 109
+      }
+    ]
+  },
+  "0x003236f4": {
+    "name": "IgdtSetPosY",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 307
+  },
+  "0x00323958": {
+    "name": "IgdtSetPosXY",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 312
+  },
+  "0x003239a0": {
+    "name": "IgdtGetPosXY",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 321
+  },
+  "0x00323c48": {
+    "name": "InitDynGroup",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 107
+  },
+  "0x00323dfc": {
+    "name": "InitDynImage (kind 2 half)",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 130
+  },
+  "0x00323f70": {
+    "name": "InitDynText",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 148
+  },
+  "0x003240e0": {
+    "name": "ResetSlot (also the 0x00324328 init loop)",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 167,
+    "also": [
+      {
+        "file": "display/igdt/igdt_runtime.cpp",
+        "line": 404
+      }
+    ]
+  },
+  "0x00324328": {
+    "name": "IgdtRuntimeInit",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 185
+  },
+  "0x00324570": {
+    "name": "IgdtSetMatrix",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 361,
+    "also": [
+      {
+        "file": "display/igdt/igdt_runtime.h",
+        "line": 119
+      }
+    ]
+  },
+  "0x0032499c": {
+    "name": "IgdtSetRotate",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 390
+  },
+  "0x00324a24": {
+    "name": "IgdtSetScale",
+    "file": "display/igdt/igdt_runtime.cpp",
+    "line": 377
+  },
+  "0x00324aec": {
+    "name": "IgdtTouchEnqueue",
+    "file": "display/igdt/igdt_touch.cpp",
+    "line": 127
+  },
+  "0x00324b90": {
+    "name": "IgdtTouchProcessQueue (per-path walk)",
+    "file": "display/igdt/igdt_touch.cpp",
+    "line": 81,
+    "also": [
+      {
+        "file": "display/igdt/igdt_touch.cpp",
+        "line": 153
+      }
+    ]
+  },
   "0x003251ec": {
     "name": "Translate",
     "file": "display/igdt/igdt_gl.cpp",
-    "line": 350
+    "line": 354
   },
   "0x003252b0": {
     "name": "SetMvpFromState",
     "file": "display/igdt/igdt_gl.cpp",
-    "line": 371
+    "line": 375
   },
   "0x003256a0": {
     "name": "SetScissorFromState",
     "file": "display/igdt/igdt_gl.cpp",
-    "line": 389
+    "line": 393
   },
   "0x00325728": {
     "name": "UploadTexture (GL part of IGDT_LoadOvgTextureEntry)",
     "file": "display/igdt/igdt_gl.cpp",
-    "line": 421,
+    "line": 453,
     "also": [
       {
         "file": "display/igdt/igdt_gl.cpp",
-        "line": 693
+        "line": 709
       },
       {
         "file": "display/igdt/igdt_ovg.cpp",
@@ -140,11 +2540,11 @@
   "0x00325d30": {
     "name": "IgdtTexture (cache lookup + 0x00325728 load)",
     "file": "display/igdt/igdt_gl.cpp",
-    "line": 564,
+    "line": 596,
     "also": [
       {
         "file": "display/igdt/igdt_gl.cpp",
-        "line": 581
+        "line": 613
       }
     ]
   },
@@ -161,47 +2561,58 @@
   "0x00326084": {
     "name": "BuildPrograms (shader part of IgdtGlInit)",
     "file": "display/igdt/igdt_gl.cpp",
-    "line": 317,
+    "line": 321,
     "also": [
       {
         "file": "display/igdt/igdt_gl.cpp",
-        "line": 477
+        "line": 509
       }
     ]
   },
   "0x00326a50": {
     "name": "IgdtBeginFrame",
     "file": "display/igdt/igdt_gl.cpp",
-    "line": 589
+    "line": 621
   },
   "0x00326b3c": {
     "name": "IgdtSwap",
     "file": "display/igdt/igdt_gl.cpp",
-    "line": 722
+    "line": 760
   },
   "0x00326ee8": {
     "name": "DrawTexturedQuad (tail, also inlined in 0x00326b3c)",
     "file": "display/igdt/igdt_gl.cpp",
-    "line": 402,
+    "line": 434,
     "also": [
       {
         "file": "display/igdt/igdt_gl.cpp",
-        "line": 464
+        "line": 496
       },
       {
         "file": "display/igdt/igdt_gl.cpp",
-        "line": 607
+        "line": 646
+      }
+    ]
+  },
+  "0x0032749c": {
+    "name": "FillBox (shared tail, also in 0x003278e0)",
+    "file": "display/igdt/igdt_gl.cpp",
+    "line": 419,
+    "also": [
+      {
+        "file": "display/igdt/igdt_gl.cpp",
+        "line": 738
       }
     ]
   },
   "0x003278e0": {
     "name": "IgdtDrawTextCoverage (GL part)",
     "file": "display/igdt/igdt_gl.cpp",
-    "line": 648,
+    "line": 675,
     "also": [
       {
         "file": "display/igdt/igdt_gl.h",
-        "line": 78
+        "line": 81
       },
       {
         "file": "display/igdt/igdt_text.cpp",
@@ -227,15 +2638,174 @@
     "line": 70
   },
   "0x00329ea0": {
-    "name": "param_1 (auStack_8c in 0x003278e0).",
+    "name": "LayoutLine",
     "file": "display/igdt/igdt_text.cpp",
-    "line": 126,
-    "also": [
-      {
-        "file": "display/igdt/igdt_text.cpp",
-        "line": 149
-      }
-    ]
+    "line": 149
+  },
+  "0x0032cc70": {
+    "name": "VCarPlayProxy::Init",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 101
+  },
+  "0x0032cd7c": {
+    "name": "VCarPlayProxy::Instance",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 93
+  },
+  "0x003302f8": {
+    "name": "VCarPlayProxy::RecieveVmfMsg",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 107
+  },
+  "0x0033a660": {
+    "name": "vAppNoConnection::vAppNoConnection",
+    "file": "display/page/appconnect/vappnoconnection.cpp",
+    "line": 45
+  },
+  "0x0033aa40": {
+    "name": "vAppNoConnection::Stop",
+    "file": "display/page/appconnect/vappnoconnection.cpp",
+    "line": 163
+  },
+  "0x0033aa60": {
+    "name": "vAppNoConnection::InitScreen",
+    "file": "display/page/appconnect/vappnoconnection.cpp",
+    "line": 75
+  },
+  "0x0033ae48": {
+    "name": "vAppNoConnection::Start",
+    "file": "display/page/appconnect/vappnoconnection.cpp",
+    "line": 156
+  },
+  "0x0033ae70": {
+    "name": "vAppNoConnection::OnBtnInfoClicked",
+    "file": "display/page/appconnect/vappnoconnection.cpp",
+    "line": 169
+  },
+  "0x00345a60": {
+    "name": "vAppConnectInfo::vAppConnectInfo",
+    "file": "display/page/appconnect/vappconnectinfo.cpp",
+    "line": 41
+  },
+  "0x003462a4": {
+    "name": "vAppConnectInfo::Stop",
+    "file": "display/page/appconnect/vappconnectinfo.cpp",
+    "line": 106
+  },
+  "0x003462c8": {
+    "name": "vAppConnectInfo::InitScreen",
+    "file": "display/page/appconnect/vappconnectinfo.cpp",
+    "line": 71
+  },
+  "0x00346f08": {
+    "name": "vAppConnectInfo::Start",
+    "file": "display/page/appconnect/vappconnectinfo.cpp",
+    "line": 99
+  },
+  "0x00346f30": {
+    "name": "vAppConnectInfo::OnBtnBackClicked",
+    "file": "display/page/appconnect/vappconnectinfo.cpp",
+    "line": 113
+  },
+  "0x00346fb4": {
+    "name": "VAppConnectProxy::Init",
+    "file": "control_logic/subsystem/appconnect/vappconnectproxy.cpp",
+    "line": 41
+  },
+  "0x00347150": {
+    "name": "VAppConnectProxy::GetAvailableApps",
+    "file": "control_logic/subsystem/appconnect/vappconnectproxy.cpp",
+    "line": 75
+  },
+  "0x00347180": {
+    "name": "VAppConnectProxy::GetFMAvailableAppRow",
+    "file": "control_logic/subsystem/appconnect/vappconnectproxy.cpp",
+    "line": 85
+  },
+  "0x00347224": {
+    "name": "VAppConnectProxy::IsCoded",
+    "file": "control_logic/subsystem/appconnect/vappconnectproxy.cpp",
+    "line": 53
+  },
+  "0x00347490": {
+    "name": "VAppConnectProxy::GetSubMode",
+    "file": "control_logic/subsystem/appconnect/vappconnectproxy.cpp",
+    "line": 69
+  },
+  "0x00347498": {
+    "name": "VAppConnectProxy::GetRegionMode",
+    "file": "control_logic/subsystem/appconnect/vappconnectproxy.cpp",
+    "line": 64
+  },
+  "0x003476a8": {
+    "name": "VAppConnectProxy::QueryPssCoding",
+    "file": "control_logic/subsystem/appconnect/vappconnectproxy.cpp",
+    "line": 46
+  },
+  "0x003482f8": {
+    "name": "VAppConnectProxy::VAppConnectProxy",
+    "file": "control_logic/subsystem/appconnect/vappconnectproxy.cpp",
+    "line": 21
+  },
+  "0x0034860c": {
+    "name": "VAppConnectProxy::Instance",
+    "file": "control_logic/subsystem/appconnect/vappconnectproxy.cpp",
+    "line": 33
+  },
+  "0x00348700": {
+    "name": "VAppConnectProxy::IsAppDeviceConnected",
+    "file": "control_logic/subsystem/appconnect/vappconnectproxy.cpp",
+    "line": 98
+  },
+  "0x0034ac5c": {
+    "name": "VAppConnectProxy::RecieveVmfMsg",
+    "file": "control_logic/subsystem/appconnect/vappconnectproxy.cpp",
+    "line": 112
+  },
+  "0x0036b0a4": {
+    "name": "VCarLifeProxy::Init",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 120
+  },
+  "0x0036b14c": {
+    "name": "VCarLifeProxy::Instance",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 112
+  },
+  "0x0036ca04": {
+    "name": "VCarLifeProxy::RecieveVmfMsg",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 126
+  },
+  "0x00382c90": {
+    "name": "VAndroidAutoProxy::Init",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 139
+  },
+  "0x00382e40": {
+    "name": "VAndroidAutoProxy::Instance",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 131
+  },
+  "0x003859b0": {
+    "name": "VAndroidAutoProxy::RecieveVmfMsg",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 145
+  },
+  "0x003aba40": {
+    "name": "VAppConnectPopupProxy::Init",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 217
+  },
+  "0x003aba80": {
+    "name": "VAppConnectPopupProxy::Instance",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 209
+  },
+  "0x003abb40": {
+    "name": "VAppConnectPopupProxy::RecieveVmfMsg",
+    "file": "control_logic/subsystem/phase3_stubs.cpp",
+    "line": 223
   },
   "_data": {
     "0x003cb25c": {
@@ -249,15 +2819,35 @@
         }
       ]
     },
+    "0x003f3850": {
+      "name": "kScreenByPage",
+      "file": "control_logic/subsystem/proxy_decoders.cpp",
+      "line": 17
+    },
+    "0x003f3950": {
+      "name": "kPopPageScreen",
+      "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+      "line": 26
+    },
+    "0x003f3ac4": {
+      "name": "kMainPageByAudioSource",
+      "file": "control_logic/subsystem/proxy_decoders.cpp",
+      "line": 10
+    },
     "0x004536a4": {
-      "name": "scr_table entry (16 B); elements are kElements[elem_first ..",
+      "name": "scr_table entry (16 B): +0 layer group, +2 root count, +3",
       "file": "display/igdt/igdt_tables.h",
-      "line": 55
+      "line": 151
+    },
+    "0x00454694": {
+      "name": "group flags (4 B per group eidx): bits 0-1 clip children,",
+      "file": "display/igdt/igdt_tables.h",
+      "line": 135
     },
     "0x0046d6a0": {
-      "name": "text_layout entry (20 B), the part the runtime text store",
+      "name": "text_layout entry (20 B).",
       "file": "display/igdt/igdt_tables.h",
-      "line": 64
+      "line": 165
     },
     "0x0069b69c": {
       "name": "tex_table entry (24 B, <BBHhhIHHII>), docs/assets-and-localization.md section 1.",
@@ -267,82 +2857,197 @@
     "0x008d4988": {
       "name": "eglChooseConfig attributes: RGB 888, any alpha, 16-bit depth,",
       "file": "display/igdt/igdt_gl.cpp",
-      "line": 134
+      "line": 138
     },
     "0x008d4bc0": {
       "name": "(pointer at 0x008d49e8)",
       "file": "display/igdt/igdt_gl.cpp",
-      "line": 189
+      "line": 193
     },
     "0x008d52d8": {
       "name": "(pointer at 0x008d49ec)",
       "file": "display/igdt/igdt_gl.cpp",
-      "line": 213
+      "line": 217
     },
     "0x008d536c": {
       "name": "(pointer at 0x008d49e0)",
       "file": "display/igdt/igdt_gl.cpp",
-      "line": 174
+      "line": 178
     },
     "0x008d54c0": {
       "name": "(pointer at 0x008d49e4)",
       "file": "display/igdt/igdt_gl.cpp",
-      "line": 183
+      "line": 187
     },
     "0x008d557c": {
       "name": "(pointer at 0x008d49dc)",
       "file": "display/igdt/igdt_gl.cpp",
-      "line": 166
+      "line": 170
     },
     "0x008d5710": {
       "name": "(pointer at 0x008d49d4)",
       "file": "display/igdt/igdt_gl.cpp",
-      "line": 152
+      "line": 156
     },
     "0x008d5868": {
       "name": "(pointer at 0x008d49d8)",
       "file": "display/igdt/igdt_gl.cpp",
-      "line": 160
+      "line": 164
     },
     "0x008d5948": {
       "name": "(pointer at 0x008d49d0)",
       "file": "display/igdt/igdt_gl.cpp",
-      "line": 147
+      "line": 151
     },
     "0x008d59c4": {
       "name": "(pointer at 0x008d49cc)",
       "file": "display/igdt/igdt_gl.cpp",
-      "line": 143
+      "line": 147
+    },
+    "0x00967984": {
+      "name": "kAudioGroups",
+      "file": "control_logic/subsystem/audio/vaudioproxy.cpp",
+      "line": 15
+    },
+    "0x00969958": {
+      "name": "kPowerGroups",
+      "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+      "line": 25
+    },
+    "0x0096995e": {
+      "name": "g_firstWakeReason",
+      "file": "control_logic/subsystem/power/vpowerproxy.cpp",
+      "line": 57
+    },
+    "0x00969964": {
+      "name": "kSubsystemProxyGroups",
+      "file": "control_logic/subsystem/phase3_stubs.cpp",
+      "line": 45
+    },
+    "0x00969978": {
+      "name": "kGroups",
+      "file": "control_logic/subsystem/amfm/vamfmproxy.cpp",
+      "line": 9
+    },
+    "0x0096997c": {
+      "name": "kBapGroups",
+      "file": "control_logic/subsystem/bap/vbapproxy.cpp",
+      "line": 10
+    },
+    "0x00969980": {
+      "name": "kBTProxyGroups",
+      "file": "control_logic/subsystem/phase3_stubs.cpp",
+      "line": 17
+    },
+    "0x00969984": {
+      "name": "kGroups",
+      "file": "control_logic/subsystem/media/vmediaproxy.cpp",
+      "line": 9
+    },
+    "0x00969988": {
+      "name": "kMirrorLinkProxyGroups",
+      "file": "control_logic/subsystem/phase3_stubs.cpp",
+      "line": 21
+    },
+    "0x0096a2cc": {
+      "name": "kGroups",
+      "file": "control_logic/subsystem/pss/vpssproxy.cpp",
+      "line": 14
+    },
+    "0x0096c790": {
+      "name": "kGroups",
+      "file": "control_logic/subsystem/diag/vdiagproxy.cpp",
+      "line": 11
+    },
+    "0x0096c794": {
+      "name": "kServiceAuxProxyGroups",
+      "file": "control_logic/subsystem/phase3_stubs.cpp",
+      "line": 41
+    },
+    "0x0096c798": {
+      "name": "kServiceProxyGroups",
+      "file": "control_logic/subsystem/phase3_stubs.cpp",
+      "line": 37
+    },
+    "0x0096c79c": {
+      "name": "kGroups",
+      "file": "control_logic/subsystem/system_time_calendar/vsystemtimecalendarproxy.cpp",
+      "line": 9
     },
     "0x0096f10c": {
       "name": "base 3x3 transform (column-major): pixels -> NDC with y down.",
       "file": "display/igdt/igdt_gl.cpp",
-      "line": 241
+      "line": 245
     },
     "0x0096f130": {
       "name": "MVPMatrix (4x4, column-major).",
       "file": "display/igdt/igdt_gl.cpp",
-      "line": 244
+      "line": 248
     },
     "0x0096f170": {
       "name": "eglCreateContext attributes: EGL_CONTEXT_CLIENT_VERSION 2.",
       "file": "display/igdt/igdt_gl.cpp",
-      "line": 139
+      "line": 143
     },
     "0x0096f17c": {
       "name": "FBO copy quad: 4 x (x, y, z, u, v); x/y set to w/h by IgdtGlInit.",
       "file": "display/igdt/igdt_gl.cpp",
-      "line": 247
+      "line": 251
+    },
+    "0x0096f1cc": {
+      "name": "IgdtFirstFrameSwapped",
+      "file": "display/igdt/igdt_gl.cpp",
+      "line": 791
     },
     "0x0096f1d0": {
       "name": "element quad: 4 x (x, y, z, u, v).",
       "file": "display/igdt/igdt_gl.cpp",
-      "line": 250
+      "line": 254
+    },
+    "0x0096f224": {
+      "name": "kCarPlayProxyGroups",
+      "file": "control_logic/subsystem/phase3_stubs.cpp",
+      "line": 25
+    },
+    "0x0096f228": {
+      "name": "kAppConnectGroups",
+      "file": "control_logic/subsystem/appconnect/vappconnectproxy.cpp",
+      "line": 8
+    },
+    "0x0096f4f8": {
+      "name": "kCarLifeProxyGroups",
+      "file": "control_logic/subsystem/phase3_stubs.cpp",
+      "line": 29
+    },
+    "0x0096f4fc": {
+      "name": "kAndroidAutoProxyGroups",
+      "file": "control_logic/subsystem/phase3_stubs.cpp",
+      "line": 33
+    },
+    "0x009701c8": {
+      "name": "kAppConnectPopupProxyGroups",
+      "file": "control_logic/subsystem/phase3_stubs.cpp",
+      "line": 49
     },
     "0x009704c8": {
       "name": "g_hmiAutotestEnabled",
       "file": "main.cpp",
-      "line": 23
+      "line": 32
+    },
+    "0x009704e4": {
+      "name": "g_controlTask (set by the constructor, read by Instance).",
+      "file": "control_logic/vcontroltask.cpp",
+      "line": 42
+    },
+    "0x00970560": {
+      "name": "g_lastMainPage",
+      "file": "control_logic/subsystem/display/vdisplayproxy.cpp",
+      "line": 47
+    },
+    "0x00976c90": {
+      "name": "g_keyDriver (set by the constructor, read by Instance).",
+      "file": "control_logic/input/vkeydriver.cpp",
+      "line": 25
     },
     "0x00a0f908": {
       "name": "draw state (current origin, alpha, tint, transform and clip",
@@ -351,7 +3056,7 @@
     }
   },
   "_coverage": {
-    "recreated": 32,
+    "recreated": 522,
     "total": 9580
   }
 }

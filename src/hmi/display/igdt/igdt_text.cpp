@@ -123,7 +123,7 @@ FT_UInt CharIndex(unsigned font, FT_ULong c, FT_Face* face, FT_GlyphSlot* glyph,
     return index;
 }
 
-// 0x00329ea0 param_1 (auStack_8c in 0x003278e0).
+// Line layout: param_1 of 0x00329ea0 (auStack_8c in 0x003278e0).
 struct LineLayout {
     const IgdtWchar* text;  // +0x04
     uint16_t max_w;         // +0x0c
@@ -395,7 +395,7 @@ void IgdtDrawText(const IgdtElement& e, const IgdtWchar* text) {
     LoadFaces(layout_font);
     if (s.flags != 0 || e.font >= kFontCount || !text) return;
     const FontStyle& style = kFontStyles[e.font];
-    // TODO(phase2): glow (text_layout +0x10 bit 0 / +9 radius / +0xc sigma,
+    // TODO(phase3): glow (text_layout +0x10 bit 0 / +9 radius / +0xc sigma,
     // all RAM-only, zero until page code sets them: pad = 2 * radius and the
     // blur pass) and the caller's width override (0x0031f41c param_3).
     const uint32_t pad = 0;
@@ -417,7 +417,7 @@ void IgdtDrawText(const IgdtElement& e, const IgdtWchar* text) {
     s.pivot_x -= (float)a.pivot_shift;
     s.x = (int16_t)(s.x - a.x_shift);
 
-    // TODO(phase2): stock caches 100 line textures keyed by text and style
+    // TODO(phase3): stock caches 100 line textures keyed by text and style
     // (0x00e5595c) and rasterizes only on a miss.
     std::vector<uint8_t> coverage((size_t)style.line_h * l.width, 0);
     std::vector<uint32_t> escapes;

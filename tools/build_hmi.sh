@@ -92,6 +92,8 @@ check_local_firmware() {
         "$SYSROOT/lib/libstdc++.so.6.0.16"
         "$SYSROOT/lib/libgcc_s.so.1"
         "$SYSROOT/usr/lib/libQtCore.so.4"
+        "$SYSROOT/opt/lib/libvmf_client.so"
+        "$SYSROOT/usr/lib/libts-1.0.so.0"
     )
     local path
     for path in "${required[@]}"; do
@@ -181,6 +183,45 @@ fetch_freetype248_headers() {
     echo "$FT248_SHA256" > "$dest/.stamp"
 }
 
+build_host_moc() {
+    local moc_src="$THIRD_PARTY_DIR/qt474_moc_src"
+    local moc_build="$OUT_DIR/host-tools/build"
+    local moc_bin="$OUT_DIR/host-tools/moc"
+    if ! is_extracted "$moc_src" "$QT474_SHA256"; then
+        local tarball tmp top="qt-everywhere-opensource-src-4.7.4"
+        tarball="$(fetch "$QT474_URL" "$QT474_SHA256")"
+        tmp="$(mktemp -d "$THIRD_PARTY_DIR/qt474_moc.tmp.XXXXXX")"
+        TMP_DIRS+=("$tmp")
+        echo "Extracting Qt 4.7.4 moc + bootstrap sources ..." >&2
+        tar -xzf "$tarball" -C "$tmp" \
+            "$top/src/tools/moc" \
+            "$top/src/corelib" \
+            "$top/include/QtCore" \
+            "$top/mkspecs/common" \
+            "$top/mkspecs/macx-g++" \
+            "$top/mkspecs/linux-g++" \
+            || die "cannot extract moc sources from $tarball"
+        rm -rf "$moc_src"
+        mv "$tmp/$top" "$moc_src"
+        rm -rf "$tmp"
+        echo "$QT474_SHA256" > "$moc_src/.stamp"
+    fi
+    if [[ $FORCE -eq 0 && -x "$moc_bin" && "$moc_bin" -nt "$SRC_DIR/tools/moc/CMakeLists.txt" \
+          && "$moc_bin" -nt "$SRC_DIR/tools/moc/host_qconfig.h" && "$moc_bin" -nt "$moc_src/.stamp" ]]; then
+        return 0
+    fi
+    if [[ $FORCE -eq 1 ]]; then
+        rm -rf "$moc_build"
+    fi
+    mkdir -p "$OUT_DIR/host-tools"
+    echo "Building host Qt 4.7.4 moc ..." >&2
+    cmake -S "$SRC_DIR/tools/moc" -B "$moc_build" -G Ninja \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DRCD330_QT474_SRC_DIR="$moc_src" \
+        -DCMAKE_RUNTIME_OUTPUT_DIRECTORY="$OUT_DIR/host-tools"
+    cmake --build "$moc_build"
+}
+
 [[ $NO_ASSETS -eq 0 || $HOST_TESTS -eq 1 ]] || die "--no-assets only applies to --host-tests"
 
 if [[ $HOST_TESTS -eq 1 ]]; then
@@ -234,6 +275,7 @@ mkdir -p "$THIRD_PARTY_DIR"
 fetch_gcc46_headers
 fetch_qt474_headers
 fetch_freetype248_headers
+build_host_moc
 
 if [[ $FORCE -eq 1 ]]; then
     rm -rf "$CMAKE_BUILD_DIR"
@@ -246,6 +288,7 @@ cmake -S "$SRC_DIR" -B "$CMAKE_BUILD_DIR" -G Ninja \
     -DRCD330_GCC46_DIR="$THIRD_PARTY_DIR/gcc46" \
     -DRCD330_QT474_DIR="$THIRD_PARTY_DIR/qt474" \
     -DRCD330_FT248_DIR="$THIRD_PARTY_DIR/freetype248" \
+    -DRCD330_MOC_EXECUTABLE="$OUT_DIR/host-tools/moc" \
     -DRCD330_GEN_DIR="$GEN_DIR"
 cmake --build "$CMAKE_BUILD_DIR" --target hmi
 # Editors/clangd look for compile_commands.json next to the sources

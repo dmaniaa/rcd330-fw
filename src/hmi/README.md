@@ -26,11 +26,13 @@ tools/build_hmi.sh --host-tests [--no-assets]
 # Python gates: ABI/DT_NEEDED/Qt-import checks, tables, trace index.
 python3 -m unittest discover -s tools/tests -p "test_hmi_*.py" -v
 
-# Slow QEMU boot and pixel-parity tests (several minutes).
+# Slow QEMU tests (several minutes): boot, mask-free pixel parity against
+# stock, and the interactive suite (hardkeys, QMP touch, tune knob).
 RCD330_QEMU_TESTS=1 python3 -m unittest discover -s tools/tests -p "test_hmi_*.py" -v
 
-# Run the recreated hmi in the emulator; HMI_DEV_SCREEN draws one IGDT screen.
-tools/run_rcd330.sh --hmi build/hmi/hmi [--headless] [--profile-env HMI_DEV_SCREEN=0x04]
+# Run the recreated hmi in the emulator. --qmp adds a QMP socket, which
+# tools/hmi_qemu.py uses for touch input (input-send-event -> atmel_mxt).
+tools/run_rcd330.sh --hmi build/hmi/hmi [--headless] [--monitor <sock>] [--qmp <sock>]
 
 # Regenerate the stock-VA -> source index after adding or moving origin tags.
 python3 src/hmi/tools/gen_trace.py
@@ -49,10 +51,13 @@ name is unknown starts with `// File name is ours; stock name unknown.`
 
 | Path | Contents |
 |---|---|
-| `main.cpp` | `main` (0x10e58) skeleton: `QCoreApplication::exec()` |
-| `display/igdt/` | IGDT: string lookup, `_ovg.bin` decode, GLES2 renderer, scene walk, FreeType text |
-| `service/osal/` | libOSAL logging shim |
-| `tools/` | `gen_igdt_tables.py`, `gen_strings.py` (tables from the stock binary), `gen_trace.py` |
+| `main.cpp` | `main` (0x10e58): stock startup order, then `QCoreApplication::exec()` |
+| `control_logic/` | `VControlTask` (control thread), notify filters (`mode/`), key / knob drivers (`input/`) |
+| `control_logic/subsystem/` | the `VBaseProxy` subsystem proxies (power, audio, display, AM/FM, media, BAP, PSS, App-Connect, diag, ...) and their portable decoders |
+| `display/` | `VDisplayTask` (display thread), pages (`page/`), controls (`controls/`, `base/controlcreator`), touch (`multitouch/`) |
+| `display/igdt/` | IGDT: tables, runtime state, string lookup, `_ovg.bin` decode, GLES2 renderer, scene walk, FreeType text, touch hit-test, `igdtTask` render thread |
+| `service/` | libOSAL logging, libvmf_client (`VmfThread`, `VBaseProxy`), tslib, `VBaseTask` |
+| `tools/` | `gen_igdt_tables.py`, `gen_strings.py` (tables from the stock binary), `gen_trace.py`, host Qt 4.7.4 `moc` build (`moc/`) |
 | `tests/` | host C++ unit tests (`ctest`) |
 | `TRACE.json` | generated index of recreated stock functions |
 
@@ -64,8 +69,8 @@ name is unknown starts with `// File name is ours; stock name unknown.`
   stock function say "helper derived from 0x..." and carry no tag.
 - `// DEVIATION: <why>` where we intentionally differ from stock.
 - `// STOCK-QUIRK: <what>` where a stock bug is reproduced on purpose.
-- `// TODO(phase2): <what>` for behaviour deferred to the next phase
-  (page/widget-driven state).
+- `// TODO(phase3): <what>` for behaviour deferred to the next phase (the
+  other pages, popups, phone/BT, projection, camera).
 - Each file ends with a newline. Qt is imported only through symbols stock
   `opt/hmi` also imports (the device runs Qt Embedded 4.7.4; the sysroot
   `libQtCore` is a stand-in), and `DT_NEEDED` must stay a subset of stock's.
@@ -91,24 +96,87 @@ toward coverage. An address inside a function body or a typo fails the check.
 `gen_trace.py --check` (run by `test_hmi_build.py::TestHmiTrace`) fails when the
 index is stale.
 
+## Architecture (phase 2)
+
+Threads, as in stock:
+
+- **main**: `VControlTask::Init` creates every proxy singleton on the main
+  thread, so their `QObject`s live there. `main` then starts the tasks, the
+  drivers and `VmfThread` in stock order, and runs `exec()`.
+- **VmfThread**: blocks in `nw_vmf_receive` and calls each registered
+  proxy's `RecieveVmfMsg` with the listener mutex held. Proxies only update
+  their own state there and hand work to the tasks as queued signals.
+- **VControlTask**: the filter chain (`VIPCLNotifyFilter`,
+  `VPowerNotifyFilter`, ...) for keys and power/audio notifications;
+  receives everything through queued signals.
+- **VDisplayTask**: every page lives on this thread. `VDisplayProxy` page
+  requests (`IDisplaySink`), raw touches from `VMultiTouch` and IGDT touch
+  hits from the render thread arrive as queued signals; a 20 ms timer drives
+  the status line.
+- **igdtTask** (render thread, stock `0x00062e60`): redraws on a timer.
+  All IGDT state is behind one recursive mutex (`0x00a0fa40`), so touch
+  callbacks may call the setters.
+- **VKeyDriver / VKnobDriver / VMultiTouch**: blocking readers of
+  `/dev/event0`, `/dev/tuner_knob` and tslib.
+
+Hard keys are handled in two passes, as in stock. The driver key goes
+through the filters, which update the `VHMIKey` state. The resulting key
+event (press 3, short release 4, ...) goes to `VDisplayTask` and
+`hmi_wrapper_igdt_post_button_event`. That function re-posts it to the
+filters for the per-key handlers (`HandleLPCLHardKeyApp`, ...) and then
+releases the held key (`0x000632bc` -> `0x00061244`).
+
+Stock quirks and deviations are marked `STOCK-QUIRK:` / `DEVIATION:` where
+they occur. [docs/hmi-internals.md](../../docs/hmi-internals.md) section 7
+lists the ones that affect behaviour.
+
 ## Status
 
-Phase 0-1 (toolchain, IGDT) is done:
+Phases 0-2 are done:
 
-- zig cross toolchain, ABI gate, boot skeleton that stays in `exec()`
-- IGDT tables (`tex_table`, `scr_table`, text layouts, scenes) generated from
-  the stock binary; localized string block decoder
-- `_ovg.bin` RLE/pixel-format decode matching stock 0x325728
-- GLES2 image rendering and scene walk, FreeType text rendering
-- AppNoConn (screen 0x04) is pixel-compared with stock in QEMU
-  (>= 99.5 % of unmasked pixels within +-4 per channel; about 99.9 % reached)
+- **Phase 0-1:** zig toolchain, ABI gate, IGDT tables, strings, `_ovg.bin`,
+  the GLES2 / FreeType renderer.
+- **Phase 2:**
+  - host `moc` emitting revision 62
+  - `VBaseTask`, `VmfThread` / `VBaseProxy`, the subsystem proxies, the
+    notify filters
+  - key, knob and touch drivers; IGDT runtime and touch
+  - controls and `ControlCreator`
+  - `VPageManager`, `VDisplayTask`, and the boot pages: tuner shell `0xf9`,
+    AppNoConn `0x04`, AppConnectInfo `0x03`
+- **QEMU pixel parity is mask-free.** AppNoConn and AppConnectInfo are
+  reached with real input, the same way as stock: APP key, then a QMP touch
+  on Info. The whole 800x480 frame is compared, and at least 99.5 % of
+  pixels must be within +-4 per channel. Current results:
 
-Parity masks follow the controller rulings: image boxes of dynamic records,
-the status line (clock, temperature, status icons) and the Info button glow
-are masked because they depend on page/widget state that does not exist yet.
-Phase 2 must produce that state (VBaseProxy/VMF, notify filters, PageManager,
-controls) and then **remove these masks**, so the dynamic-record and
-widget-state images are compared too.
+  | Screen | Parity |
+  |---|---|
+  | AppNoConn | 99.84 % |
+  | AppConnectInfo | 99.95 % |
 
-Next: phase 2 (host-built Qt `moc`, tasks/threads, proxies, pages and
-controls), phase 3 pages, phase 4 Skoda overlay, phase 5 device hardening.
+  The rest of the AppNoConn difference is in the status line: stock shows
+  the BAP outside temperature, and ours shows a mute icon there (phase 3
+  status line).
+
+  STOCK-QUIRK: the language is picked by a boot-time race. If diag's
+  App-Connect coding is decoded before the PSS setup-block (0x4b) read
+  fails, the region follows the coding and the language is en_US;
+  otherwise it stays zh_CN. Ours ports that decision (`VPSSProxy` 0x4b
+  reply, `VDisplayProxy::SetRegion`) and inherits the race. Ours starts
+  earlier than stock, so it re-sends the read while pss answers "not ready"
+  (status 10; DEVIATION, at most 10 x 200 ms). Nothing logs
+  the outcome, so the parity test reads both languages from the pixels
+  (ink width of the second welcome line on AppNoConn). It re-boots stock
+  up to 3 times until stock matches ours, and skips with the race named
+  if it never does. See [hmi-internals.md](../../docs/hmi-internals.md)
+  §7, "Language".
+- `tools/tests/test_hmi_interactive.py` covers:
+  - boot, APP, touch Info, touch Back, RADIO
+  - the tune knob
+  - the phase-3 keys MEDIA and SETUP: each logs once, crashes nothing, and
+    leaves APP and touch working
+  - one hmi start (no `pwr_agent` restart)
+
+Next: phase 3 pages by area (tuner, media, phone, sound, setup, car, popups,
+service, projection, camera), phase 4 Skoda overlay, phase 5 device
+hardening.

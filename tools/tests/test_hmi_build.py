@@ -21,6 +21,7 @@ import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 HMI = pathlib.Path(os.environ.get("RCD330_HMI") or ROOT / "build/hmi/hmi").resolve()
+MOC = ROOT / "build/hmi/host-tools/moc"
 STOCK_HMI = ROOT / "extracted-fw/5624_vw/opt/hmi"
 STOCK_OPT = ROOT / "extracted-fw/5624_vw/opt"
 SYSROOT_QTCORE = ROOT / "build/cache/std_plus_pss-6.5inch_5624_VW_PQ_ROW/stage/usr/lib/libQtCore.so.4"
@@ -228,6 +229,42 @@ class TestHmiTrace(unittest.TestCase):
             self.assertEqual(self.run_gen_trace("--check", "--src", str(src), "--out", str(out)).returncode, 0)
             (src / "a.cpp").write_text("\n// 0x00010e58 main\nint main();\n")
             self.assertNotEqual(self.run_gen_trace("--check", "--src", str(src), "--out", str(out)).returncode, 0)
+
+
+class TestHmiMoc(unittest.TestCase):
+    def setUp(self):
+        if not MOC.is_file():
+            if os.environ.get("RCD330_REQUIRE_HMI") == "1":
+                self.fail(f"{MOC} missing; run tools/build_hmi.sh")
+            self.skipTest(f"{MOC} not built")
+
+    def test_moc_revision_62(self):
+        ver = subprocess.run([str(MOC), "-v"], capture_output=True, text=True)
+        combined = ver.stdout + ver.stderr
+        self.assertEqual(ver.returncode, 1, combined)
+        self.assertIn("4.7.4", combined)
+        self.assertIn("62", combined)
+        sample = (
+            "#include <QtCore/QObject>\n"
+            "class ProbeObj : public QObject {\n"
+            "    Q_OBJECT\n"
+            "signals:\n"
+            "    void ping(int v);\n"
+            "public slots:\n"
+            "    void pong(int v);\n"
+            "};\n"
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            hdr = pathlib.Path(tmp) / "probe.h"
+            hdr.write_text(sample)
+            out = subprocess.check_output(
+                [str(MOC), "-DQT_NO_DEBUG", str(hdr)], text=True
+            )
+        self.assertIn("cannot be used with the include files", out)
+        self.assertIn("62", out)
+        self.assertIn("QMetaObject::activate", out)
+        self.assertNotIn("qt_static_metacall", out)
+
 
 if __name__ == "__main__":
     unittest.main()

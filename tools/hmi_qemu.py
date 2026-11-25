@@ -13,6 +13,7 @@ staged /etc/profile as exports, which the variant /opt/launch.sh sources so
 pwr_agent and the hmi it spawns inherit them. hmi's log_simple(" ==== HMI ==== ...") lines
 reach the serial console through the libhal_gpio_shim.so LD_PRELOAD hook.
 """
+import json
 import os
 import pathlib
 import re
@@ -57,6 +58,7 @@ class Rcd330Qemu:
         self._tmpdir = None
         self.vip_port = None
         self.monitor_path = None
+        self.qmp_path = None
 
     def __enter__(self):
         self.start()
@@ -71,9 +73,10 @@ class Rcd330Qemu:
             raise FileNotFoundError(f"hmi binary not found: {self.hmi} (build it with tools/build_hmi.sh)")
         self._tmpdir = _short_tmpdir()
         self.monitor_path = os.path.join(self._tmpdir, "monitor.sock")
+        self.qmp_path = os.path.join(self._tmpdir, "qmp.sock")
         self.vip_port = _free_tcp_port()
 
-        cmd = [str(RUN_SCRIPT), "--headless", "--monitor", self.monitor_path]
+        cmd = [str(RUN_SCRIPT), "--headless", "--monitor", self.monitor_path, "--qmp", self.qmp_path]
         if self.hmi is not None:
             cmd += ["--hmi", self.hmi]
         for key, val in self.env.items():
@@ -94,12 +97,17 @@ class Rcd330Qemu:
         with self._serial_lock:
             return self._serial.decode("utf-8", errors="replace")
 
-    def wait_serial(self, pattern, timeout):
+    def mark(self):
+        """Current serial length, for wait_serial(since=...)."""
+        return len(self.serial_text())
+
+    def wait_serial(self, pattern, timeout, since=0):
+        """Wait for pattern in the serial output from offset since (a mark())."""
         regex = re.compile(pattern)
         deadline = time.monotonic() + timeout
         while True:
             text = self.serial_text()
-            match = regex.search(text)
+            match = regex.search(text, since)
             if match:
                 return match.group(0)
             if self._proc.poll() is not None:
@@ -109,6 +117,22 @@ class Rcd330Qemu:
             if time.monotonic() > deadline:
                 raise AssertionError(f"/{pattern}/ not seen on serial within {timeout}s; serial tail:\n{text[-3000:]}")
             time.sleep(0.5)
+
+    def wait_hmi_ready(self, banner_timeout=240, page_timeout=120):
+        """Waits until the hmi takes input, stock or recreated.
+
+        Ready = the boot page (tuner, screen 0xf9) is on screen and pwr_agent's
+        WS_IDLE -> WS_RUNNING cycle is done. WS_RUNNING clears VPowerProxy's
+        hmi-run flag; the hmi asks the VIP for its audio mode, and the RUN that
+        follows recovers the main page (VPowerProxy RecoverSetupMainPage logs
+        "wangqin cur main = ..." and re-inserts it if another page is up). Stock
+        gets the cycle before its boot page; the recreated hmi starts faster
+        and may get it afterwards, when a page opened in between would be
+        replaced by the main page again.
+        """
+        self.wait_serial(r"\[HMI_START\]HMI main start", banner_timeout)
+        self.wait_serial(r"VPageManager::ShowPage 249\b[\s\S]*gl_fb_shim: eglSwapBuffers #1\b", page_timeout)
+        self.wait_serial(r"VPowerProxy::WS_RUNNING[\s\S]*wangqin cur main = ", page_timeout)
 
     def vip(self, cmd, timeout=10.0):
         """Send one text line to the VIP control socket (see vip_process_cmd in rcd330_vip.c).
@@ -140,6 +164,56 @@ class Rcd330Qemu:
                 pass
         except OSError:
             pass
+
+    def knob(self, steps):
+        """Rotate the TUNE rotary encoder by steps (+ clockwise, - counter-clockwise)."""
+        self.vip(f"ENC TUNE {int(steps)}")
+
+    def touch(self, x, y, hold_s=0.15):
+        """Tap screen coordinate (x, y) of the 800x480 display.
+
+        QMP input-send-event (absolute axes 0..32767) reaches the atmel_mxt
+        touchscreen model, which maps it through the factory /etc/pointercal
+        so tslib in the guest reports (x, y) again.
+        """
+        if not (0 <= x <= 799 and 0 <= y <= 479):
+            raise ValueError(f"touch ({x}, {y}) outside the 800x480 display")
+        ax = int(round(x * 32767 / 799.0))
+        ay = int(round(y * 32767 / 479.0))
+        self._qmp_cmd({"execute": "input-send-event", "arguments": {"events": [
+            {"type": "abs", "data": {"axis": "x", "value": ax}},
+            {"type": "abs", "data": {"axis": "y", "value": ay}},
+            {"type": "btn", "data": {"down": True, "button": "left"}},
+        ]}})
+        time.sleep(hold_s)
+        self._qmp_cmd({"execute": "input-send-event", "arguments": {"events": [
+            {"type": "btn", "data": {"down": False, "button": "left"}},
+        ]}})
+
+    def _qmp_cmd(self, payload, timeout=10.0):
+        """Run one QMP command on a fresh connection; returns its reply."""
+        with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as s:
+            s.settimeout(timeout)
+            s.connect(self.qmp_path)
+            f = s.makefile("rwb", buffering=0)
+            self._qmp_reply(f, "greeting", key="QMP")
+            f.write(b'{"execute":"qmp_capabilities"}\n')
+            self._qmp_reply(f, "qmp_capabilities")
+            f.write(json.dumps(payload).encode("ascii") + b"\n")
+            return self._qmp_reply(f, payload)
+
+    @staticmethod
+    def _qmp_reply(f, what, key="return"):
+        # Asynchronous {"event": ...} lines may come before the reply.
+        while True:
+            line = f.readline()
+            if not line:
+                raise ConnectionError(f"QMP closed while waiting for the reply to {what}")
+            reply = json.loads(line.decode("utf-8"))
+            if "error" in reply:
+                raise RuntimeError(f"QMP error for {what}: {reply['error']}")
+            if key in reply:
+                return reply
 
     def screendump(self, path, timeout=10.0):
         """Write the current display as PPM via the QEMU monitor."""
