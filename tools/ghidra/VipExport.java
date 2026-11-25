@@ -1,6 +1,6 @@
 // Export every function of the analysed VIP program as decompiled C, mirroring the layout of the
 // other docs/decompiled/* archives (one file per function + an index).
-// Args: out=<dir>  (default docs/decompiled/vip)
+// Args: out=<dir>  (default docs/decompiled/5624/vip)
 // @category RCD330
 
 import ghidra.app.decompiler.*;
@@ -26,7 +26,7 @@ public class VipExport extends GhidraScript {
 
     @Override
     public void run() throws Exception {
-        String out = "docs/decompiled/vip";
+        String out = "docs/decompiled/5624/vip";
         for (String a : getScriptArgs()) if (a.startsWith("out=")) out = a.substring(4);
         File fdir = new File(out, "functions");
         fdir.mkdirs();

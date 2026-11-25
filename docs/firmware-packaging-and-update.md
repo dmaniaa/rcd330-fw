@@ -1,6 +1,6 @@
 # Firmware Packaging, `opt/sysupdate` & QEMU Rootfs Staging
 
-Detailed specification of Noname/Visteon `.tar` update packages based on our complete `decompile_all` export of [`opt/sysupdate`](decompiled/services/sysupdate) (`2,267` functions, `0` failed), inspection of both original tarballs in `original-fw/`, and the QEMU emulation staging pipeline in `tools/`.
+Detailed specification of Noname/Visteon `.tar` update packages based on our complete `decompile_all` export of [`opt/sysupdate`](decompiled/5624/services/sysupdate) (`2,267` functions, `0` failed), inspection of both original tarballs in `original-fw/`, and the QEMU emulation staging pipeline in `tools/`.
 
 ---
 
@@ -44,10 +44,10 @@ For software-only or HMI/translation overlay updates, `kernel_update:0`, `bootlo
 
 ## 2. How `opt/sysupdate` Validates & Flashes Packages
 
-From [`FUN_000147fc`](decompiled/services/sysupdate/functions/0x147fc.c) (`IsPackageValid`), [`FUN_00010fac`](decompiled/services/sysupdate/functions/0x10fac.c) (`ParseConfigFile`), and [`FUN_000190fc`](decompiled/services/sysupdate/functions/0x190fc.c) (`ExtractFileToDir`):
+From [`FUN_000147fc`](decompiled/5624/services/sysupdate/functions/0x147fc.c) (`IsPackageValid`), [`FUN_00010fac`](decompiled/5624/services/sysupdate/functions/0x10fac.c) (`ParseConfigFile`), and [`FUN_000190fc`](decompiled/5624/services/sysupdate/functions/0x190fc.c) (`ExtractFileToDir`):
 1. Runs `tar -xvf "<pkg>.tar" <member> -C /sysupdate/system/` without checking any cryptographic signature in standard upgrade mode.
 2. Requires **`opt/stdplus.ini`**, **`config.txt`**, and **`script/`** to be present in the archive.
-3. Checks `[Upgrade] PACK_TYPE` (`VW_PQ_PSS`) matches the device and checks `[Version] AP_VER` differs from the currently flashed `AP_VER` ([`FUN_00011f70`](decompiled/services/sysupdate/functions/0x11f70.c)).
+3. Checks `[Upgrade] PACK_TYPE` (`VW_PQ_PSS`) matches the device and checks `[Version] AP_VER` differs from the currently flashed `AP_VER` ([`FUN_00011f70`](decompiled/5624/services/sysupdate/functions/0x11f70.c)).
 4. Writes `FLAG_UPDATE_HOST` (or `FLAG_UPDATE_VIP`) into `/sysupdate/flag.ini` and triggers a hard reboot through VIP watchdog shutdown via VMF `(0x8F, 0x19, payload=[0x01])`.
 5. On reboot, `/etc/rc.d/rcS` inspects `/sysupdate/flag.ini`:
    - When `FLAG_UPDATE_HOST`, `FLAG_UPDATE_VIP`, or `FLAG_UPDATE_HOST_ERROR` is set, `rcS` remounts `/` read-write, restores `/sysupdate/backup/*` on error, starts only `./vmf &`, `./hal_init`, `./vgw &`, and `./sysupdate &`, executes `script/before_app_update.sh`, flashes enabled images (`u-boot.bin` via `kobs-ng`, `kernelImage` to `mtd1`, `vipImage.bin` over SPI, `bt_ac_firm`), untars `[file]:[...]` trees, and executes `script/after_app_update.sh`.

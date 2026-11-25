@@ -83,15 +83,23 @@ public class VipSetup extends GhidraScript {
                     createLabel(toAddr(t), String.format("%s_isr_%04x", sn[s], t & 0xffff), true, SourceType.USER_DEFINED);
             }
         }
+        long appMain = 0x13de2L;
+        long rodataStart = 0x54e68L;
+        long rodataEnd = 0x61aa0L;
+        for (String a : getScriptArgs()) {
+            if (a.startsWith("appMain=")) appMain = Long.decode(a.substring(8));
+            else if (a.startsWith("rodataStart=")) rodataStart = Long.decode(a.substring(12));
+            else if (a.startsWith("rodataEnd=")) rodataEnd = Long.decode(a.substring(10));
+        }
         entry(0x3096, "BM_main");
-        entry(0x13de2, "APP_main");
+        entry(appMain, "APP_main");
 
-        // Seed indirect function-pointer tables in APP rodata/init-data (0x54e68..0x61aa0)
+        // Seed indirect function-pointer tables in APP rodata/init-data
         // so Ghidra discovers task, KWP/UDS, BAP, and state-machine callbacks before auto-analysis.
         int seeded = 0;
-        for (long off = 0x54e68L; off < 0x61aa0L; off += 4) {
+        for (long off = rodataStart; off < rodataEnd; off += 4) {
             long tgt = u32(off);
-            if (tgt < 0x106a0L || tgt >= 0x54e68L || (tgt & 1) != 0) continue;
+            if (tgt < 0x106a0L || tgt >= rodataStart || (tgt & 1) != 0) continue;
             int first16 = mem.getShort(toAddr(tgt)) & 0xffff;
             int prev16 = mem.getShort(toAddr(tgt - 2)) & 0xffff;
             boolean isPrepare = (first16 & 0xffc0) == 0x0780;

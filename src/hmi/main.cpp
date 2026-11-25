@@ -1,5 +1,5 @@
 // Stock opt/hmi entry point (firmware 5624), recreated from
-// docs/decompiled/hmi/functions/0x10e58.c.
+// docs/decompiled/5624/hmi/functions/0x10e58.c.
 //
 // Phase 1 keeps main()'s prologue (start banner, autotest and RVC coding
 // reads, QCoreApplication with UTF-8 codecs) and its event loop. Every other

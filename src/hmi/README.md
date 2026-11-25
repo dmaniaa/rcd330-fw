@@ -2,7 +2,7 @@
 
 C++ source that recreates the stock RCD 330 head-unit UI process `opt/hmi`
 (VW firmware 5624, `sha256 44ccad42...a6f2`), function by function, from the
-decompilation in `docs/decompiled/hmi/`. It is built for the device
+decompilation in `docs/decompiled/5624/hmi/`. It is built for the device
 (ARMv7 softfp, glibc 2.13, GCC 4.6 libstdc++, Qt 4.7.4 `libQtCore` only) and
 runs under the QEMU `-M rcd330` emulator in place of the stock binary.
 
@@ -84,7 +84,7 @@ name is unknown starts with `// File name is ours; stock name unknown.`
 ```
 
 Every tagged VA must be a decompiled function
-(`docs/decompiled/hmi/functions/0x<va>.c`) or lie in a non-code section
+(`docs/decompiled/5624/hmi/functions/0x<va>.c`) or lie in a non-code section
 (`.rodata`, `.data`, `.bss`, ...) of `hmi_symbols_5624.json`; tags on data
 addresses (tables, globals, shader strings) go under `_data` and do not count
 toward coverage. An address inside a function body or a typo fails the check.

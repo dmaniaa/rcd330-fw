@@ -6,9 +6,9 @@ indentation): `// 0x<8 lowercase hex> <name>`. Helper comments that merely
 derive from a stock function carry no tag in that form and are ignored.
 
 Each tagged VA must be either
-  * a decompiled stock function (docs/decompiled/hmi/functions/0x<va>.c), or
+  * a decompiled stock function (docs/decompiled/5624/hmi/functions/0x<va>.c), or
   * a data address: inside a non-code section of the 5624 binary according to
-    docs/decompiled/hmi/hmi_symbols_5624.json (.rodata, .data, .bss, ...).
+    docs/decompiled/5624/hmi/hmi_symbols_5624.json (.rodata, .data, .bss, ...).
 Anything else (e.g. an address inside a function body, or a typo) is an error.
 
 TRACE.json layout:
@@ -28,7 +28,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 DEFAULT_SRC = ROOT / "src/hmi"
 DEFAULT_OUT = ROOT / "src/hmi/TRACE.json"
-DECOMPILED = ROOT / "docs/decompiled/hmi"
+DECOMPILED = ROOT / "docs/decompiled/5624/hmi"
 SYMBOLS = DECOMPILED / "hmi_symbols_5624.json"
 TAG_RE = re.compile(r"^\s*//\s(0x[0-9a-f]{8})\s(\S.*)$")
 CODE_SECTIONS = {".init", ".plt", ".text", ".fini"}
@@ -54,7 +54,7 @@ def data_ranges(sym=None):
 def stock_function_vas(sym=None):
     """Set of integer start VAs for all 9,580 decompiled opt/hmi functions.
 
-    Reads docs/decompiled/hmi/functions/0x*.c when present; falls back to
+    Reads docs/decompiled/5624/hmi/functions/0x*.c when present; falls back to
     hmi_symbols_5624.json["function_addresses"] on public checkouts that omit
     raw decompiled .c files.
     """

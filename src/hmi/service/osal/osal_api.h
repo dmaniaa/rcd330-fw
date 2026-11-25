@@ -2,7 +2,7 @@
 //
 // libOSAL.so.1 (/opt/lib) entry points used by opt/hmi. libOSAL ships no
 // header; these prototypes follow its exported C symbols and the decompiled
-// bodies in docs/decompiled/hal_osal/libOSAL/functions/.
+// bodies in docs/decompiled/5624/hal_osal/libOSAL/functions/.
 #ifndef RCD330_HMI_SERVICE_OSAL_OSAL_API_H
 #define RCD330_HMI_SERVICE_OSAL_OSAL_API_H
 

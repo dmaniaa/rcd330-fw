@@ -1,6 +1,6 @@
 # IGDT Assets (`_ovg.bin`) & Multi-Language String Specification
 
-Complete binary format documentation for all UI textures (`opt/gresfiles/`) and localized strings in `opt/hmi`, with extracted catalogs in [gresfiles_catalog_5624.json](decompiled/hmi/gresfiles_catalog_5624.json) / [gresfiles_catalog_5606.json](decompiled/hmi/gresfiles_catalog_5606.json), scene graphs in [resources/scenes/](../resources/scenes), and translation dictionaries in [resources/translations/](../resources/translations).
+Complete binary format documentation for all UI textures (`opt/gresfiles/`) and localized strings in `opt/hmi`, with extracted catalogs in [gresfiles_catalog_5624.json](decompiled/5624/hmi/gresfiles_catalog_5624.json) / [gresfiles_catalog_5606.json](decompiled/5624/hmi/gresfiles_catalog_5606.json), scene graphs in [resources/scenes/](../resources/scenes), and translation dictionaries in [resources/translations/](../resources/translations).
 
 ---
 
@@ -10,7 +10,7 @@ Inside `opt/hmi`, `PT_LOAD[0]` maps file offsets to virtual addresses via `va = 
 - **`5624_vw/opt/hmi`**: `VA 0x69b69c..0x7578ec` (`32,110` widget slots, **`2,806` unique `_ovg.bin` files**).
 - **`5606_skoda/opt/hmi`**: `VA 0x6ca2f4` (`39,367` widget slots, **`2,611` unique `_ovg.bin` files**).
 
-Each 24-byte struct (`<BBHhhIHHII`, decoded by `IGDT_LoadOvgTextureEntry` @ [`0x325728`](decompiled/hmi/functions/0x325728.c)) contains:
+Each 24-byte struct (`<BBHhhIHHII`, decoded by `IGDT_LoadOvgTextureEntry` @ [`0x325728`](decompiled/5624/hmi/functions/0x325728.c)) contains:
 
 | Offset | Size | Type | Meaning |
 |---:|---:|---|---|
@@ -25,7 +25,7 @@ Each 24-byte struct (`<BBHhhIHHII`, decoded by `IGDT_LoadOvgTextureEntry` @ [`0x
 
 > **Important Deduplication Rule**: Multiple UI widget slots can point to the same `_ovg.bin` file with clipped or sub-panel dimensions (e.g., `10x20` vs `20x20` or `1x1`). Always select the entry with `max(w * h)` per unique path. Applying this rule decodes **100% (`2,806/2,806` in `5624`, `2,611/2,611` in `5606`, `bad=0`)** of all shipped `_ovg.bin` assets.
 
-### PackBits RLE Stream (`flags & 0x7f == 2`, inline in [`0x325728`](decompiled/hmi/functions/0x325728.c))
+### PackBits RLE Stream (`flags & 0x7f == 2`, inline in [`0x325728`](decompiled/5624/hmi/functions/0x325728.c))
 The `_ovg.bin` file holds **no header** — just raw compressed pixels, decoded inline inside `FUN_00325728` (note: `0x323dfc` is a scene-state updater, not an RLE helper):
 - Tracks remaining stream budget `bsz` (decremented by `1 + payload_bytes` per item) and stops as soon as the output buffer (`w * h * bpp`) is full or `bsz == 0`.
 - Read control byte `ctrl`:
@@ -35,7 +35,7 @@ The `_ovg.bin` file holds **no header** — just raw compressed pixels, decoded 
 
 ---
 
-## 2. Compressed 5-Language String Block (`FUN_00023650` @ [`0x23650`](decompiled/hmi/functions/0x23650.c))
+## 2. Compressed 5-Language String Block (`FUN_00023650` @ [`0x23650`](decompiled/5624/hmi/functions/0x23650.c))
 
 `opt/hmi` packs all localized UI strings into a dense byte stream inside `.rodata`:
 - **`5624_vw`**: file `0x3c3680` (`VA 0x3cb680`), max valid start id `0x20fcb` (`0x23650` rejects `id >= 0x20fcc`; the last 5-language group starts at `0x20fcb` and ends at `0x20fec`, the JSON `block_length`), `multilang_start = 0x02d2` (`\tUSEnglish`). IDs `0..8` are 9 empty chunks (neutral IDs start at `9`), yielding **`222` neutral + `1,976` 5-language entries** (`en_US`, `zh_CN`, `pt_BR`, `ru_RU`, `es_MX`), archived in [strings_5624_vw.json](../resources/translations/strings_5624_vw.json).
@@ -45,7 +45,7 @@ The `_ovg.bin` file holds **no header** — just raw compressed pixels, decoded 
 Starting at byte offset `id` inside the string block (for `id >= 0x2d2`, language slot `0..4` selects the `N`-th sequential string starting at `id`):
 - `tag = b0 & 0x1f`, `cont = (b0 & 0x80) != 0`
 - **If `tag == 0x1f`** (Backreference / Jump):
-  - `target = (b1 << 8) | b2` (if `b0 & 0x20` is set, 24-bit `(target << 8) | b3`); decoded **one level deep with language `0`** ([`0x31d1bc`](decompiled/hmi/functions/0x31d1bc.c)) — no backref chains exist in the block.
+  - `target = (b1 << 8) | b2` (if `b0 & 0x20` is set, 24-bit `(target << 8) | b3`); decoded **one level deep with language `0`** ([`0x31d1bc`](decompiled/5624/hmi/functions/0x31d1bc.c)) — no backref chains exist in the block.
 - **Else** (`tag` chunk length):
   - `mode = (b0 >> 5) & 3`:
     - `mode == 0`: Unicode page `0x00` (ASCII / Latin-1), `cnt = tag` bytes.
@@ -75,4 +75,4 @@ A second uncompressed **UTF-32LE engineering string table** (`109` entries at fi
 - **IGDT scene-graph & texture catalogs**:
   - [scenes_5624_vw.json](../resources/scenes/scenes_5624_vw.json) & [scenes_5606_skoda.json](../resources/scenes/scenes_5606_skoda.json)
     - *Known extractor defects in `scenes_5624_vw.json`*: the earlier JSON extractor (1) indexed `branch_init` by `tag & 0xfffff` instead of node `eidx` (affecting screens `0x17` and `0x52`), (2) capped recursion at depth 12 (dropping elements on `0x0a`, `0x0d`, `0x58`, `0x60`, `0x63`, `0xa5`, `0xfe`), and (3) skipped static kind-7 rect nodes. For stock-faithful scene generation, use [src/hmi/tools/gen_igdt_tables.py](../src/hmi/tools/gen_igdt_tables.py) (pinned against these exact exceptions in [tools/tests/test_hmi_tables.py](../tools/tests/test_hmi_tables.py)).
-  - [gresfiles_catalog_5624.json](decompiled/hmi/gresfiles_catalog_5624.json) & [gresfiles_catalog_5606.json](decompiled/hmi/gresfiles_catalog_5606.json)
+  - [gresfiles_catalog_5624.json](decompiled/5624/hmi/gresfiles_catalog_5624.json) & [gresfiles_catalog_5606.json](decompiled/5624/hmi/gresfiles_catalog_5606.json)

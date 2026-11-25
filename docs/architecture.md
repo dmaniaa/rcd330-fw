@@ -15,7 +15,7 @@ Technical reference derived from direct Ghidra 12.2 decompilation of all 31 core
 | **Vehicle MCU (VIP)** | Renesas RH850 (`R7F7010253`, QFP-100, 1 MB flash `vipImage.bin`) | CAN transceiver controller, PQ/MQB identity, power rail `EN` sequencing, hardware watchdog, AM/FM tuner DSP control |
 | **VIP <-> SoC Link** | SPI IPCL (`/dev/spidev0.0`, `/dev/v850srq`, GPIO 83) | Driven by `opt/lib/libHAL.so.1.0.0` (`spi_ipcl_read` / `spi_ipcl_write`) and `opt/vgw` |
 | **Touchscreen** | Atmel maXTouch T100 (`atmel_mxt_ts`, I2C4 `0x021f8000` / `/dev/i2c-3`, addr `0x4b`, GPIO1_27 IRQ) | Configured via `/lib/firmware/maxtouch.cfg`; read via `tslib` (`/dev/event1`, `/etc/pointercal`, `/etc/ts.conf`) |
-| **Faceplate Buttons & Knobs** | `/dev/event0` (`EV_KEY` codes `1..10`) & `/dev/tuner_knob` (`0x32`/`0x33`) | Read by `VKeyDriver` ([`0xaa77c`](decompiled/hmi/functions/0xaa77c.c)) & `VKnobDriver` ([`0xaa3e0`](decompiled/hmi/functions/0xaa3e0.c)) in `opt/hmi` |
+| **Faceplate Buttons & Knobs** | `/dev/event0` (`EV_KEY` codes `1..10`) & `/dev/tuner_knob` (`0x32`/`0x33`) | Read by `VKeyDriver` ([`0xaa77c`](decompiled/5624/hmi/functions/0xaa77c.c)) & `VKnobDriver` ([`0xaa3e0`](decompiled/5624/hmi/functions/0xaa3e0.c)) in `opt/hmi` |
 | **Reverse Camera (RVC)** | Analog Devices `ADV7182` (I2C4 `/dev/i2c-3`, addr `0x21`) | CVBS-to-digital V4L2 video decoder (`/dev/video0`, overlay `/dev/video17`), managed by `opt/camera` and `VCameraTask` |
 | **Bluetooth Module** | ALPS (`BT_VER = C210`, UART) | Firmware stored in `bt_ac_firm/`, managed by `opt/bt` (`libcidb_sdk.so`) |
 
@@ -32,7 +32,7 @@ On the target Linux system (`/etc/rc.d/rcS` & `/opt/launch.sh`):
 
 ## 3. True Boot Sequence & Runtime Process Supervision
 
-Decompiling `opt/pwr_agent` ([`FUN_0000d59c`](decompiled/services/pwr_agent/functions/0xd59c.c), `start_next_group_transition`) revealed why most services are commented out in `/opt/launch.sh`: **`opt/pwr_agent` is the runtime process supervisor** that spawns the remaining infotainment daemons in power-state groups after establishing the VIP handshake.
+Decompiling `opt/pwr_agent` ([`FUN_0000d59c`](decompiled/5624/services/pwr_agent/functions/0xd59c.c), `start_next_group_transition`) revealed why most services are commented out in `/opt/launch.sh`: **`opt/pwr_agent` is the runtime process supervisor** that spawns the remaining infotainment daemons in power-state groups after establishing the VIP handshake.
 
 ```mermaid
 flowchart TD
@@ -74,7 +74,7 @@ flowchart TD
 - **`opt/vmf`**, **`opt/lib/libvmf_client.so`**, **`opt/lib/libvmf_trace.so`**: Central publish/subscribe IPC message broker using System V shared memory and message queues. CLI helpers: **`opt/tools/vmf_send`** and **`opt/tools/vmf_rcv`**.
 - **`opt/hal_init`**, **`opt/lib/libHAL.so.1.0.0`**, **`opt/lib/libOSAL.so.1.0.0`**: Hardware abstraction (SPI IPCL `/dev/spidev0.0`, `/dev/v850srq`, GPIO sysfs) and OS abstraction (threads, timers, logging, INI access).
 - **`opt/vgw`**: Bridges VMF message groups `[0x8f, 0x8d, 0x7c]` and power channel `0x8e` to the Renesas RH850 VIP MCU over SPI IPCL. See [ipc-and-vgw.md](ipc-and-vgw.md).
-- **`opt/pwr_agent`**: Manages power state transitions (`CL_S`, `CL_15`, standby/run/user-off, battery warnings), syncs version metadata in `/pss1/stdplus.ini`, supervises power-group service startup/shutdown ([`0xd59c`](decompiled/services/pwr_agent/functions/0xd59c.c)), and feeds the periodic watchdog keepalive (`0x8f:0x03`) so VIP does not power-cycle the SoC after ~60 s.
+- **`opt/pwr_agent`**: Manages power state transitions (`CL_S`, `CL_15`, standby/run/user-off, battery warnings), syncs version metadata in `/pss1/stdplus.ini`, supervises power-group service startup/shutdown ([`0xd59c`](decompiled/5624/services/pwr_agent/functions/0xd59c.c)), and feeds the periodic watchdog keepalive (`0x8f:0x03`) so VIP does not power-cycle the SoC after ~60 s.
 - **`opt/hmi`**: 800x480 infotainment display and control logic application (`9,580` decompiled functions). See [hmi-internals.md](hmi-internals.md).
 - **`opt/audio_proc`**: Audio Manager handling volume (`0..30`), mute, equalizer, fader/balance, and audio source switching with `VAudioProxy` (`0x3C..0x3F`, `0x45`, `0x47`).
 - **`opt/media`**: Media indexing, browsing, and playback service for USB, SD, and AUX inputs (`0x28..0x2A`).

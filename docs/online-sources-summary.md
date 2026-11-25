@@ -22,7 +22,7 @@ Sources archived in this repo:
    - `mtd2` (`208 MB`): `nand.rootfs` -> `ubi0:rootfs` UBIFS mounted at `/`
    - `mtd3` (`10 MB`): `pss1` -> `ubi1:pss1` mounted at `/pss1` (persistent coding, BT state, `stdplus.ini`, `hmi_autotest.ini`)
    - `mtd4` (`10 MB`): `pss2` -> `ubi2:pss2` mounted at `/pss2` (backup PSS partition + `app_data/`)
-   - `mtd5` (`12 MB`): `logo` (raw splash framebuffer logo partition; sellers overwrite via `dd of=/dev/mtdblock5`, and `opt/hmi` `VETMHmiLookFeelPage` @ [`0x1fb9b8`](decompiled/hmi/functions/0x1fb9b8.c) can flash it from SD card at offsets `0x0` and `0x300000`)
+   - `mtd5` (`12 MB`): `logo` (raw splash framebuffer logo partition; sellers overwrite via `dd of=/dev/mtdblock5`, and `opt/hmi` `VETMHmiLookFeelPage` @ [`0x1fb9b8`](decompiled/5624/hmi/functions/0x1fb9b8.c) can flash it from SD card at offsets `0x0` and `0x300000`)
 3. **Vehicle Interface Processor (VIP MCU)**:
    - Renesas **RH850** (`R7F7010253`, QFP-100, 1 MB flash updated via `vipImage.bin` over SPI).
    - **Responsibilities**: CAN bus transceiver interface (PQ/MQB), part number / brand / VIN / coding identity, **power regulator enable (`EN`) sequencing**, and a **hardware watchdog (~60 s reset cycle)** fed by the SoC.
@@ -44,7 +44,7 @@ Sources archived in this repo:
   - Offset `0x15` (`21`): `eventid` (`uint8_t`)
   - Offset `0x18` (`24`): `payload_len` (`uint16_t` LE)
   - Offset `0x1A` (`26`): `payload[]`
-  - Confirmed identically in `VBaseProxy::PackMsg` (`opt/hmi` [`0x5fe68`](decompiled/hmi/functions/0x5fe68.c)) and `opt/vgw` (`0x8b78`..`0xa320`).
+  - Confirmed identically in `VBaseProxy::PackMsg` (`opt/hmi` [`0x5fe68`](decompiled/5624/hmi/functions/0x5fe68.c)) and `opt/vgw` (`0x8b78`..`0xa320`).
 - **Watchdog Feed (`pwr_agent`)**: `groupid = 0x8F (143)`, `eventid = 0x03`, `len = 4`, payload `[0x02, seq++, 0x01, vip_enabled]`.
 - **Update Shutdown / Hard Reboot (`sysupdate`)**: Calling `SendUpdateStatus(1)` sends `groupid = 0x8F (143)`, `eventid = 0x19 (25)`, payload `[0x01]`, or via CLI: `/opt/tools/vmf_send 143 25 1`. VIP disables the watchdog during update reboot.
 
@@ -68,6 +68,6 @@ Community members (`571Pro`, `mengxp`) documented that Noname/Visteon update `.t
   - Identified that `opt/hmi` stores 5 languages inline between `"main RVC..."` and `"ts_open error"` using length-prefixed chunks and `\x1f` backreferences.
   - Community translators (`5606_skoda` German mod) had to hex-edit strings **in-place** inside `.rodata` (padding with spaces or `\x1f` refs) because hardcoded 16-bit/32-bit byte offsets inside `.text` point directly into the compressed blob.
   - Because German replacements in `5606_skoda` were hex-edited manually, a few slots (`0xe05d`, `0xfa29`, `0x10073`, `0x129f7`) drifted across multi-byte chunk headers (`mode == 3`), causing shifted codepages when decoded sequentially.
-- **Our complete resolution ([`0x23650`](decompiled/hmi/functions/0x23650.c), [`0x325728`](decompiled/hmi/functions/0x325728.c))**:
+- **Our complete resolution ([`0x23650`](decompiled/5624/hmi/functions/0x23650.c), [`0x325728`](decompiled/5624/hmi/functions/0x325728.c))**:
   - Decoded 100% of the proprietary string compression opcode table (bits `[7]` = continuation, `[6:5]` = BMP page mode `0:0x00xx, 1:0x01xx, 2:0x04xx Cyrillic, 3:next-byte page`, `[4:0] == 0x1F` = 16-bit/24-bit backreference) into [resources/translations/](../resources/translations).
   - Decoded 100% of the IGDT 24-byte `_ovg.bin` descriptor table and PackBits RLE codec (`2,806/2,806` unique textures in `5624_vw`, `2,611/2,611` in `5606_skoda`) and scene-graph tables into [resources/scenes/](../resources/scenes).

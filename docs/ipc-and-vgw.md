@@ -4,7 +4,7 @@ All infotainment services communicate over the Visteon Message Framework (**VMF*
 
 ---
 
-## 1. VMF Wire Framing (`VBaseProxy::PackMsg` @ [`0x5fe68`](decompiled/hmi/functions/0x5fe68.c))
+## 1. VMF Wire Framing (`VBaseProxy::PackMsg` @ [`0x5fe68`](decompiled/5624/hmi/functions/0x5fe68.c))
 
 Every VMF packet starts with a fixed **26-byte (`0x1A`) header** followed immediately by payload bytes (up to `0x4B4` payload bytes in a `0x4D0`-byte buffer):
 
@@ -18,17 +18,17 @@ Every VMF packet starts with a fixed **26-byte (`0x1A`) header** followed immedi
 | `0x18` (24) | 2 | `uint16_t` LE | **Payload length** (`len`) |
 | `0x1A` (26) | `len` | `uint8_t[]` | Payload buffer |
 
-Inside `opt/hmi`, `VBaseProxy::PackMsg` ([`0x5fe68`](decompiled/hmi/functions/0x5fe68.c)) accepts an internal 4-byte prefix `[grp, sub, len_hi, len_lo]` followed by `len` payload bytes, converts the big-endian length `(buf[2] << 8) | buf[3]` into little-endian `*(uint16_t*)(pkt + 0x18)`, copies `buf + 4` to `pkt + 0x1a`, and transmits via `VmfThread::send` ([`0x606e8`](decompiled/hmi/functions/0x606e8.c) -> `nw_vmf_send`).
+Inside `opt/hmi`, `VBaseProxy::PackMsg` ([`0x5fe68`](decompiled/5624/hmi/functions/0x5fe68.c)) accepts an internal 4-byte prefix `[grp, sub, len_hi, len_lo]` followed by `len` payload bytes, converts the big-endian length `(buf[2] << 8) | buf[3]` into little-endian `*(uint16_t*)(pkt + 0x18)`, copies `buf + 4` to `pkt + 0x1a`, and transmits via `VmfThread::send` ([`0x606e8`](decompiled/5624/hmi/functions/0x606e8.c) -> `nw_vmf_send`).
 
-For CLI testing on the target or inside QEMU, [`opt/tools/vmf_send`](decompiled/vmf/vmf_send) and [`opt/tools/vmf_rcv`](decompiled/vmf/vmf_rcv) inject and monitor decimal VMF packets (`vmf_send <dec_group> <dec_sub> [dec_byte0 ...]`).
+For CLI testing on the target or inside QEMU, [`opt/tools/vmf_send`](decompiled/5624/vmf/vmf_send) and [`opt/tools/vmf_rcv`](decompiled/5624/vmf/vmf_rcv) inject and monitor decimal VMF packets (`vmf_send <dec_group> <dec_sub> [dec_byte0 ...]`).
 
 ---
 
-## 2. `opt/vgw` VMF <-> SPI IPCL Bridge ([docs/decompiled/vgw/pseudocode/](decompiled/vgw/pseudocode))
+## 2. `opt/vgw` VMF <-> SPI IPCL Bridge ([docs/decompiled/5624/vgw/pseudocode/](decompiled/5624/vgw/pseudocode))
 
 `opt/vgw` registers with `opt/vmf` using `libvmf_client.so` and runs three threads:
-1. **Main VMF RX Thread**: Subscribes to VMF groups **`[0x8f, 0x8d, 0x7c]`**, looks up `(vmf_grp, vmf_sub)` in a **44-entry TX routing table** ([`0x8b78`](decompiled/vgw/pseudocode/functions/0x8b78.c)..[`0xa320`](decompiled/vgw/pseudocode/functions/0xa320.c)), translates the header, and calls `spi_ipcl_write` in `libHAL.so.1.0.0`.
-2. **SPI IPCL RX Thread**: Reads frames via `spi_ipcl_read` ([`0x1439c`](decompiled/hal_osal/libHAL/functions/0x1439c.c)) from the Renesas RH850 VIP MCU, maps `(ipcl_grp, ipcl_sub)` through a **36-entry RX routing table**, and publishes VMF events back onto the bus for `opt/hmi`, `opt/pwr_agent`, and `opt/diag`.
+1. **Main VMF RX Thread**: Subscribes to VMF groups **`[0x8f, 0x8d, 0x7c]`**, looks up `(vmf_grp, vmf_sub)` in a **44-entry TX routing table** ([`0x8b78`](decompiled/5624/vgw/pseudocode/functions/0x8b78.c)..[`0xa320`](decompiled/5624/vgw/pseudocode/functions/0xa320.c)), translates the header, and calls `spi_ipcl_write` in `libHAL.so.1.0.0`.
+2. **SPI IPCL RX Thread**: Reads frames via `spi_ipcl_read` ([`0x1439c`](decompiled/5624/hal_osal/libHAL/functions/0x1439c.c)) from the Renesas RH850 VIP MCU, maps `(ipcl_grp, ipcl_sub)` through a **36-entry RX routing table**, and publishes VMF events back onto the bus for `opt/hmi`, `opt/pwr_agent`, and `opt/diag`.
 3. **Power Thread (`0x8e`)**: Dedicated fast-path forwarding `(0x8e, 0xd9) -> (0x8f, 0xfe, len=4)` power management handshakes.
 
 ### SPI IPCL Frame Wire Format (`libHAL.so.1.0.0`)
@@ -42,7 +42,7 @@ where `sub_len = 4 + plen`, `total = 2 + sub_len + 2 = 8 + plen`, and `crc16` is
 
 ## 3. Complete VMF Group ID & Inter-Service Routing Matrix
 
-Derived from `VBaseProxy::RegisterVmfGroup` ([`0x5fdd4`](decompiled/hmi/functions/0x5fdd4.c)) and `VBaseProxy::SendVmfMsg` ([`0x5ff4c`](decompiled/hmi/functions/0x5ff4c.c)) across all 18 `opt/hmi` subsystem proxies and peer services:
+Derived from `VBaseProxy::RegisterVmfGroup` ([`0x5fdd4`](decompiled/5624/hmi/functions/0x5fdd4.c)) and `VBaseProxy::SendVmfMsg` ([`0x5ff4c`](decompiled/5624/hmi/functions/0x5ff4c.c)) across all 18 `opt/hmi` subsystem proxies and peer services:
 
 | VMF Group (Hex / Dec) | Direction | Producer -> Consumer | Purpose |
 |---|---|---|---|
@@ -100,4 +100,4 @@ Derived from `VBaseProxy::RegisterVmfGroup` ([`0x5fdd4`](decompiled/hmi/function
 | `VIP -> HMI` (`VBAPProxy`) | `(0x34, 0x01)` | `(0x0C, 0x04)` | BAP Climatronic status |
 | `audio_proc -> HMI` (`VAudioProxy`) | `(0x3F, 0x01)` | — | `AUDIO_AM_PRIMARY_VOLUME_STATUS` 6 B `[0x00, v_act, v_ent, v_phone, v_ring, v_sds]` (`0..30`) & `AUDIO_AM_HMI_MUTE_STATUS` 5 B `[0x04, active, ent, phone, ring]` |
 
-Full route tables and raw SPI reader/writer implementations are preserved in [`docs/decompiled/vgw/pseudocode/functions/`](decompiled/vgw/pseudocode/functions) and [`docs/decompiled/hal_osal/libHAL/functions/0x1439c.c`](decompiled/hal_osal/libHAL/functions/0x1439c.c).
+Full route tables and raw SPI reader/writer implementations are preserved in [`docs/decompiled/5624/vgw/pseudocode/functions/`](decompiled/5624/vgw/pseudocode/functions) and [`docs/decompiled/5624/hal_osal/libHAL/functions/0x1439c.c`](decompiled/5624/hal_osal/libHAL/functions/0x1439c.c).

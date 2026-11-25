@@ -2,7 +2,7 @@
 
 Technical reference for **VW Long Coding (`DID 0x0600`)**, **Feature Manager (`FEATURE_MANAGER_PSS_BLK.pss`)**, **early-boot INI coding (`/pss1/stdplus.ini`)**, **VRM platform/brand identity**, and **runtime VIP ↔ Linux coding IPC** on the Noname/Visteon RCD 330 (`6RD 035 187 B/C/E/F`, `5624_vw` & `5606_skoda`).
 
-All byte offsets, bitmasks, CRC parameters, validation rules, adaptation channels, and IPC routes below are verified directly against the Ghidra 12.2 decompilation archives in [docs/decompiled/](decompiled/README.md) — covering **both** the **Renesas RH850 VIP firmware** ([docs/decompiled/vip/](decompiled/vip/README.md), `vipImage.bin`, `2,824` functions) **and** Linux userspace (`opt/diag`, `opt/pss`, `opt/pwr_agent`, `opt/vgw`, `opt/hmi`, `opt/bt`, `opt/camera`, `opt/exlap`, `opt/connect_mgr`, `opt/sysupdate`, `opt/audio_proc`).
+All byte offsets, bitmasks, CRC parameters, validation rules, adaptation channels, and IPC routes below are verified directly against the Ghidra 12.2 decompilation archives in [docs/decompiled/](decompiled/README.md) — covering **both** the **Renesas RH850 VIP firmware** ([docs/decompiled/5624/vip/](decompiled/5624/vip/README.md), `vipImage.bin`, `2,824` functions) **and** Linux userspace (`opt/diag`, `opt/pss`, `opt/pwr_agent`, `opt/vgw`, `opt/hmi`, `opt/bt`, `opt/camera`, `opt/exlap`, `opt/connect_mgr`, `opt/sysupdate`, `opt/audio_proc`).
 
 ---
 
@@ -12,9 +12,9 @@ Headunit coding and feature enablement span four coordinated storage layers acro
 
 | Layer | File Path(s) | PSS Block ID / Size | Writers | Readers | Format |
 |---|---|---|---|---|---|
-| **1. VW Long Coding (`DID 0x0600`)** | `/pss1/DIAG_PSS_CODING.pss` & `/pss2/DIAG_PSS_CODING.pss` | Block `0x50` (80), `data_len=25`, `total_len=33` (`type=2` dual-partition) | `opt/diag` (`Diag_Provide_Coding` [`0x13660`](decompiled/services/diag/functions/0x13660.c)) → `opt/pss` (`VMF 0x8C:0x02`) | `opt/hmi` (`VPSSProxy` [`0x1c5a90`](decompiled/hmi/functions/0x1c5a90.c)), `opt/bt` (`0x14a5c`, offset `0x10` len 1), `opt/exlap` (`0xd1c8`/`0xd4e4`, len `0x19`), `opt/diag` (`0x131b4`) | 8-byte BE PSS header + 25-byte coding payload (PQ uses bytes `0..6`; MQB uses `0..24`) |
+| **1. VW Long Coding (`DID 0x0600`)** | `/pss1/DIAG_PSS_CODING.pss` & `/pss2/DIAG_PSS_CODING.pss` | Block `0x50` (80), `data_len=25`, `total_len=33` (`type=2` dual-partition) | `opt/diag` (`Diag_Provide_Coding` [`0x13660`](decompiled/5624/services/diag/functions/0x13660.c)) → `opt/pss` (`VMF 0x8C:0x02`) | `opt/hmi` (`VPSSProxy` [`0x1c5a90`](decompiled/5624/hmi/functions/0x1c5a90.c)), `opt/bt` (`0x14a5c`, offset `0x10` len 1), `opt/exlap` (`0xd1c8`/`0xd4e4`, len `0x19`), `opt/diag` (`0x131b4`) | 8-byte BE PSS header + 25-byte coding payload (PQ uses bytes `0..6`; MQB uses `0..24`) |
 | **2. Feature Manager Flags** | `/pss1/FEATURE_MANAGER_PSS_BLK.pss` & `/pss2/FEATURE_MANAGER_PSS_BLK.pss` + `/opt/feature_config.ini` | Block `0x54` (84), `data_len=25`, `total_len=33` (`type=2` dual-partition) | `opt/pss` (`0xdb34`, `0xe0c0`, `0xe44c`) via `opt/pwr_agent` (`VMF 0x8C:0x09`/`0x0A`) and `opt/diag` adaptation (`DIAG_OUT` sub `0x16`) | `opt/pwr_agent` (`0xd134` via `VMF 0x0B:0x06`), `opt/connect_mgr` (`0xc9a0` via `VMF 0x8C:0x08`), `opt/hmi`, `opt/diag_eol` | 8-byte BE PSS header + 25-byte array (11 feature indices `0..10`), overridden by `/opt/feature_config.ini` |
-| **3. Early-Boot Fast INI** | `/pss1/stdplus.ini` (seeded on first boot from `/opt/stdplus.ini`, which ships with `BT=0`, `CODINGS=0`) | — | `opt/pwr_agent` (`0xa35c` → `0x1015c` for `[CODING]`; `0xf704`/`0xfc58`/`0xfd30` for `[VIP]`), `opt/sysupdate` (`0x16028`) | `opt/camera` (`0x8adc`), `opt/hmi` `main()` ([`0x10e58`](decompiled/hmi/functions/0x10e58.c)) — read **before** VMF/PSS are running | Standard INI (`[CODING]` & `[VIP]` sections) |
+| **3. Early-Boot Fast INI** | `/pss1/stdplus.ini` (seeded on first boot from `/opt/stdplus.ini`, which ships with `BT=0`, `CODINGS=0`) | — | `opt/pwr_agent` (`0xa35c` → `0x1015c` for `[CODING]`; `0xf704`/`0xfc58`/`0xfd30` for `[VIP]`), `opt/sysupdate` (`0x16028`) | `opt/camera` (`0x8adc`), `opt/hmi` `main()` ([`0x10e58`](decompiled/5624/hmi/functions/0x10e58.c)) — read **before** VMF/PSS are running | Standard INI (`[CODING]` & `[VIP]` sections) |
 | **4. BT Coding Mirror** | `/pss2/app_data/bt_coding.config` | — | `opt/bt` (`0x87b3c`) | `opt/bt` (`0x879d8`, defaults to `0x2f` if missing) | Single raw byte = MQB Coding Byte 16 (`g_ucBtCoding`) |
 
 ### PSS Binary File Format (`opt/pss` `0x9a78`, `0xa848`, `0xb258`)
@@ -72,13 +72,13 @@ Written by `opt/pwr_agent` (`0xf704`, `0xfc58`, `0xfd30`) upon receiving VRM ide
 
 ### 3.0 Where Coding Actually Lives (VIP + Linux)
 
-When you code the unit with VCDS (`56-Radio` → `Coding-07`) or OBDeleven (`Radio` → `Long Coding`), the tester talks to the **RH850 VIP MCU** (`vipImage.bin`). The VIP owns the KWP2000/UDS stack ([`0x27cf0`](decompiled/vip/functions/0x27cf0.c)), validates writes in [`0x1f48a`](decompiled/vip/functions/0x1f48a.c), persists the authoritative 7-byte PQ coding to DataFlash block `0xB7` (RAM mirror `0xFEE00410..0xFEE00416`), and forwards a copy to Linux `opt/diag` over `IPCL(0x07, 0x01)` (`actionId=0x05`, [`0x23158`](decompiled/vip/functions/0x23158.c), §5.2).
+When you code the unit with VCDS (`56-Radio` → `Coding-07`) or OBDeleven (`Radio` → `Long Coding`), the tester talks to the **RH850 VIP MCU** (`vipImage.bin`). The VIP owns the KWP2000/UDS stack ([`0x27cf0`](decompiled/5624/vip/functions/0x27cf0.c)), validates writes in [`0x1f48a`](decompiled/5624/vip/functions/0x1f48a.c), persists the authoritative 7-byte PQ coding to DataFlash block `0xB7` (RAM mirror `0xFEE00410..0xFEE00416`), and forwards a copy to Linux `opt/diag` over `IPCL(0x07, 0x01)` (`actionId=0x05`, [`0x23158`](decompiled/5624/vip/functions/0x23158.c), §5.2).
 
 Because both the VIP firmware and Linux userspace are now decompiled, **every single byte and bit below is verified against firmware code** — including several community/VCDS `.lbl` myths inherited from older PQ radios (RCD 310/510/RNS 315) that `vipImage.bin` actually ignores or rejects.
 
 ### 3.1 PQ Platform (`platform == 1`, 7 Bytes: `0..6`) — the coding VCDS/OBDeleven shows
 
-#### Exact VIP Write Validation Rules (`vipImage.bin` [`0x1e1b8`](decompiled/vip/functions/0x1e1b8.c) → [`0x1f48a`](decompiled/vip/functions/0x1f48a.c))
+#### Exact VIP Write Validation Rules (`vipImage.bin` [`0x1e1b8`](decompiled/5624/vip/functions/0x1e1b8.c) → [`0x1f48a`](decompiled/5624/vip/functions/0x1f48a.c))
 
 The validator below is **bit-for-bit identical in both `5624_vw` (`0x1f48a`) and `5606_skoda` (`0x1f402`)**:
 1. **Fingerprint precondition (`0x1e1b8`)**: Tester must first write `DID 0xF198` (6-byte Repair Shop Code / fingerprint, sets `DAT_ram_fede80aa = 1`) before writing `DID 0x0600`, otherwise VIP returns **NRC `0x22`** (*Conditions Not Correct*).
@@ -96,7 +96,7 @@ The validator below is **bit-for-bit identical in both `5624_vw` (`0x1f48a`) and
 
 #### Byte-by-Byte Semantics (VIP + Linux vs. Community Labels)
 
-Verified in `vipImage.bin` (`0xFEE00410..0xFEE00416`) and Linux `opt/diag` ([`0x13660`](decompiled/services/diag/functions/0x13660.c)) / `opt/hmi` ([`0x5ad80`](decompiled/hmi/functions/0x5ad80.c)):
+Verified in `vipImage.bin` (`0xFEE00410..0xFEE00416`) and Linux `opt/diag` ([`0x13660`](decompiled/5624/services/diag/functions/0x13660.c)) / `opt/hmi` ([`0x5ad80`](decompiled/5624/hmi/functions/0x5ad80.c)):
 
 | Byte | Bits / Value | Community / VCDS Label | Verified VIP (`vipImage.bin`) Behavior | Verified Linux (`opt/diag` / `opt/hmi`) Behavior |
 |---|---|---|---|---|
@@ -105,13 +105,13 @@ Verified in `vipImage.bin` (`0xFEE00410..0xFEE00416`) and Linux `opt/diag` ([`0x
 | **0** | `bit 2` (`0x04`) | (factory `1` in `0x16`) | Accepted, **never read** in VIP | `opt/diag` → Feature `2` `CARPLAY_ATTR` (overridden `TRUE` on `5624_vw`) |
 | **0** | `bit 3` (`0x08`) | *"Parking System / OPS"* **(VCDS `.lbl` myth!)** | Accepted, **NEVER read anywhere in VIP!** OPS activates automatically from PDC CAN/BAP frames (`0x497`) regardless of this bit | `opt/diag` → Feature `10` `ANDAUTO_ATTR` (overridden `TRUE` on `5624_vw`, so toggling bit 3 has **zero effect** on either OPS or Android Auto!) |
 | **0** | `bit 4` (`0x10`) | (factory `1` in `0x16`) | Accepted, **never read** in VIP | `opt/diag` → Feature `3` `CARLIFE_ATTR` (`INVALID`/forced OFF on `5624_vw`; active on `5606_skoda`) |
-| **1** | `0x00` / `0x02` | **Amplifier**: `00` = internal, `02` = external digital amp (Fender / Dynaudio / Skoda Sound System / Beats) | **Verified (`0x23388` / `0x412e8` → `b1 == 2`)**: latched **at boot only** in DSP/amp init [`0x3c362`](decompiled/vip/functions/0x3c362.c) (`DAT_ram_fedeb85f`) — **this is why a restart is required!** Switches power amp to low-level output, disables internal speaker DTCs (`0x2189c`, `0x4356a`), applies DSP attenuation (`0x3e942` → `0x40f9a(2, 599)`), and enables external amp BAP flag `0x2D` (`0x2e126` → `0x458f4`) | Not read directly by Linux |
+| **1** | `0x00` / `0x02` | **Amplifier**: `00` = internal, `02` = external digital amp (Fender / Dynaudio / Skoda Sound System / Beats) | **Verified (`0x23388` / `0x412e8` → `b1 == 2`)**: latched **at boot only** in DSP/amp init [`0x3c362`](decompiled/5624/vip/functions/0x3c362.c) (`DAT_ram_fedeb85f`) — **this is why a restart is required!** Switches power amp to low-level output, disables internal speaker DTCs (`0x2189c`, `0x4356a`), applies DSP attenuation (`0x3e942` → `0x40f9a(2, 599)`), and enables external amp BAP flag `0x2D` (`0x2e126` → `0x458f4`) | Not read directly by Linux |
 | **2** | `0x00` / `0x02` / `0x04` | **Speaker channels**: `00` = SoundSystem (req. `B1=02`), `02` = 2 front speakers, `04` = 4 speakers | **Verified (`0x216d0`)**: gates speaker impedance monitoring (`0x4356a`: `02`→front ch `2,3`; `04`→all `0..3`), coding plausibility DTC `01044` (`0x2189c`), actuator tests (`0x21b84`/`0x22af8`), and sends `B2` via `IPCL(0x07, 0x01)` `actionId=1` (`0x216da`) | `opt/diag` `0xe028` → `VDiagProxy+9`: `2` hides HMI Fader controls (§3.4) |
 | **3** | `bit 0` (`0x01`) | *"Steering Wheel Buttons"* **(rejected!)** | **REJECTED by `0x1f48a` (`& 0x9D`) & `0x25a68` (`& 0xBD`) with NRC `0x31`!** MFL CAN messages (`0x5C1`) work natively without setting this bit (legacy RCD 310/510 `.lbl` artifact) | Not read |
-| **3** | `bit 1` (`0x02`) | *(undocumented in Reddit)* | **Verified (`0x23398`): External Telephone Microphone (`R38`) Enable!** `0` = internal faceplate mic (`SAF775x` `0xF2433D`/`0xF205C8`/`0xF246CE`); `1` = external mic `R38` (`0xF2433E`/`0xF205C9`/`0xF246D3`, [`0x3f6d8`](decompiled/vip/functions/0x3f6d8.c)/[`0x3f7ba`](decompiled/vip/functions/0x3f7ba.c)), loads ext-mic DSP gain (`0x40e5a`), monitors ADC6−ADC7 bias current (`0x40e0c`/`0x4124e`, MVB `0x20458`), and raises VW DTC **`01523`** (`0x40da4`: Open / Short GND / Short B+) | Not read |
+| **3** | `bit 1` (`0x02`) | *(undocumented in Reddit)* | **Verified (`0x23398`): External Telephone Microphone (`R38`) Enable!** `0` = internal faceplate mic (`SAF775x` `0xF2433D`/`0xF205C8`/`0xF246CE`); `1` = external mic `R38` (`0xF2433E`/`0xF205C9`/`0xF246D3`, [`0x3f6d8`](decompiled/5624/vip/functions/0x3f6d8.c)/[`0x3f7ba`](decompiled/5624/vip/functions/0x3f7ba.c)), loads ext-mic DSP gain (`0x40e5a`), monitors ADC6−ADC7 bias current (`0x40e0c`/`0x4124e`, MVB `0x20458`), and raises VW DTC **`01523`** (`0x40da4`: Open / Short GND / Short B+) | Not read |
 | **3** | `bit 5` (`0x20`) | (not in community lists; keep `0`) | Allowed by UDS `0x1f48a`; toggled by EOL `0x02:0x11`/`0x12` (`0x25e6a`); not read by VIP runtime | **Bluetooth DISABLE (INVERTED!)**: `bt_coding = (b3 & 0x20) == 0`. Must stay **`0`** for BT ON (`stdplus.ini` bit 0, `PA_OUT_CODING`) |
-| **3** | `bit 6` (`0x40`) | **Rear View Camera (RVC)** | **Verified (`0x20dbc`)**: fed into the VIP ParkPilot/RVC state machine (`0x2e06e` → `0x45900(1, &rvc)` → [`0x48fac`](decompiled/vip/functions/0x48fac.c)) | **Verified (`0x13660`)**: `rvc_coding = (b3 & 0x40) != 0` → `stdplus.ini` bit 1 (`opt/camera` & `opt/hmi`), `PA_OUT_CODING`, Feature `1` |
-| **4** | `0x00..0x04` | **Treble speaker monitoring**: `00` not coded, `01` off, `02` front, `03` rear, `04` front + rear | **Verified (`0x2170a`)**: [`0x435b0`](decompiled/vip/functions/0x435b0.c) enables tweeter load checks (`<2` off, `2` front ch `2,3`, `3` rear ch `0,1`, `4` all `0..3`); selects speaker actuator tests (`0x21b84`/`0x22af8`); also selects `b4 == 4` vs `!= 4` row in internal EQ table `0x590d0` (`0x40560`) | Not read |
+| **3** | `bit 6` (`0x40`) | **Rear View Camera (RVC)** | **Verified (`0x20dbc`)**: fed into the VIP ParkPilot/RVC state machine (`0x2e06e` → `0x45900(1, &rvc)` → [`0x48fac`](decompiled/5624/vip/functions/0x48fac.c)) | **Verified (`0x13660`)**: `rvc_coding = (b3 & 0x40) != 0` → `stdplus.ini` bit 1 (`opt/camera` & `opt/hmi`), `PA_OUT_CODING`, Feature `1` |
+| **4** | `0x00..0x04` | **Treble speaker monitoring**: `00` not coded, `01` off, `02` front, `03` rear, `04` front + rear | **Verified (`0x2170a`)**: [`0x435b0`](decompiled/5624/vip/functions/0x435b0.c) enables tweeter load checks (`<2` off, `2` front ch `2,3`, `3` rear ch `0,1`, `4` all `0..3`); selects speaker actuator tests (`0x21b84`/`0x22af8`); also selects `b4 == 4` vs `!= 4` row in internal EQ table `0x590d0` (`0x40560`) | Not read |
 | **5** | `0x00` only | *"Frequency Response (01..07 Skoda)"* **(rejected!)** | **REJECTED if `!= 0x00` (NRC `0x31`)** on both `5624_vw` (`0x1f48a`) and `5606_skoda` (`0x1f402`), and **never read** in VIP. Internal EQ profiles (`0x40560`, table `0x590d0`) are chosen from **Byte 6** (vehicle) + **Byte 4** (tweeters), not Byte 5 (legacy Swing/Bolero/RCD 310 `.lbl` artifact) | Not read |
 | **6** | `bits 5:0` (`0..63`, valid `1..26`) | **Car selection** (OPS / fader car picture) | **Verified (`0x136ac` → `0x13b56`)**: `1..26` selects vehicle model in `0x55218` (sets VRM `vehicle` & `platform`, plus EQ profile in `0x40560`); `0` falls back to CAN vehicle fingerprint table `0x55318` | **Verified (`0x5ad80`)**: `1..26` selects OPS & Fader car silhouette (`0x8de308`, §3.5); `0` falls back to `PA_OUT_NET_SYS_INFO` or default `0x13` (`VW370`) |
 
@@ -196,9 +196,9 @@ Instead, **speaker count (`2` vs `4`)** is sent by VIP via `IPCL(0x07, 0x01)` (`
 
 ### 3.6 Adaptation (`Adaptation-10`) & Developer / Engineering Menu
 
-#### PQ Adaptation Channels (`vipImage.bin` [`0x21f9a`](decompiled/vip/functions/0x21f9a.c) — ALL 13 Channels Verified)
+#### PQ Adaptation Channels (`vipImage.bin` [`0x21f9a`](decompiled/5624/vip/functions/0x21f9a.c) — ALL 13 Channels Verified)
 
-On PQ, VCDS `Adaptation-10` uses KWP2000 routines (`0xB8`/`0xB9`/`0xBA`/`0xBB`) handled directly by VIP [`0x21f9a`](decompiled/vip/functions/0x21f9a.c). Every supported channel is listed below:
+On PQ, VCDS `Adaptation-10` uses KWP2000 routines (`0xB8`/`0xB9`/`0xBA`/`0xBB`) handled directly by VIP [`0x21f9a`](decompiled/5624/vip/functions/0x21f9a.c). Every supported channel is listed below:
 
 | VCDS Channel (Dec / Hex) | Range / Default | VIP Storage / Action | Forwarded to Linux (`opt/diag` PQ `cls6` / `cls0`) |
 |---:|---|---|---|
@@ -214,16 +214,16 @@ On PQ, VCDS `Adaptation-10` uses KWP2000 routines (`0xB8`/`0xB9`/`0xBA`/`0xBB`) 
 | **`17`** (`0x11`) | `0..4` *(req. Ch 10=1)* | Test mode sub-parameter | `IPCL(0x07,0x01)` `[5,0,0,0x11,0,val]` |
 | **`36`** (`0x24`) | `0..255` | `DAT_ram_fee00017` (DataFlash `0xCF`) | `0x23320` (`cls6 actionId=9`) → `opt/diag` `0x100b4` **`Diag_Threshold_High_Notify`** |
 | **`47`** (`0x2F`) | `0..15` | `DAT_ram_fee00018` (DataFlash `0xCF`) | `0x23354` (`cls6 actionId=10`) → `opt/diag` `0x101b4` **`Diag_ML_Country_Code_Notify`** (MirrorLink country code) |
-| **`50`** (`0x32`) | **`0..1`** | **`DAT_ram_fee00014` (DataFlash `0xCF`) — Developer / Engineering Menu** | **`0x232ec` (`cls6 actionId=7`) → `opt/diag` [`0xb1e8`](decompiled/services/diag/functions/0xb1e8.c) `Diag_Eng_Mode_Notify` → `VMF 0xA1:0x0A` → HMI `VDiagProxy+0xe`** |
+| **`50`** (`0x32`) | **`0..1`** | **`DAT_ram_fee00014` (DataFlash `0xCF`) — Developer / Engineering Menu** | **`0x232ec` (`cls6 actionId=7`) → `opt/diag` [`0xb1e8`](decompiled/5624/services/diag/functions/0xb1e8.c) `Diag_Eng_Mode_Notify` → `VMF 0xA1:0x0A` → HMI `VDiagProxy+0xe`** |
 
 **Developer Menu End-to-End Trace (`Channel 50 = 1`)**:
-1. VCDS writes **PQ Adaptation Channel 50 (`0x32`) = `1`** → VIP [`0x21f9a`](decompiled/vip/functions/0x21f9a.c) saves `DAT_ram_fee00014 = 1` to DataFlash block `0xCF` and calls [`0x232ec`](decompiled/vip/functions/0x232ec.c).
+1. VCDS writes **PQ Adaptation Channel 50 (`0x32`) = `1`** → VIP [`0x21f9a`](decompiled/5624/vip/functions/0x21f9a.c) saves `DAT_ram_fee00014 = 1` to DataFlash block `0xCF` and calls [`0x232ec`](decompiled/5624/vip/functions/0x232ec.c).
 2. `0x232ec` sends `IPCL(0x07, 0x01)` `[0x04, 0x06, 0x00, 0x07, 0x01]` (`cmd_class=6`, `actionId=7`, also re-sent on boot/sync via `0x1d64a`).
-3. Linux `opt/diag` (`Diag_Handle_VIP_Request` `0xabc8`, PQ `cls6` table `@0x14124`) dispatches `actionId=7` to `Diag_Eng_Mode_Notify` ([`0xb1e8`](decompiled/services/diag/functions/0xb1e8.c)) → broadcasts `VMF(0xA1, 0x0A, [1])`.
-4. `opt/hmi` `VDiagProxy::RecieveVmfMsg` ([`0x1fe10c`](decompiled/hmi/functions/0x1fe10c.c)) stores `1` at `VDiagProxy+0xe` (getter `0x1fce4c`).
-5. `VIPCLNotifyFilter::HandleLPCLHardKeySet` ([`0x42088`](decompiled/hmi/functions/0x42088.c)) opens Engineering Testmode (`page 0x0D`) when **SETUP** reports `IPCL_HARDKEY_BH_ULTRALONG_PRESS` (`para[3] == 9`) **and** `VDiagProxy+0xe == 1`. With Channel 50 = `0`, the ultra-long SETUP press is ignored.
+3. Linux `opt/diag` (`Diag_Handle_VIP_Request` `0xabc8`, PQ `cls6` table `@0x14124`) dispatches `actionId=7` to `Diag_Eng_Mode_Notify` ([`0xb1e8`](decompiled/5624/services/diag/functions/0xb1e8.c)) → broadcasts `VMF(0xA1, 0x0A, [1])`.
+4. `opt/hmi` `VDiagProxy::RecieveVmfMsg` ([`0x1fe10c`](decompiled/5624/hmi/functions/0x1fe10c.c)) stores `1` at `VDiagProxy+0xe` (getter `0x1fce4c`).
+5. `VIPCLNotifyFilter::HandleLPCLHardKeySet` ([`0x42088`](decompiled/5624/hmi/functions/0x42088.c)) opens Engineering Testmode (`page 0x0D`) when **SETUP** reports `IPCL_HARDKEY_BH_ULTRALONG_PRESS` (`para[3] == 9`) **and** `VDiagProxy+0xe == 1`. With Channel 50 = `0`, the ultra-long SETUP press is ignored.
 
-#### MQB Adaptation Notify Table (`opt/diag` `Diag_Adaption_Notify` [`0x13544`](decompiled/services/diag/functions/0x13544.c))
+#### MQB Adaptation Notify Table (`opt/diag` `Diag_Adaption_Notify` [`0x13544`](decompiled/5624/services/diag/functions/0x13544.c))
 
 On MQB (`platform == 2`), `opt/diag` receives internal adaptation IDs via table VA `0x14cac` (16-byte rows: `id`, handler, `len`, shadow ptr):
 

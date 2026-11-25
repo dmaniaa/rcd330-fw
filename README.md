@@ -19,7 +19,7 @@ This project consists of two main pieces of software supported by a complete rev
    - Clean-room C++ recreation of stock `opt/hmi` (`5624_vw`, ARMv7 softfp, glibc 2.13 / GCC 4.6 libstdc++ ABI) cross-built with `zig` via `tools/build_hmi.sh`, including the IGDT GLES2 renderer, `_ovg.bin` texture loader, FreeType 2.4.8 text pipeline, and QEMU pixel-parity tests (~99.94% parity on `AppNoConn`). See [src/hmi/README.md](src/hmi/README.md).
 3. **Complete Reverse Engineering Archive (`docs/` & `resources/`)**:
    - **All 31 ARMv7 ELF binaries and libraries** plus the **Renesas RH850 VIP MCU firmware (`vipImage.bin`)** from `5624_vw` (`27,422` total functions analyzed) are documented with per-binary `README.md` guides, symbol/asset metadata, and cross-cutting specs under [docs/decompiled/](docs/decompiled/README.md) *(raw Ghidra `functions/*.c` dumps are intentionally omitted from the public GitHub mirror; see [docs/decompiled/README.md](docs/decompiled/README.md))*.
-   - **100% decoded `_ovg.bin` UI texture catalogs** ([gresfiles_catalog_5624.json](docs/decompiled/hmi/gresfiles_catalog_5624.json), [gresfiles_catalog_5606.json](docs/decompiled/hmi/gresfiles_catalog_5606.json)), declarative **IGDT scene graphs** ([resources/scenes/](resources/scenes)), and **multi-language string dictionaries** ([resources/translations/](resources/translations)).
+   - **100% decoded `_ovg.bin` UI texture catalogs** ([gresfiles_catalog_5624.json](docs/decompiled/5624/hmi/gresfiles_catalog_5624.json), [gresfiles_catalog_5606.json](docs/decompiled/5624/hmi/gresfiles_catalog_5606.json)), declarative **IGDT scene graphs** ([resources/scenes/](resources/scenes)), and **multi-language string dictionaries** ([resources/translations/](resources/translations)).
 
 ---
 
@@ -82,8 +82,9 @@ Or run the individual build steps manually:
 - [Firmware Packaging (`opt/sysupdate`) & QEMU Rootfs Staging](docs/firmware-packaging-and-update.md)
 - [Community & Online Sources Synthesis](docs/online-sources-summary.md)
 - [Known Firmware Bugs: Android Auto BT Call Echo (ALPS ECNR State Machine)](docs/bugs/android-auto-echo-ecnr.md)
-- [Decompiled Binary Index (All 32 Binaries / 27,422 Functions)](docs/decompiled/README.md)
-- [5624 (VW) vs. 5606 (ŠKODA) Firmware Diff](docs/decompiled/hmi/diff_5624_vs_5606.md)
+- [Decompiled Binary Index (`5624/` + `diff-5624vs5606/` + `diff-5624vs780/`)](docs/decompiled/README.md)
+- [5624 (VW) vs. 5606 (ŠKODA `7.1.2.2` + `DE_CV`) Firmware Diff](docs/diff-5624-vs-5606.md)
+- [5624 (VW) vs. RCD 780 (`8.5.9.7` CR222 + `5814` DE Overlay) Firmware Diff](docs/diff-5624-vs-rcd780.md)
 - [AI Agent Guide (`AGENTS.md`)](AGENTS.md)
 - [Recreated `opt/hmi` Guide (`src/hmi/README.md`)](src/hmi/README.md)
 

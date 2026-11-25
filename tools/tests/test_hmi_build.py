@@ -189,10 +189,10 @@ class TestHmiTrace(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         trace = json.loads((ROOT / "src/hmi/TRACE.json").read_text())
         self.assertEqual(trace["_coverage"]["total"], 9580)
-        symbols = json.loads((ROOT / "docs/decompiled/hmi/hmi_symbols_5624.json").read_text())
+        symbols = json.loads((ROOT / "docs/decompiled/5624/hmi/hmi_symbols_5624.json").read_text())
         func_addrs = set(symbols.get("function_addresses", []))
         self.assertEqual(len(func_addrs), 9580)
-        functions = ROOT / "docs/decompiled/hmi/functions"
+        functions = ROOT / "docs/decompiled/5624/hmi/functions"
         if functions.is_dir():
             disk_addrs = {p.stem for p in functions.glob("0x*.c")}
             self.assertEqual(func_addrs, disk_addrs, "hmi_symbols_5624.json function_addresses drifted")
