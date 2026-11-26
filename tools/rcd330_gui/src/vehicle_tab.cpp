@@ -168,6 +168,34 @@ VehicleTab::VehicleTab(QWidget *parent) : QWidget(parent) {
     }
     canGrid->addLayout(doorRow, row++, 1, 1, 2);
 
+    // Handbrake (IPCL 0x06:0x03) / CAN Language
+    canGrid->addWidget(new QLabel("Handbrake / Lang", canBox), row, 0);
+    auto *hbLangRow = new QHBoxLayout();
+    m_handbrakeBtn = new QPushButton("Handbrake: OFF", canBox);
+    m_handbrakeBtn->setObjectName("handbrakeBtn");
+    m_handbrakeBtn->setCheckable(true);
+    connect(m_handbrakeBtn, &QPushButton::toggled, this, [this](bool on) {
+        m_handbrakeBtn->setText(on ? "Handbrake: ON" : "Handbrake: OFF");
+        emit commandRequested(on ? "HANDBRAKE 1" : "HANDBRAKE 0");
+    });
+    m_canLangCombo = new QComboBox(canBox);
+    m_canLangCombo->setObjectName("canLangCombo");
+    m_canLangCombo->addItem("CAN Lang: Auto (PSS)", "LANG 0 0");
+    m_canLangCombo->addItem("EN (0x00)", "LANG 1 0");
+    m_canLangCombo->addItem("ZH (0x09)", "LANG 1 9");
+    m_canLangCombo->addItem("PT/DE (0x06)", "LANG 1 6");
+    m_canLangCombo->addItem("RU (0x0D)", "LANG 1 13");
+    m_canLangCombo->addItem("ES (0x05)", "LANG 1 5");
+    connect(m_canLangCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, [this](int idx) {
+                if (idx >= 0) {
+                    emit commandRequested(m_canLangCombo->itemData(idx).toString());
+                }
+            });
+    hbLangRow->addWidget(m_handbrakeBtn);
+    hbLangRow->addWidget(m_canLangCombo, 1);
+    canGrid->addLayout(hbLangRow, row++, 1, 1, 2);
+
     // OPS Parking
     canGrid->addWidget(new QLabel("OPS Parking", canBox), row, 0);
     auto *opsRow = new QHBoxLayout();
@@ -329,6 +357,15 @@ void VehicleTab::resetForReboot() {
         QSignalBlocker b(m_battSlider);
         m_battSlider->setValue(126);
         updateBatteryVisual(126);
+    }
+    if (m_handbrakeBtn) {
+        QSignalBlocker b(m_handbrakeBtn);
+        m_handbrakeBtn->setChecked(false);
+        m_handbrakeBtn->setText("Handbrake: OFF");
+    }
+    if (m_canLangCombo) {
+        QSignalBlocker b(m_canLangCombo);
+        m_canLangCombo->setCurrentIndex(0);
     }
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QComboBox>
 #include <QLabel>
 #include <QPushButton>
 #include <QSlider>
@@ -37,4 +38,6 @@ private:
     QLabel *m_lightVal = nullptr;
     QSlider *m_battSlider = nullptr;
     QLabel *m_battVal = nullptr;
+    QPushButton *m_handbrakeBtn = nullptr;
+    QComboBox *m_canLangCombo = nullptr;
 };

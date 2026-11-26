@@ -33,6 +33,15 @@ OPS_MODES: dict[str, tuple[int, int, int, int]] = {
     "360": (4, 4, 4, 4),
 }
 
+SYSTEM_LANGUAGES: dict[str, int] = {
+    "en_US": 0,
+    "zh_CN": 1,
+    "pt_BR": 2,
+    "de_DE": 2,
+    "ru_RU": 3,
+    "es_MX": 4,
+}
+
 PQ_VEHICLES: dict[int, str] = {
     1: "VW321",
     2: "VW310",
@@ -188,6 +197,7 @@ def default_coding_config(fw_id: str = "") -> dict[str, Any]:
         "speakers": 4,
         "ops_mode": "8K",
         "eng_mode": False,
+        "language": "auto",
         "coding_hex": DEFAULT_PQ_CODING_SKODA if is_skoda else DEFAULT_PQ_CODING_VW,
     }
 
@@ -244,6 +254,9 @@ def normalize_coding_config(cfg: dict[str, Any] | None, fw_id: str = "") -> dict
 
     eng_mode = bool(cfg.get("eng_mode", base["eng_mode"]))
 
+    lang_raw = str(cfg.get("language", base["language"]))
+    language = lang_raw if (lang_raw == "auto" or lang_raw in SYSTEM_LANGUAGES) else "auto"
+
     expected_bytes = 7 if plat == "PQ" else 25
     fallback_hex = (
         (DEFAULT_PQ_CODING_SKODA if brand == "SKODA" else DEFAULT_PQ_CODING_VW)
@@ -267,6 +280,7 @@ def normalize_coding_config(cfg: dict[str, Any] | None, fw_id: str = "") -> dict
         "speakers": speakers,
         "ops_mode": ops_mode,
         "eng_mode": eng_mode,
+        "language": language,
         "coding_hex": coding_hex,
     }
 
@@ -324,7 +338,7 @@ def apply_coding_update(current_cfg: dict[str, Any], update: dict[str, Any], fw_
     prev = normalize_coding_config(current_cfg, fw_id)
     merged = dict(prev)
 
-    for key in ("platform", "brand", "can_speed", "part_number", "vehicle_mqb", "speakers", "ops_mode", "eng_mode"):
+    for key in ("platform", "brand", "can_speed", "part_number", "vehicle_mqb", "speakers", "ops_mode", "eng_mode", "language"):
         if key in update:
             merged[key] = update[key]
 
@@ -529,6 +543,24 @@ def seed_rootfs_coding(stage_dir: str | pathlib.Path, cfg: dict[str, Any]) -> No
     fields = decode_coding_fields(norm)
     bt_byte = int(fields["bt_coding_byte"]) & 0xFF
     (pss2 / "app_data" / "bt_coding.config").write_bytes(bytes([bt_byte]))
+
+    lang_name = norm.get("language", "auto")
+    pss1_setup = pss1 / "HMI_SYSTEM_SETUP_PSS_NEWBLK.pss"
+    pss2_setup = pss2 / "HMI_SYSTEM_SETUP_PSS_NEWBLK.pss"
+    if lang_name in SYSTEM_LANGUAGES:
+        setup_payload = bytearray(20)
+        setup_payload[0x03] = 0x01  # valid init marker matching real 5814 dump
+        # opt/pss 0x9a78 prepends a 7-byte read-reply header before the 20-byte payload,
+        # so opt/hmi 0x1c5a90 (param_4[0xb]) / 0x1c3b18 write-back read/write setup_payload[0x04].
+        setup_payload[0x04] = SYSTEM_LANGUAGES[lang_name]
+        setup_payload[0x05] = 0x01
+        setup_payload[0x06] = 0x01
+        setup_blob = build_pss_block(bytes(setup_payload), data_len=20, client_tag=0, counter=1)
+        pss1_setup.write_bytes(setup_blob)
+        pss2_setup.write_bytes(setup_blob)
+    else:
+        pss1_setup.unlink(missing_ok=True)
+        pss2_setup.unlink(missing_ok=True)
 
 
 def build_coding_payload(

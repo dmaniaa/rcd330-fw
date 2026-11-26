@@ -402,6 +402,62 @@ private slots:
         QCOMPARE(battSl->value(), 126);
         QVERIFY(cmds.isEmpty());
     }
+
+    void testHandbrakeAndCanLanguageControls() {
+        VehicleTab tab;
+        QStringList sent;
+        QObject::connect(&tab, &VehicleTab::commandRequested, [&](const QString &c) {
+            sent.append(c);
+        });
+
+        auto *hb = tab.findChild<QPushButton *>("handbrakeBtn");
+        QVERIFY(hb != nullptr);
+        QVERIFY(hb->isCheckable());
+        QVERIFY(!hb->isChecked());
+        QCOMPARE(hb->text(), QString("Handbrake: OFF"));
+
+        hb->click();
+        QVERIFY(hb->isChecked());
+        QCOMPARE(hb->text(), QString("Handbrake: ON"));
+        QCOMPARE(sent.last(), QString("HANDBRAKE 1"));
+
+        hb->click();
+        QVERIFY(!hb->isChecked());
+        QCOMPARE(hb->text(), QString("Handbrake: OFF"));
+        QCOMPARE(sent.last(), QString("HANDBRAKE 0"));
+
+        auto *lang = tab.findChild<QComboBox *>("canLangCombo");
+        QVERIFY(lang != nullptr);
+        QCOMPARE(lang->count(), 6);
+        QCOMPARE(lang->currentIndex(), 0);
+
+        const QStringList expectedLangCmds = {
+            QString("LANG 1 0"),
+            QString("LANG 1 9"),
+            QString("LANG 1 6"),
+            QString("LANG 1 13"),
+            QString("LANG 1 5"),
+        };
+        for (int i = 1; i <= 5; ++i) {
+            lang->setCurrentIndex(i);
+            QCOMPARE(sent.last(), expectedLangCmds[i - 1]);
+        }
+        lang->setCurrentIndex(0);
+        QCOMPARE(sent.last(), QString("LANG 0 0"));
+
+        // Verify resetForReboot silently resets both controls without emitting commands
+        hb->click();
+        QVERIFY(hb->isChecked());
+        QCOMPARE(hb->text(), QString("Handbrake: ON"));
+        lang->setCurrentIndex(2);
+        sent.clear();
+
+        tab.resetForReboot();
+        QVERIFY(!hb->isChecked());
+        QCOMPARE(hb->text(), QString("Handbrake: OFF"));
+        QCOMPARE(lang->currentIndex(), 0);
+        QVERIFY(sent.isEmpty());
+    }
 };
 
 QTEST_MAIN(TestRcd330Gui)

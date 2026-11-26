@@ -10,7 +10,9 @@
  *    so SDMA RX DMA does not time out and BT_VER from /pss1/stdplus.ini is
  *    reported to opt/pwr_agent via VMF(0x0B, 0x04) [0x04, hi, lo].
  */
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE
+#endif
 #include <dlfcn.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -32,10 +34,11 @@ static pthread_mutex_t g_shim_lock = PTHREAD_MUTEX_INITIALIZER;
 static int g_v850srq_fd = -1;
 static int g_v850srq_is_real = 0;
 static int g_spidev_fd = -1;
+static int g_srq_thread_created = 0;
 static int g_srq_thread_started = 0;
 static int g_bt_ver_thread_started = 0;
 static volatile uint32_t *g_vip_mmio = NULL;
-static uint8_t g_rx_stash[512];
+static uint8_t g_rx_stash[1024];
 static uint16_t g_rx_stash_len = 0;
 static uint8_t g_tx_hdr[2];
 static uint16_t g_tx_expect = 0;
@@ -84,6 +87,9 @@ int msgsnd(int msqid, const void *msgp, size_t msgsz, int msgflg) {
         }
         if (msqid == __atomic_load_n(&g_tx_msg_id, __ATOMIC_ACQUIRE)) {
             __atomic_store_n(&g_tx_pending, 1, __ATOMIC_RELEASE);
+            if (__atomic_load_n(&g_srq_thread_started, __ATOMIC_ACQUIRE)) {
+                kill(getpid(), SIGIO);
+            }
         }
     }
     return r;
@@ -141,7 +147,7 @@ static void *v850srq_sigio_thread(void *arg) {
     int (*real_open)(const char *, int, ...) = (int (*)(const char *, int, ...))arg;
     volatile uint32_t *mmio = get_vip_mmio(real_open);
     for (;;) {
-        usleep(20000);
+        usleep(5000);
         int fire = 0;
 
         /* 1. Single-shot ACK completion (libHAL DAT_0001936c: 1 -> 0) */
@@ -206,7 +212,7 @@ static void *event0_poll_thread(void *arg) {
                 ev = mmio[0x20 / 4];
             }
         }
-        usleep(20000);
+        usleep(5000);
     }
     return NULL;
 }
@@ -438,15 +444,21 @@ int fcntl(int fd, int cmd, ...) {
     if (fd >= 0 && fd == g_v850srq_fd && cmd == F_SETFL && (arg & O_ASYNC)) {
         static int (*real_open)(const char *, int, ...) = NULL;
         if (!real_open) real_open = dlsym(RTLD_NEXT, "open");
+        get_vip_mmio(real_open);
+        int started_now = 0;
         pthread_mutex_lock(&g_shim_lock);
-        if (!g_srq_thread_started) {
-            g_srq_thread_started = 1;
+        if (!g_srq_thread_created) {
             pthread_t th;
             if (pthread_create(&th, NULL, v850srq_sigio_thread, (void *)real_open) == 0) {
                 pthread_detach(th);
+                g_srq_thread_created = 1;
+                started_now = 1;
             }
         }
         pthread_mutex_unlock(&g_shim_lock);
+        if (started_now) {
+            __atomic_store_n(&g_srq_thread_started, 1, __ATOMIC_RELEASE);
+        }
         if (g_v850srq_is_real) {
             return real_fcntl(fd, cmd, arg);
         }
@@ -563,17 +575,67 @@ int access(const char *pathname, int mode) {
     return real_access(pathname, mode);
 }
 
-void log_simple(const char *tag, const char *fmt, unsigned long a1, unsigned long a2, unsigned long a3, unsigned long a4) {
-    static void (*real_log)(const char *, const char *, unsigned long, unsigned long, unsigned long, unsigned long) = NULL;
-    if (!real_log) real_log = dlsym(RTLD_NEXT, "log_simple");
-    if (fmt && strstr(fmt, "==== HMI ====") &&
-        !strstr(fmt, "BTsubsystemNotify") &&
-        !strstr(fmt, "PA_OUT_DEV_STS") &&
-        !strstr(fmt, "PA_OUT_VRM_INTO") &&
-        !strstr(fmt, "PA_OUT_WAKE_UP_REASON") &&
-        !strstr(fmt, "PA_OUT_MODE_CHG")) {
-        fprintf(stderr, fmt, a1, a2, a3, a4);
-        fputc('\n', stderr);
+static pthread_once_t g_log_tags_once = PTHREAD_ONCE_INIT;
+static const char *g_log_tags = NULL;
+
+static void init_log_tags(void) {
+    g_log_tags = getenv("QEMU_LOG_TAGS");
+}
+
+static int log_matches_filter(const char *tag, const char *fmt) {
+    pthread_once(&g_log_tags_once, init_log_tags);
+    if (!fmt) return 0;
+    if (!g_log_tags || !g_log_tags[0]) {
+        return strstr(fmt, "==== HMI ====") != NULL &&
+               !strstr(fmt, "BTsubsystemNotify") &&
+               !strstr(fmt, "PA_OUT_DEV_STS") &&
+               !strstr(fmt, "PA_OUT_VRM_INTO") &&
+               !strstr(fmt, "PA_OUT_WAKE_UP_REASON") &&
+               !strstr(fmt, "PA_OUT_MODE_CHG");
     }
-    if (real_log) real_log(tag, fmt, a1, a2, a3, a4);
+    if (strcmp(g_log_tags, "*") == 0) return 1;
+    const char *p = g_log_tags;
+    while (*p) {
+        const char *comma = strchr(p, ',');
+        size_t len = comma ? (size_t)(comma - p) : strlen(p);
+        if (len > 0 && len < 64) {
+            char tok[64];
+            memcpy(tok, p, len);
+            tok[len] = '\0';
+            if ((tag && strstr(tag, tok)) || strstr(fmt, tok)) {
+                return 1;
+            }
+        }
+        if (!comma) break;
+        p = comma + 1;
+    }
+    return 0;
+}
+
+void log_simple(const char *tag, const char *fmt,
+                unsigned long a1, unsigned long a2, unsigned long a3, unsigned long a4,
+                unsigned long a5, unsigned long a6, unsigned long a7, unsigned long a8,
+                unsigned long a9, unsigned long a10) {
+    static void (*real_log)(const char *, const char *,
+                            unsigned long, unsigned long, unsigned long, unsigned long,
+                            unsigned long, unsigned long, unsigned long, unsigned long,
+                            unsigned long, unsigned long) = NULL;
+    void (*fn)(const char *, const char *,
+               unsigned long, unsigned long, unsigned long, unsigned long,
+               unsigned long, unsigned long, unsigned long, unsigned long,
+               unsigned long, unsigned long) =
+        __atomic_load_n(&real_log, __ATOMIC_ACQUIRE);
+    if (!fn) {
+        fn = dlsym(RTLD_NEXT, "log_simple");
+        if (fn) {
+            __atomic_store_n(&real_log, fn, __ATOMIC_RELEASE);
+        }
+    }
+    if (log_matches_filter(tag, fmt)) {
+        flockfile(stderr);
+        fprintf(stderr, fmt, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10);
+        fputc('\n', stderr);
+        funlockfile(stderr);
+    }
+    if (fn) fn(tag, fmt, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10);
 }

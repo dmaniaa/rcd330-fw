@@ -256,6 +256,33 @@ QEMU_CMD+=(
     -chardev "socket,id=vipctl,host=127.0.0.1,port=${VIP_PORT},server=on,wait=off"
     -global rcd330-vip.chardev=vipctl
 )
+VIP_CODING_JSON="$(python3 "$ROOT_DIR/tools/rcd330_coding.py" load --coding-file "$CODING_FILE" --fw-id "$FW_ID")"
+VIP_CODING_GLOBALS="$(python3 -c '
+import json, sys
+cfg = json.loads(sys.argv[1])["config"]
+plat = 1 if cfg["platform"] == "PQ" else 2
+brand = 1 if cfg["brand"] == "SKODA" else 2
+can_speed = 1 if cfg["can_speed"] == "HS" else 2
+coding_hex = cfg["coding_hex"]
+veh = (bytes.fromhex(coding_hex)[6] & 0x3F) if plat == 1 else int(cfg["vehicle_mqb"])
+speakers = int(cfg["speakers"])
+eng_mode = 1 if cfg.get("eng_mode") else 0
+part_num = cfg["part_number"] if cfg["part_number"].strip() else "6RD035187B "
+args = [
+    f"rcd330-vip.platform={plat}",
+    f"rcd330-vip.brand={brand}",
+    f"rcd330-vip.vehicle={veh}",
+    f"rcd330-vip.can-speed={can_speed}",
+    f"rcd330-vip.speakers={speakers}",
+    f"rcd330-vip.eng-mode={eng_mode}",
+    f"rcd330-vip.part-num={part_num}",
+    f"rcd330-vip.coding-hex={coding_hex}",
+]
+print("\n".join(args))
+' "$VIP_CODING_JSON")"
+while IFS= read -r vip_arg; do
+    QEMU_CMD+=(-global "$vip_arg")
+done <<< "$VIP_CODING_GLOBALS"
 if [[ -n "$MONITOR_SOCK" ]]; then
     QEMU_CMD+=(-monitor "unix:${MONITOR_SOCK},server,nowait")
 fi
